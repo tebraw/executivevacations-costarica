@@ -22,7 +22,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 py-4 md:p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 md:p-4" onClick={onClose}>
       <div 
         className="bg-white rounded-xl max-w-7xl w-full max-h-[95vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
