@@ -22,13 +22,13 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 md:p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center md:p-4" onClick={onClose}>
       <div 
-        className="bg-white rounded-xl max-w-7xl w-full max-h-[95vh] overflow-y-auto"
+        className="bg-white md:rounded-xl max-w-7xl w-full h-full md:max-h-[95vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-start">
+        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 md:p-6 flex justify-between items-start">
           <div className="flex-1">
             <h2 className="heading-2 mb-2">{villa.name}</h2>
             <div className="flex items-center gap-4 text-gray">
@@ -43,7 +43,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
           </button>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6 p-6">
+        <div className="grid lg:grid-cols-3 gap-6 p-4 md:p-6">
           {/* Image Gallery - Larger and with navigation */}
           <div className="lg:col-span-2">
             <div className="relative overflow-hidden rounded-xl mb-4">
@@ -102,7 +102,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
           {/* Villa Details - Immediately visible */}
           <div className="lg:col-span-1">
             {/* Key Information Box */}
-            <div className="bg-light rounded-xl p-6 mb-6 sticky top-24">
+            <div className="bg-light rounded-xl p-4 md:p-6 mb-6 sticky top-24">
               <h3 className="heading-3 mb-4">Villa Details</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2 border-b border-gray-100">
@@ -143,7 +143,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
         </div>
 
         {/* Additional Information Section */}
-        <div className="px-6 pb-6">
+        <div className="px-4 pb-4 md:px-6 md:pb-6">
           <div className="grid lg:grid-cols-2 gap-8">
             {/* About Villa */}
             <div>
@@ -167,7 +167,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
             {/* Location & Booking */}
             <div>
               <h4 className="heading-3 mb-4">Location & Contact</h4>
-              <div className="bg-light rounded-xl p-6 mb-6">
+              <div className="bg-light rounded-xl p-4 md:p-6 mb-6">
                 <div className="mb-4">
                   <span className="body-regular font-semibold text-dark">{villa.fullLocation || villa.location}</span>
                 </div>
