@@ -5,6 +5,12 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
 
   if (!isOpen || !villa) return null;
 
+  // Helper function to get correct image path for GitHub Pages
+  const BASE_URL = import.meta.env.BASE_URL;
+  const getImagePath = (path) => {
+    return `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
+  };
+
   const images = villa.detailImages || villa.images || [];
   
   const nextImage = () => {
@@ -16,7 +22,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 py-4 md:p-4" onClick={onClose}>
       <div 
         className="bg-white rounded-xl max-w-7xl w-full max-h-[95vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
@@ -42,7 +48,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
           <div className="lg:col-span-2">
             <div className="relative overflow-hidden rounded-xl mb-4">
               <img 
-                src={images[currentImageIndex]} 
+                src={getImagePath(images[currentImageIndex])} 
                 alt={`${villa.name} - ${currentImageIndex + 1}`}
                 className="w-full h-96 object-cover"
               />
@@ -83,7 +89,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
                     }`}
                   >
                     <img 
-                      src={image} 
+                      src={getImagePath(image)} 
                       alt={`Thumbnail ${index + 1}`}
                       className="w-full h-full object-cover"
                     />

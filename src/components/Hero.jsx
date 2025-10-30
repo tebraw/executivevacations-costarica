@@ -22,7 +22,7 @@ const Hero = () => {
               <span className="block mt-2" style={{ color: '#D4AF37' }}>Costa Rica</span>
             </h1>
             
-            <p className="body-large text-white/90 mb-8 max-w-2xl">
+            <p className="body-large text-white mb-8 max-w-2xl">
               Exclusive vacation villas in tropical paradise. From private pools to breathtaking ocean views – 
               experience unforgettable moments in Costa Rica's most beautiful accommodations.
             </p>
