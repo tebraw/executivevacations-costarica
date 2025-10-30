@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import VillaDetailModal from './VillaDetailModal';
 import ContactModal from './ContactModal';
 
+// Get the base URL from Vite config for proper GitHub Pages paths
+const BASE_URL = import.meta.env.BASE_URL;
+const getImagePath = (path) => `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
+
 const VillaCard = ({ villa, onViewDetails }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -19,7 +23,7 @@ const VillaCard = ({ villa, onViewDetails }) => {
       {/* Image Gallery */}
       <div className="relative overflow-hidden rounded-lg">
         <img 
-          src={villa.images[currentImageIndex]} 
+          src={getImagePath(villa.images[currentImageIndex])} 
           alt={villa.name}
           className="card-image"
         />
