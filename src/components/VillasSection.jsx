@@ -17,7 +17,21 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
   };
 
   return (
-    <div className={`card group ${isSelected ? 'ring-2 ring-luxury-gold' : ''}`}>
+    <div className={`card group ${isSelected ? 'ring-2 ring-luxury-gold' : ''} ${villa.isComingSoon ? 'coming-soon-card' : ''}`}>
+      {/* Coming Soon Overlay - Set villa.isComingSoon to false to remove */}
+      {villa.isComingSoon && (
+        <div className="coming-soon-overlay">
+          <div className="coming-soon-badge">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span className="coming-soon-text">Available Soon</span>
+            <p className="coming-soon-subtext">Currently undergoing final preparations</p>
+          </div>
+        </div>
+      )}
+      
       {/* Image Gallery */}
       <div className="relative overflow-hidden rounded-lg">
         <img 
@@ -186,8 +200,8 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       id: 2,
       name: "Palacio Tropical",
       type: "Ultra-Luxury Oceanfront Villa",
-      location: "Tambor",
-      fullLocation: "Cóbano, Tambor, Costa Rica",
+      location: "Tambor, Puntarenas - Tango Mar",
+      fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.98,
       bedrooms: 7,
       bathrooms: 9.5,
@@ -242,8 +256,8 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       id: 3,
       name: "The View House",
       type: "Newly Built Pacific Ocean Villa",
-      location: "Puntarenas",
-      fullLocation: "Puntarenas Province, Costa Rica",
+      location: "Tambor, Puntarenas - Tango Mar",
+      fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.96,
       bedrooms: 4,
       bathrooms: 2,
@@ -288,14 +302,15 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       id: 4,
       name: "Palicio Musical",
       type: "Exclusive Beachfront Villa",
-      location: "Guanacaste",
-      fullLocation: "Peninsula Papagayo, Guanacaste, Costa Rica",
+      location: "Tambor, Puntarenas - Tango Mar",
+      fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.97,
       bedrooms: 8,
       bathrooms: 6,
       guests: 16,
       size: "7,200 sq ft",
       isPremium: true,
+      isComingSoon: true, // Set to false when available for booking
       images: [
         "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg",
         "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG",
