@@ -38,10 +38,10 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
     },
     {
       id: 'sunset-catamaran',
-      name: 'Sunset Catamaran Tour',
+      name: 'Private Catamaran Tour',
       description: 'Sail along the stunning Costa Rican coast during golden hour. Includes snorkeling, drinks, and unforgettable sunset views.',
       duration: '3 hours',
-      image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop',
+      image: getImagePath('images/activities/Design ohne Titel (56).png'),
       highlights: ['Open bar included', 'Snorkeling gear provided', 'Light snacks served']
     },
     {
