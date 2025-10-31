@@ -11,8 +11,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'ATV Rainbow Mountain Adventure',
       description: 'Embark on a thrilling ATV ride through pristine mountains and lush rainforest. Experience breathtaking views and an adrenaline rush like no other.',
       duration: '4-5 hours',
-      image: '/images/activities/ATVTourRainbowMountain.jpg',
-      price: 120,
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop',
       highlights: ['Professional guide included', 'All safety equipment provided', 'Refreshments included']
     },
     {
@@ -20,8 +19,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'Private Yoga Session',
       description: 'Enjoy a personalized yoga experience with stunning ocean views. Perfect for all skill levels, from beginners to advanced practitioners.',
       duration: '60 minutes',
-      image: '/images/activities/yoga.jpg',
-      price: 80,
+      image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=600&fit=crop',
       highlights: ['Certified instructor', 'Ocean view setting', 'Equipment provided']
     },
     {
@@ -29,8 +27,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'Couples Massage',
       description: 'Indulge in a relaxing in-villa couples massage. Professional therapists bring the spa experience directly to your accommodation.',
       duration: '90 minutes',
-      image: '/images/activities/massage.jpg',
-      price: 200,
+      image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&h=600&fit=crop',
       highlights: ['In-villa service', 'Premium oils & lotions', 'Relaxing atmosphere']
     },
     {
@@ -38,8 +35,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'Sunset Catamaran Tour',
       description: 'Sail along the stunning Costa Rican coast during golden hour. Includes snorkeling, drinks, and unforgettable sunset views.',
       duration: '3 hours',
-      image: '/images/activities/catamaran.jpg',
-      price: 150,
+      image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop',
       highlights: ['Open bar included', 'Snorkeling gear provided', 'Light snacks served']
     },
     {
@@ -47,8 +43,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'Surf Lessons',
       description: 'Learn to surf or improve your skills with professional instruction. All levels welcome, from first-timers to experienced surfers.',
       duration: '2 hours',
-      image: '/images/activities/surfing.jpg',
-      price: 75,
+      image: 'https://images.unsplash.com/photo-1502933691298-84fc14542831?w=800&h=600&fit=crop',
       highlights: ['Expert instructors', 'Board rental included', 'Small group sizes']
     },
     {
@@ -56,9 +51,16 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'Zip-lining Adventure',
       description: 'Soar through the rainforest canopy on an exhilarating zip-line tour. Experience Costa Rica\'s natural beauty from a unique perspective.',
       duration: '3 hours',
-      image: '/images/activities/zipline.jpg',
-      price: 95,
+      image: 'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&h=600&fit=crop',
       highlights: ['Multiple zip-lines', 'Safety certified', 'Transportation included']
+    },
+    {
+      id: 'private-chef',
+      name: 'Private Chef Experience',
+      description: 'Enjoy a gourmet dining experience in the comfort of your villa. Our professional chefs prepare exquisite meals using fresh, local ingredients.',
+      duration: 'Flexible',
+      image: 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=800&h=600&fit=crop',
+      highlights: ['Customized menu', 'Local & fresh ingredients', 'Full service included']
     }
   ];
 

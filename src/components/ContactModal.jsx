@@ -102,8 +102,7 @@ const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose }) => {
         selectedActivities: selectedActivities.map(a => ({
           id: a.id,
           name: a.name,
-          duration: a.duration,
-          price: a.price
+          duration: a.duration
         }))
       });
       
@@ -341,15 +340,10 @@ const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose }) => {
                   <div className="space-y-2">
                     {selectedActivities.map(activity => (
                       <div key={activity.id} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-0">
-                        <div>
+                        <div className="flex-1">
                           <p className="body-small font-semibold text-dark">{activity.name}</p>
                           <p className="text-xs text-gray">{activity.duration}</p>
                         </div>
-                        {activity.price && (
-                          <span className="body-small font-semibold text-luxury-gold">
-                            From ${activity.price}
-                          </span>
-                        )}
                       </div>
                     ))}
                   </div>

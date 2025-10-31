@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import VillaDetailModal from './VillaDetailModal';
-import ContactModal from './ContactModal';
 
 // Get the base URL from Vite config for proper GitHub Pages paths
 const BASE_URL = import.meta.env.BASE_URL;
 const getImagePath = (path) => `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
 
-const VillaCard = ({ villa, onViewDetails }) => {
+const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % villa.images.length);
@@ -19,7 +17,7 @@ const VillaCard = ({ villa, onViewDetails }) => {
   };
 
   return (
-    <div className="card group cursor-pointer">
+    <div className={`card group ${isSelected ? 'ring-2 ring-luxury-gold' : ''}`}>
       {/* Image Gallery */}
       <div className="relative overflow-hidden rounded-lg">
         <img 
@@ -60,17 +58,15 @@ const VillaCard = ({ villa, onViewDetails }) => {
           </div>
         )}
 
-        {/* Like Button */}
-        <button 
-          onClick={() => setIsLiked(!isLiked)}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform text-lg"
-          style={{ background: 'rgba(255, 255, 255, 0.9)' }}
-        >
-          {isLiked ? '♥' : '♡'}
-        </button>
+        {/* Selected Badge */}
+        {isSelected && (
+          <div className="absolute top-3 left-3 bg-luxury-gold text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+            <span>✓</span> SELECTED
+          </div>
+        )}
 
         {/* Premium Badge */}
-        {villa.isPremium && (
+        {villa.isPremium && !isSelected && (
           <div className="absolute top-3 left-3 bg-luxury-gold text-white px-2 py-1 rounded text-xs font-semibold">
             PREMIUM
           </div>
@@ -83,7 +79,7 @@ const VillaCard = ({ villa, onViewDetails }) => {
         <div className="flex items-center justify-between mb-3">
           <span className="body-regular text-dark font-medium">{villa.location}</span>
           <div className="rating">
-            <span className="body-small">{villa.rating}</span>
+            <span className="body-small">★ {villa.rating}</span>
           </div>
         </div>
 
@@ -114,35 +110,28 @@ const VillaCard = ({ villa, onViewDetails }) => {
           ))}
         </div>
 
-        {/* Booking */}
-        <div className="flex items-center justify-between">
-          <div className="rating">
-            <span className="body-small">★ {villa.rating} • Exceptional</span>
-          </div>
+        {/* Action Buttons */}
+        <div className="flex gap-3">
           <button 
             onClick={() => onViewDetails(villa)}
-            className="btn btn-primary btn-small"
+            className="btn btn-secondary flex-1"
           >
             View Details
           </button>
+          <button 
+            onClick={() => onSelect(villa)}
+            className={`btn flex-1 ${isSelected ? 'btn-success' : 'btn-luxury'}`}
+          >
+            {isSelected ? '✓ Selected' : 'Add to Selection'}
+          </button>
         </div>
-
-        {/* Special Features */}
-        {villa.specialFeatures && villa.specialFeatures.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="body-small text-gray">
-              {villa.specialFeatures.map(feature => feature.name).join(' • ')}
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-const VillasSection = ({ selectedActivities = [] }) => {
-  const [selectedVilla, setSelectedVilla] = useState(null);
-  const [contactVilla, setContactVilla] = useState(null);
+const VillasSection = ({ selectedVilla, onVillaSelect }) => {
+  const [detailVilla, setDetailVilla] = useState(null);
   
   const villas = [
     {
@@ -357,35 +346,25 @@ const VillasSection = ({ selectedActivities = [] }) => {
         
         <div className="grid grid-1 lg:grid-2 gap-6">
           {villas.map((villa) => (
-            <VillaCard key={villa.id} villa={villa} onViewDetails={setSelectedVilla} />
+            <VillaCard 
+              key={villa.id} 
+              villa={villa} 
+              isSelected={selectedVilla?.id === villa.id}
+              onSelect={onVillaSelect}
+              onViewDetails={setDetailVilla} 
+            />
           ))}
         </div>
 
         {/* Villa Detail Modal */}
         <VillaDetailModal 
-          villa={selectedVilla}
-          isOpen={!!selectedVilla}
-          onClose={() => setSelectedVilla(null)}
+          villa={detailVilla}
+          isOpen={!!detailVilla}
+          onClose={() => setDetailVilla(null)}
           onContactClick={() => {
-            setContactVilla(selectedVilla);
-            setSelectedVilla(null);
+            setDetailVilla(null);
           }}
         />
-
-        {/* Contact Modal */}
-        <ContactModal 
-          villa={contactVilla}
-          selectedActivities={selectedActivities}
-          isOpen={!!contactVilla}
-          onClose={() => setContactVilla(null)}
-        />
-
-        {/* View More Button */}
-        <div className="text-center mt-16">
-          <button className="btn btn-secondary btn-large">
-            Show More Villas
-          </button>
-        </div>
       </div>
     </section>
   );

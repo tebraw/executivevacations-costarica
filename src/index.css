@@ -1524,3 +1524,131 @@ textarea.border-red-500 {
   }
 }
 
+/* ========================================
+   BOOKING CART STYLES
+   ======================================== */
+
+.booking-cart {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 45;
+}
+
+@media (max-width: 768px) {
+  .booking-cart {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+  }
+}
+
+.booking-cart-content {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 2px solid var(--luxury-gold);
+  min-width: 280px;
+  max-width: 350px;
+}
+
+@media (max-width: 768px) {
+  .booking-cart-content {
+    min-width: 100%;
+    max-width: 100%;
+  }
+}
+
+.booking-cart-title {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--neutral-dark);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--luxury-gold);
+}
+
+.booking-item {
+  margin-bottom: 1rem;
+}
+
+.booking-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.booking-item-icon {
+  font-size: 1.25rem;
+}
+
+.booking-item-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--neutral-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.booking-item-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--neutral-dark);
+  margin: 0;
+}
+
+.booking-activities-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.booking-activities-list li {
+  font-size: 0.875rem;
+  color: var(--neutral-dark);
+  padding: 0.25rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.booking-activities-list li::before {
+  content: "•";
+  color: var(--luxury-gold);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+/* Success Button Variant */
+.btn-success {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success:hover {
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Gold/Blue Background Utilities */
+.bg-gold-100 {
+  background-color: #FEF3C7;
+}
+
+.bg-blue-100 {
+  background-color: #DBEAFE;
+}
+
+.bg-green-100 {
+  background-color: #D1FAE5;
+}
+
+.text-green-600 {
+  color: #059669;
+}
+

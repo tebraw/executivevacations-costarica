@@ -38,10 +38,6 @@ const ActivityCard = ({ activity, isSelected, onToggle }) => {
           </ul>
         )}
 
-        {activity.price && (
-          <p className="activity-price">From ${activity.price} per person</p>
-        )}
-
         <button 
           className={`add-activity-btn ${isSelected ? 'selected' : ''}`}
           onClick={() => onToggle(activity)}
