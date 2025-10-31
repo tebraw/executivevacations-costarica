@@ -4,6 +4,12 @@ import ActivityCard from './ActivityCard';
 const ActivitiesSection = ({ onActivitiesChange }) => {
   const [selectedActivities, setSelectedActivities] = useState([]);
 
+  // Helper function to get correct image path for GitHub Pages
+  const BASE_URL = import.meta.env.BASE_URL;
+  const getImagePath = (path) => {
+    return `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
+  };
+
   // Activity data
   const activities = [
     {
@@ -11,7 +17,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'ATV Rainbow Mountain Adventure',
       description: 'Embark on a thrilling ATV ride through pristine mountains and lush rainforest. Experience breathtaking views and an adrenaline rush like no other.',
       duration: '4-5 hours',
-      image: 'https://images.unsplash.com/photo-1612435376805-b5e7bb2e00e3?w=800&h=600&fit=crop&auto=format',
+      image: getImagePath('images/activities/ATVTourRainbowMountain.jpg'),
       highlights: ['Professional guide included', 'All safety equipment provided', 'Refreshments included']
     },
     {
