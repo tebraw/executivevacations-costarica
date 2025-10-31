@@ -1198,18 +1198,10 @@ textarea.border-red-500 {
   margin: 0;
 }
 
-/* Activities Layout */
+/* Activities Layout - Full width (sidebar removed) */
 .activities-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  display: block;
   position: relative;
-}
-
-@media (min-width: 1024px) {
-  .activities-layout {
-    grid-template-columns: 1fr 350px;
-  }
 }
 
 /* Activities Grid */
