@@ -11,7 +11,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'ATV Rainbow Mountain Adventure',
       description: 'Embark on a thrilling ATV ride through pristine mountains and lush rainforest. Experience breathtaking views and an adrenaline rush like no other.',
       duration: '4-5 hours',
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop&auto=format',
+      image: 'https://images.unsplash.com/photo-1612435376805-b5e7bb2e00e3?w=800&h=600&fit=crop&auto=format',
       highlights: ['Professional guide included', 'All safety equipment provided', 'Refreshments included']
     },
     {
@@ -27,7 +27,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'Couples Massage',
       description: 'Indulge in a relaxing in-villa couples massage. Professional therapists bring the spa experience directly to your accommodation.',
       duration: '90 minutes',
-      image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&h=600&fit=crop',
+      image: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&h=600&fit=crop&auto=format',
       highlights: ['In-villa service', 'Premium oils & lotions', 'Relaxing atmosphere']
     },
     {
@@ -51,7 +51,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'Zip-lining Adventure',
       description: 'Soar through the rainforest canopy on an exhilarating zip-line tour. Experience Costa Rica\'s natural beauty from a unique perspective.',
       duration: '3 hours',
-      image: 'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&h=600&fit=crop',
+      image: 'https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&h=600&fit=crop&auto=format',
       highlights: ['Multiple zip-lines', 'Safety certified', 'Transportation included']
     },
     {

@@ -40,13 +40,13 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center md:p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div 
-        className="bg-white md:rounded-xl max-w-7xl w-full h-full md:max-h-[95vh] overflow-y-auto"
+        className="bg-white rounded-xl max-w-7xl w-full max-h-[95vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 md:p-6 flex justify-between items-start">
+        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 md:p-6 flex justify-between items-start z-10">
           <div className="flex-1">
             <h2 className="heading-2 mb-2">{villa.name}</h2>
             <div className="flex items-center gap-4 text-gray">
