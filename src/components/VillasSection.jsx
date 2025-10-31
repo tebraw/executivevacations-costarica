@@ -140,7 +140,7 @@ const VillaCard = ({ villa, onViewDetails }) => {
   );
 };
 
-const VillasSection = () => {
+const VillasSection = ({ selectedActivities = [] }) => {
   const [selectedVilla, setSelectedVilla] = useState(null);
   const [contactVilla, setContactVilla] = useState(null);
   
@@ -375,6 +375,7 @@ const VillasSection = () => {
         {/* Contact Modal */}
         <ContactModal 
           villa={contactVilla}
+          selectedActivities={selectedActivities}
           isOpen={!!contactVilla}
           onClose={() => setContactVilla(null)}
         />

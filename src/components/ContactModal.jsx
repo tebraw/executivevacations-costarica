@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const ContactModal = ({ villa, isOpen, onClose }) => {
+const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -98,7 +98,13 @@ const ContactModal = ({ villa, isOpen, onClose }) => {
       
       console.log('Contact form submitted:', {
         ...formData,
-        villa: villa?.name || 'Unknown Villa'
+        villa: villa?.name || 'Unknown Villa',
+        selectedActivities: selectedActivities.map(a => ({
+          id: a.id,
+          name: a.name,
+          duration: a.duration,
+          price: a.price
+        }))
       });
       
       setIsSubmitted(true);
@@ -325,6 +331,33 @@ const ContactModal = ({ villa, isOpen, onClose }) => {
                   <p className="text-red-500 text-sm mt-1">{errors.message}</p>
                 )}
               </div>
+
+              {/* Selected Activities Display */}
+              {selectedActivities && selectedActivities.length > 0 && (
+                <div className="bg-light rounded-lg p-4">
+                  <h4 className="body-regular font-semibold mb-3 text-dark">
+                    Selected Activities ({selectedActivities.length})
+                  </h4>
+                  <div className="space-y-2">
+                    {selectedActivities.map(activity => (
+                      <div key={activity.id} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-0">
+                        <div>
+                          <p className="body-small font-semibold text-dark">{activity.name}</p>
+                          <p className="text-xs text-gray">{activity.duration}</p>
+                        </div>
+                        {activity.price && (
+                          <span className="body-small font-semibold text-luxury-gold">
+                            From ${activity.price}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray mt-3 italic">
+                    Our team will contact you to discuss quantities, participants, and finalize all details.
+                  </p>
+                </div>
+              )}
 
               {/* Submit Button */}
               <div className="flex gap-3 pt-4">
