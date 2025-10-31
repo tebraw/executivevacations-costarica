@@ -21,14 +21,19 @@ function App() {
       setHasSeenModal(true);
     }
 
-    // Show modal on first scroll to villas section
+    // Show modal when user scrolls 30% into the villas section
     const handleScroll = () => {
       if (hasSeenModal) return;
       
       const villasSection = document.getElementById('villas');
       if (villasSection) {
         const rect = villasSection.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
+        const sectionHeight = rect.height;
+        const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+        const scrolledPercentage = (visibleHeight / sectionHeight) * 100;
+        
+        // Show modal when user has scrolled 30% through the villas section
+        if (scrolledPercentage >= 30) {
           setShowInstructionModal(true);
           setHasSeenModal(true);
           localStorage.setItem('instructionModalSeen', 'true');

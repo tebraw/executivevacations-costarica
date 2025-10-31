@@ -1,18 +1,12 @@
 import React from 'react';
 
 const ActivityCard = ({ activity, isSelected, onToggle }) => {
-  // Helper function to get correct image path for GitHub Pages
-  const BASE_URL = import.meta.env.BASE_URL;
-  const getImagePath = (path) => {
-    return `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
-  };
-
   return (
     <div className={`activity-card ${isSelected ? 'selected' : ''}`}>
       {/* Activity Image */}
       <div 
         className="activity-card-image"
-        style={{ backgroundImage: `url('${getImagePath(activity.image)}')` }}
+        style={{ backgroundImage: `url('${activity.image}')` }}
       >
         {activity.duration && (
           <div className="duration-badge">

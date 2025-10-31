@@ -1652,3 +1652,335 @@ textarea.border-red-500 {
   color: #059669;
 }
 
+/* ============================================
+   ENHANCED INSTRUCTION MODAL STYLES
+   ============================================ */
+
+/* Overlay with smooth fade-in animation */
+.instruction-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(30, 64, 175, 0.95) 0%, rgba(0, 0, 0, 0.9) 100%);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.instruction-modal-overlay.active {
+  opacity: 1;
+}
+
+/* Modal content with slide-up animation */
+.instruction-modal-content {
+  background: white;
+  border-radius: 24px;
+  max-width: 700px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transform: translateY(30px) scale(0.95);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.instruction-modal-content.active {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* Decorative gradient background */
+.instruction-modal-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 50%, #D4AF37 100%);
+  opacity: 0.05;
+  z-index: 0;
+}
+
+/* Header Section */
+.instruction-modal-header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 3rem 2rem 2rem;
+}
+
+.instruction-modal-icon {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.instruction-modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1F2937;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.instruction-modal-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: #6B7280;
+  font-weight: 400;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Steps Section */
+.instruction-steps {
+  padding: 0 2rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.instruction-step {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.instruction-step:last-child {
+  margin-bottom: 0;
+}
+
+/* Step Number Circle */
+.instruction-step-number {
+  position: relative;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.instruction-step:hover .instruction-step-number {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.step-blue {
+  background: linear-gradient(135deg, #DBEAFE 0%, #93C5FD 100%);
+  color: #1E40AF;
+}
+
+.step-gold {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FCD34D 100%);
+  color: #92400E;
+}
+
+.step-green {
+  background: linear-gradient(135deg, #D1FAE5 0%, #6EE7B7 100%);
+  color: #065F46;
+}
+
+.instruction-step-number svg {
+  position: absolute;
+  opacity: 0.3;
+}
+
+.step-badge {
+  position: relative;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Step Content */
+.instruction-step-content {
+  flex: 1;
+  padding-top: 0.5rem;
+}
+
+.instruction-step-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 0.5rem;
+}
+
+.instruction-step-description {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.938rem;
+  color: #6B7280;
+  line-height: 1.6;
+}
+
+/* Info Box */
+.instruction-info-box {
+  margin: 0 2rem 2rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  border: 1.5px solid #FCD34D;
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.instruction-info-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.instruction-info-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #78350F;
+  line-height: 1.6;
+}
+
+.instruction-info-text strong {
+  color: #92400E;
+  font-weight: 600;
+}
+
+/* CTA Button */
+.instruction-cta-button {
+  margin: 0 2rem 2rem;
+  width: calc(100% - 4rem);
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.063rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px -5px rgba(30, 64, 175, 0.4);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.instruction-cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.instruction-cta-button:hover::before {
+  left: 100%;
+}
+
+.instruction-cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px -5px rgba(30, 64, 175, 0.5);
+  background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
+}
+
+.instruction-cta-button:active {
+  transform: translateY(0);
+}
+
+.instruction-cta-button svg {
+  transition: transform 0.3s ease;
+}
+
+.instruction-cta-button:hover svg {
+  transform: translateX(5px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .instruction-modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 1rem;
+  }
+  
+  .instruction-modal-header {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+  
+  .instruction-modal-title {
+    font-size: 1.5rem;
+  }
+  
+  .instruction-modal-subtitle {
+    font-size: 0.938rem;
+  }
+  
+  .instruction-steps {
+    padding: 0 1.5rem 1.5rem;
+  }
+  
+  .instruction-step {
+    gap: 1rem;
+  }
+  
+  .instruction-step-number {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .step-badge {
+    font-size: 1.25rem;
+  }
+  
+  .instruction-step-title {
+    font-size: 1.125rem;
+  }
+  
+  .instruction-step-description {
+    font-size: 0.875rem;
+  }
+  
+  .instruction-info-box {
+    margin: 0 1.5rem 1.5rem;
+    padding: 1rem;
+  }
+  
+  .instruction-cta-button {
+    margin: 0 1.5rem 1.5rem;
+    width: calc(100% - 3rem);
+    font-size: 1rem;
+  }
+}

@@ -11,7 +11,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'ATV Rainbow Mountain Adventure',
       description: 'Embark on a thrilling ATV ride through pristine mountains and lush rainforest. Experience breathtaking views and an adrenaline rush like no other.',
       duration: '4-5 hours',
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop',
+      image: 'https://images.unsplash.com/photo-1607631568010-a87852c512be?w=800&h=600&fit=crop',
       highlights: ['Professional guide included', 'All safety equipment provided', 'Refreshments included']
     },
     {
@@ -146,7 +146,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
                     <div key={activity.id} className="selected-activity-item">
                       <div 
                         className="selected-activity-image"
-                        style={{ backgroundImage: `url('${import.meta.env.BASE_URL}${activity.image.startsWith('/') ? activity.image.slice(1) : activity.image}')` }}
+                        style={{ backgroundImage: `url('${activity.image}')` }}
                       ></div>
                       <div className="selected-activity-info">
                         <h4 className="selected-activity-name">{activity.name}</h4>
