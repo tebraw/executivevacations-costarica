@@ -17,7 +17,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'ATV Rainbow Mountain Adventure',
       description: 'Embark on a thrilling ATV ride through pristine mountains and lush rainforest. Experience breathtaking views and an adrenaline rush like no other.',
       duration: '4-5 hours',
-      image: getImagePath('images/activities/ATVTourRainbowMountain.jpg'),
+      image: getImagePath('images/activities/atv.avif'),
       highlights: ['Professional guide included', 'All safety equipment provided', 'Refreshments included']
     },
     {
@@ -57,7 +57,7 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       name: 'Zip-lining Adventure',
       description: 'Soar through the rainforest canopy on an exhilarating zip-line tour. Experience Costa Rica\'s natural beauty from a unique perspective.',
       duration: '3 hours',
-      image: 'https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&h=600&fit=crop&auto=format',
+      image: getImagePath('images/activities/zipline.avif'),
       highlights: ['Multiple zip-lines', 'Safety certified', 'Transportation included']
     },
     {
@@ -67,6 +67,15 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
       duration: 'Flexible',
       image: 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=800&h=600&fit=crop',
       highlights: ['Customized menu', 'Local & fresh ingredients', 'Full service included']
+    },
+    {
+      id: 'private-air-charter',
+      name: 'Private Air Charter Service',
+      description: 'Fly directly to your paradise! Our exclusive private air charter service brings you from SJO or LIR to Tambor Private Airstrip - just 20 minutes from Palicio Tropical, Palicio Musical, and The View House. Skip the long drive and arrive refreshed, enjoying personalized VIP service and flexible scheduling tailored to your travel needs.',
+      duration: '45-60 minutes',
+      image: getImagePath('images/activities/privateaircharter.jpeg'),
+      highlights: ['20 min to villas', 'Direct to Tambor Airstrip', 'VIP concierge service'],
+      isService: true
     }
   ];
 

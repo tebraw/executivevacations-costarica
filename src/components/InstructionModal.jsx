@@ -26,37 +26,50 @@ const InstructionModal = ({ isOpen, onClose }) => {
 
   return (
     <div 
-      className={`instruction-modal-overlay ${isAnimating ? 'active' : ''}`}
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div 
-        className={`instruction-modal-content ${isAnimating ? 'active' : ''}`}
+        className={`bg-white rounded-xl max-w-4xl w-full max-h-[95vh] overflow-y-auto ${isAnimating ? 'active' : ''}`}
         onClick={(e) => e.stopPropagation()}
+        style={{ animation: isAnimating ? 'slideIn 0.4s ease-out' : 'none' }}
       >
-        {/* Decorative gradient background */}
-        <div className="instruction-modal-gradient"></div>
         
-        {/* Header with icon animation */}
-        <div className="instruction-modal-header">
-          <div className="instruction-modal-icon">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-              <circle cx="24" cy="24" r="24" fill="url(#goldGradient)" opacity="0.2"/>
-              <path d="M24 14L27.708 21.584L36 22.736L30 28.584L31.416 36.832L24 32.944L16.584 36.832L18 28.584L12 22.736L20.292 21.584L24 14Z" fill="url(#goldGradient)"/>
-              <defs>
-                <linearGradient id="goldGradient" x1="24" y1="14" x2="24" y2="36.832" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#F4E4C1"/>
-                  <stop offset="1" stopColor="#D4AF37"/>
-                </linearGradient>
-              </defs>
-            </svg>
+        {/* Header */}
+        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 md:p-6 flex justify-between items-start z-10">
+          <div className="flex-1">
+            <div className="instruction-modal-icon mb-4">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="24" fill="url(#goldGradient)" opacity="0.2"/>
+                <path d="M24 14L27.708 21.584L36 22.736L30 28.584L31.416 36.832L24 32.944L16.584 36.832L18 28.584L12 22.736L20.292 21.584L24 14Z" fill="url(#goldGradient)"/>
+                <defs>
+                  <linearGradient id="goldGradient" x1="24" y1="14" x2="24" y2="36.832" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#F4E4C1"/>
+                    <stop offset="1" stopColor="#D4AF37"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-2">
+              Plan Your Perfect Escape
+            </h2>
+            <p className="text-gray-600 text-lg">
+              Your luxury Costa Rica experience begins with three simple steps
+            </p>
           </div>
-          <h2 className="instruction-modal-title">
-            Plan Your Perfect Escape
-          </h2>
-          <p className="instruction-modal-subtitle">
-            Your luxury Costa Rica experience begins with three simple steps
-          </p>
+          <button
+            onClick={onClose}
+            className="ml-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="Close modal"
+          >
+            <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
+
+        {/* Content */}
+        <div className="p-4 md:p-6">
 
         {/* Steps with enhanced styling */}
         <div className="instruction-steps">
@@ -111,26 +124,27 @@ const InstructionModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Enhanced info box */}
-        <div className="instruction-info-box">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="instruction-info-icon">
-            <circle cx="10" cy="10" r="9" stroke="#D4AF37" strokeWidth="2"/>
-            <path d="M10 14V10M10 6H10.01" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round"/>
+        <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 flex items-start gap-3">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0 mt-0.5">
+            <circle cx="10" cy="10" r="9" stroke="#1E40AF" strokeWidth="2"/>
+            <path d="M10 14V10M10 6H10.01" stroke="#1E40AF" strokeWidth="2" strokeLinecap="round"/>
           </svg>
-          <p className="instruction-info-text">
-            <strong>Flexible Planning:</strong> No payment required now. Simply explore, select, and let us handle the rest with personalized service.
+          <p className="text-sm text-gray-700">
+            <strong className="text-gray-900">Flexible Planning:</strong> No payment required now. Simply explore, select, and let us handle the rest with personalized service.
           </p>
         </div>
 
-        {/* CTA Button with gradient */}
+        {/* CTA Button */}
         <button 
           onClick={onClose}
-          className="instruction-cta-button"
+          className="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
         >
           <span>Begin Your Journey</span>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
+        </div>
       </div>
     </div>
   );

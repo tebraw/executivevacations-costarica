@@ -40,9 +40,9 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-0 md:p-4" onClick={onClose}>
       <div 
-        className="bg-white rounded-xl max-w-7xl w-full max-h-[95vh] overflow-y-auto"
+        className="bg-white rounded-none md:rounded-xl max-w-7xl w-full h-full md:h-auto md:max-h-[95vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -61,14 +61,14 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
           </button>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6 p-4 md:p-6">
-          {/* Image Gallery - Larger and with navigation */}
-          <div className="lg:col-span-2">
-            <div className="relative overflow-hidden rounded-xl mb-4">
+        <div className="block lg:grid lg:grid-cols-3 gap-6 p-4 md:p-6">
+          {/* Image Gallery - Mobile: Stack vertically, Desktop: Side by side */}
+          <div className="lg:col-span-2 mb-6 lg:mb-0">
+            <div className="relative overflow-hidden rounded-lg md:rounded-xl mb-4">
               <img 
                 src={getImagePath(images[currentImageIndex])} 
                 alt={`${villa.name} - ${currentImageIndex + 1}`}
-                className="w-full h-96 object-cover"
+                className="w-full h-64 md:h-96 object-cover"
               />
               
               {/* Navigation arrows */}
@@ -76,13 +76,13 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
                 <>
                   <button 
                     onClick={prevImage}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all text-xl font-bold"
+                    className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all text-lg md:text-xl font-bold"
                   >
                     ←
                   </button>
                   <button 
                     onClick={nextImage}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all text-xl font-bold"
+                    className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all text-lg md:text-xl font-bold"
                   >
                     →
                   </button>
@@ -90,14 +90,14 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
               )}
 
               {/* Image counter */}
-              <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
+              <div className="absolute bottom-2 md:bottom-4 right-2 md:right-4 bg-black/70 text-white px-2 md:px-3 py-1 rounded-full text-xs md:text-sm">
                 {currentImageIndex + 1} / {images.length}
               </div>
             </div>
 
-            {/* Thumbnail navigation */}
+            {/* Thumbnail navigation - Hide on mobile for cleaner look */}
             {images.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-2">
+              <div className="hidden md:flex gap-2 overflow-x-auto pb-2">
                 {images.map((image, index) => (
                   <button
                     key={index}

@@ -8,6 +8,13 @@ const ActivityCard = ({ activity, isSelected, onToggle }) => {
         className="activity-card-image"
         style={{ backgroundImage: `url('${activity.image}')` }}
       >
+        {/* Service Badge */}
+        {activity.isService && (
+          <div className="service-badge">
+            ✈️ SERVICE
+          </div>
+        )}
+        
         {activity.duration && (
           <div className="duration-badge">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
