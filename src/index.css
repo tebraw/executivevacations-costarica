@@ -24,7 +24,6 @@ body {
   margin: 0 auto;
   padding: 0 1rem;
   width: 100%;
-  overflow-x: hidden;
 }
 
 @media (min-width: 768px) {
