@@ -84,12 +84,12 @@ function App() {
         onClose={() => setShowInstructionModal(false)}
       />
       
-      {/* Floating Booking Cart */}
-      <BookingCart 
+      {/* Floating Booking Cart - DEACTIVATED (too large for mobile) */}
+      {/* <BookingCart 
         selectedVilla={selectedVilla}
         selectedActivities={selectedActivities}
         onOpenContact={scrollToContact}
-      />
+      /> */}
     </div>
   )
 }

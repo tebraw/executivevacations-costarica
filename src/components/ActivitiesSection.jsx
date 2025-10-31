@@ -106,18 +106,6 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
             Add unforgettable activities to your Costa Rica vacation. Select the experiences that interest you, 
             and our team will contact you to arrange all the details.
           </p>
-          
-          {/* Important Note */}
-          <div className="activity-note-box max-w-2xl mx-auto">
-            <div className="note-icon">ℹ️</div>
-            <div className="note-content">
-              <h4 className="note-title">How it works</h4>
-              <p className="note-text">
-                Simply select activities that interest you. Our concierge team will reach out to discuss 
-                quantities, participants, preferred dates, and personalize every detail to your preferences.
-              </p>
-            </div>
-          </div>
         </div>
 
         <div className="activities-layout">
