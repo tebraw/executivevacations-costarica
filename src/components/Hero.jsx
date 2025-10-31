@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hero = () => {
   return (
-    <section className="relative" style={{ height: 'calc(100vh - 80px)', marginTop: '80px' }}>
+    <section className="relative" style={{ height: 'calc(100vh - 80px)', marginTop: '80px', overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center"

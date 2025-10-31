@@ -148,7 +148,18 @@ const InstructionModal = ({ isOpen, onClose }) => {
         {/* CTA Button */}
         <button 
           onClick={onClose}
-          className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+          className="w-full py-3.5 px-6 bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-none rounded-full font-semibold text-base cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
+          style={{
+            background: 'linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)',
+            boxShadow: '0 4px 12px rgba(212, 175, 55, 0.3)',
+            fontFamily: 'Montserrat, sans-serif'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.boxShadow = '0 6px 16px rgba(212, 175, 55, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.boxShadow = '0 4px 12px rgba(212, 175, 55, 0.3)';
+          }}
         >
           <span>Got it, let's start!</span>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
