@@ -14,15 +14,15 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex items-center">
+      <div className="relative z-10 h-full flex items-center justify-center">
         <div className="container">
-          <div className="max-w-3xl animate-fade-in-up">
+          <div className="w-full max-w-3xl mx-auto text-center animate-fade-in-up">
             <h1 className="heading-1 text-white mb-6">
               Discover Luxury Villas in 
               <span className="block mt-2" style={{ color: '#D4AF37' }}>Costa Rica</span>
             </h1>
             
-            <p className="body-large mb-8 max-w-2xl" style={{ color: 'white' }}>
+            <p className="body-large mb-8 mx-auto" style={{ color: 'white', maxWidth: '42rem' }}>
               Exclusive vacation villas in tropical paradise. From private pools to breathtaking ocean views – 
               experience unforgettable moments in Costa Rica's most beautiful accommodations.
             </p>
@@ -35,7 +35,7 @@ const Hero = () => {
 
             {/* Stats */}
             <div className="mt-12">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 max-w-4xl mx-auto">
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 md:p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 w-full max-w-4xl mx-auto">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                   <div>
                     <div className="heading-3 mb-2" style={{ color: 'white' }}>4</div>

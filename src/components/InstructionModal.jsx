@@ -76,7 +76,7 @@ const InstructionModal = ({ isOpen, onClose }) => {
           {/* Step 1 - Villa Selection */}
           <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 transform transition-all hover:scale-[1.02]">
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+              <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl" style={{ background: 'linear-gradient(135deg, #D4AF37 0%, #F4E4C1 100%)', color: '#1F2937' }}>
                 1
               </div>
               <div className="flex-1">
@@ -97,7 +97,7 @@ const InstructionModal = ({ isOpen, onClose }) => {
           {/* Step 2 - Activities */}
           <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200 transform transition-all hover:scale-[1.02]">
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+              <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl" style={{ background: 'linear-gradient(135deg, #D4AF37 0%, #F4E4C1 100%)', color: '#1F2937' }}>
                 2
               </div>
               <div className="flex-1">
@@ -117,7 +117,7 @@ const InstructionModal = ({ isOpen, onClose }) => {
           {/* Step 3 - Contact */}
           <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200 transform transition-all hover:scale-[1.02]">
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+              <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl" style={{ background: 'linear-gradient(135deg, #D4AF37 0%, #F4E4C1 100%)', color: '#1F2937' }}>
                 3
               </div>
               <div className="flex-1">
@@ -145,14 +145,14 @@ const InstructionModal = ({ isOpen, onClose }) => {
           </p>
         </div>
 
-        {/* Gold CTA Button with Shine Effect */}
+        {/* CTA Button */}
         <button 
           onClick={onClose}
-          className="gold-shine-button w-full font-bold py-4 px-8 rounded-xl text-lg flex items-center justify-center gap-3 transform transition-all hover:scale-[1.02] active:scale-[0.98]"
+          className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
         >
-          <span>Start Planning Your Escape</span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <span>Got it, let's start!</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
         </div>

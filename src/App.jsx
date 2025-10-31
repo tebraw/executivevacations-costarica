@@ -64,7 +64,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen" style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
       <Header />
       <Hero />
       <VillasSection 
