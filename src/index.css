@@ -898,6 +898,63 @@ body {
   box-shadow: 0 2px 8px rgba(212, 175, 55, 0.25);
 }
 
+/* Gold Shine Button for Instruction Modal */
+.gold-shine-button {
+  position: relative;
+  background: linear-gradient(135deg, #D4AF37 0%, #F4E4C1 50%, #D4AF37 100%);
+  background-size: 200% 200%;
+  color: #1F2937;
+  font-weight: bold;
+  border: none;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+  animation: goldShimmer 3s ease-in-out infinite;
+}
+
+.gold-shine-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 70%
+  );
+  animation: shine 3s ease-in-out infinite;
+}
+
+.gold-shine-button:hover {
+  box-shadow: 0 6px 30px rgba(212, 175, 55, 0.6);
+  transform: scale(1.02);
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+@keyframes goldShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Utility classes for modal */
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
 .btn-luxury:hover {
   background: var(--luxury-gold-dark);
   color: white;
@@ -2065,10 +2122,6 @@ textarea.border-red-500 {
 }
 
 /* Mobile-specific fixes for overflow prevention */
-* {
-  max-width: 100%;
-}
-
 img, video {
   max-width: 100%;
   height: auto;
