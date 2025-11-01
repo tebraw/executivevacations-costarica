@@ -79,8 +79,20 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
           </div>
         )}
 
+        {/* Christmas Special Badge */}
+        {villa.hasChristmasSpecial && !isSelected && (
+          <div className="christmas-special-badge">
+            <div className="christmas-badge-header">CHRISTMAS WEEK SPECIAL</div>
+            <div className="christmas-badge-divider"></div>
+            <div className="christmas-badge-offer">
+              <span className="offer-text">FREE</span>
+              <span className="offer-details">ATV + Catamaran Tours</span>
+            </div>
+          </div>
+        )}
+
         {/* Premium Badge */}
-        {villa.isPremium && !isSelected && (
+        {villa.isPremium && !isSelected && !villa.hasChristmasSpecial && (
           <div className="absolute top-3 left-3 bg-luxury-gold text-white px-2 py-1 rounded text-xs font-semibold">
             PREMIUM
           </div>
@@ -208,6 +220,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       guests: 16,
       size: "10,500 sq ft",
       isPremium: true,
+      hasChristmasSpecial: true,
       images: [
         "/images/villas/palacio-tropical/palaciotropical.dronephoto-03.jpg",
         "/images/villas/palacio-tropical/palaciotropical-455.exterior_1.jpg",
