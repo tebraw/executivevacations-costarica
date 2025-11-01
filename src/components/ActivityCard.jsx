@@ -48,7 +48,7 @@ const ActivityCard = ({ activity, isSelected, onToggle }) => {
               <span className="checkmark">✓</span> Added
             </>
           ) : (
-            '+ Add Activity'
+            activity.isService ? '+ Add Service' : '+ Add Activity'
           )}
         </button>
       </div>
