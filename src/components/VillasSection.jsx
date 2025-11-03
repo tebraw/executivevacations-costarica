@@ -161,54 +161,6 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
   
   const villas = [
     {
-      id: 1,
-      name: "The Palms Villa Estate",
-      type: "Mountain Villa Retreat",
-      location: "Atenas",
-      fullLocation: "Santa Eulalia, Atenas, Costa Rica",
-      rating: 4.95,
-      bedrooms: 4,
-      bathrooms: 3.5,
-      guests: 8,
-      size: "Resort-style property",
-      isPremium: true,
-      images: [
-        "/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif",
-        "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.jpeg",
-        "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.jpeg"
-      ],
-      detailImages: [
-        "/images/villas/the-palms-villa-estate/3010682d-f127-4ff9-b647-099323082072.jpeg",
-        "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.jpeg",
-        "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.jpeg",
-        "/images/villas/the-palms-villa-estate/910cba2e-cbaf-41f4-a725-57ddbebf7ac1.jpeg",
-        "/images/villas/the-palms-villa-estate/d990535c-645c-4e23-b04f-9c4f3bd9040c.jpeg",
-        "/images/villas/the-palms-villa-estate/f9aafc09-ec54-4b03-a21b-a4d799f059c1.jpeg",
-        "/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp",
-        "/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif"
-      ],
-      topAmenities: ["Private Pool", "Mountain Views", "Full-time Caretaker", "Air Conditioning"],
-      allAmenities: [
-        { name: "Private Pool", icon: "fa-swimming-pool" },
-        { name: "Mountain Views", icon: "fa-mountain" },
-        { name: "Full-time Caretaker", icon: "fa-user-tie" },
-        { name: "Air Conditioning", icon: "fa-snowflake" },
-        { name: "Resort-style Grounds", icon: "fa-tree" },
-        { name: "Peaceful Setting", icon: "fa-leaf" },
-        { name: "32 Miles to Beach", icon: "fa-umbrella-beach" },
-        { name: "Cultural Experience", icon: "fa-heart" },
-        { name: "Family Friendly", icon: "fa-home" },
-        { name: "Event Hosting", icon: "fa-calendar" }
-      ],
-      detailedDescription: "This beautiful mountain villa is nestled in the hills of Atenas, Costa Rica. Atenas offers a wonderful opportunity to experience authentic Costa Rican culture, known as a local favorite. The property provides a tranquil, peaceful, and quiet environment perfect for family vacations, intimate weddings, reunions, or personal and business retreats. With 4 bedrooms (3 upstairs with full AC, 1 downstairs), the villa accommodates up to 8 guests comfortably. Additional sleeping options include a queen pull-out sofa and futon.",
-      locationDescription: "Located in the hills of Atenas, just 32 miles from the nearest beach and marina on the Pacific coast. Experience authentic Costa Rican culture while staying close to all the adventures Costa Rica offers.",
-      specialFeatures: [
-        { name: "Full-time Caretaker (Don Manuel)", icon: "fa-user-tie" },
-        { name: "Resort-style Grounds", icon: "fa-tree" },
-        { name: "Perfect for Events", icon: "fa-calendar" }
-      ]
-    },
-    {
       id: 2,
       name: "Palacio Tropical",
       type: "Ultra-Luxury Oceanfront Villa",
@@ -222,8 +174,8 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       isPremium: true,
       hasChristmasSpecial: true,
       images: [
+        "/images/villas/palacio-tropical/palaciotropical-469.exterior_1.jpg",
         "/images/villas/palacio-tropical/palaciotropical.dronephoto-03.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-455.exterior_1.jpg",
         "/images/villas/palacio-tropical/palaciotropical-518.exterior.jpg"
       ],
       detailImages: [
@@ -263,6 +215,50 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "VIP Privacy & Security", icon: "fa-user-shield" },
         { name: "Full Staff Service", icon: "fa-concierge-bell" },
         { name: "Airport Transfer Service", icon: "fa-plane" }
+      ]
+    },
+    {
+      id: 4,
+      name: "Palicio Musical",
+      type: "Exclusive Beachfront Villa",
+      location: "Tambor, Puntarenas - Tango Mar",
+      fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
+      rating: 4.97,
+      bedrooms: 8,
+      bathrooms: 6,
+      guests: 16,
+      size: "7,200 sq ft",
+      isPremium: true,
+      isComingSoon: true, // Set to false when available for booking
+      images: [
+        "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg",
+        "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG",
+        "/images/villas/palicio-musical/+Cuarto 3 DSC_3345.jpg"
+      ],
+      detailImages: [
+        "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg",
+        "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG",
+        "/images/villas/palicio-musical/+Cuarto 3 DSC_3345.jpg"
+      ],
+      topAmenities: ["Music Studio", "Newly Renovated", "Ocean Views", "Full Staff"],
+      allAmenities: [
+        { name: "Professional Music Studio", icon: "fa-music" },
+        { name: "Newly Renovated", icon: "fa-tools" },
+        { name: "Ocean Views", icon: "fa-water" },
+        { name: "Full Staff Available", icon: "fa-concierge-bell" },
+        { name: "Similar Size to Tropical", icon: "fa-home" },
+        { name: "Modern Amenities", icon: "fa-star" },
+        { name: "Private Beach Access", icon: "fa-umbrella-beach" },
+        { name: "Enhanced Security", icon: "fa-shield-alt" },
+        { name: "Next to Palacio Tropical", icon: "fa-map-marker-alt" },
+        { name: "Combinable Booking", icon: "fa-link" }
+      ],
+      detailedDescription: "Experience luxury in this newly renovated villa, similar in size to Palacio Tropical but featuring a unique professional music studio. Perfect for artists, musicians, or those seeking creative inspiration alongside oceanfront luxury. This villa has been completely renovated with modern amenities while maintaining the same high-end standards as its sister property. Located directly next to Palacio Tropical, both villas can be booked together for ultimate privacy and space for large groups, events, or extended stays.",
+      locationDescription: "Situated directly next to Palacio Tropical in the pristine area of Tambor, Costa Rica. Both properties can be combined for the ultimate luxury experience, offering unparalleled privacy and space.",
+      specialFeatures: [
+        { name: "Professional Music Studio", icon: "fa-music" },
+        { name: "Newly Renovated", icon: "fa-tools" },
+        { name: "Combinable with Palacio Tropical", icon: "fa-link" }
       ]
     },
     {
@@ -312,47 +308,51 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       ]
     },
     {
-      id: 4,
-      name: "Palicio Musical",
-      type: "Exclusive Beachfront Villa",
-      location: "Tambor, Puntarenas - Tango Mar",
-      fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
-      rating: 4.97,
-      bedrooms: 8,
-      bathrooms: 6,
-      guests: 16,
-      size: "7,200 sq ft",
+      id: 1,
+      name: "The Palms Villa Estate",
+      type: "Mountain Villa Retreat",
+      location: "Atenas",
+      fullLocation: "Santa Eulalia, Atenas, Costa Rica",
+      rating: 4.95,
+      bedrooms: 4,
+      bathrooms: 3.5,
+      guests: 8,
+      size: "Resort-style property",
       isPremium: true,
-      isComingSoon: true, // Set to false when available for booking
       images: [
-        "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg",
-        "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG",
-        "/images/villas/palicio-musical/+Cuarto 3 DSC_3345.jpg"
+        "/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif",
+        "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.jpeg",
+        "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.jpeg"
       ],
       detailImages: [
-        "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg",
-        "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG",
-        "/images/villas/palicio-musical/+Cuarto 3 DSC_3345.jpg"
+        "/images/villas/the-palms-villa-estate/3010682d-f127-4ff9-b647-099323082072.jpeg",
+        "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.jpeg",
+        "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.jpeg",
+        "/images/villas/the-palms-villa-estate/910cba2e-cbaf-41f4-a725-57ddbebf7ac1.jpeg",
+        "/images/villas/the-palms-villa-estate/d990535c-645c-4e23-b04f-9c4f3bd9040c.jpeg",
+        "/images/villas/the-palms-villa-estate/f9aafc09-ec54-4b03-a21b-a4d799f059c1.jpeg",
+        "/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp",
+        "/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif"
       ],
-      topAmenities: ["Music Studio", "Newly Renovated", "Ocean Views", "Full Staff"],
+      topAmenities: ["Private Pool", "Mountain Views", "Full-time Caretaker", "Air Conditioning"],
       allAmenities: [
-        { name: "Professional Music Studio", icon: "fa-music" },
-        { name: "Newly Renovated", icon: "fa-tools" },
-        { name: "Ocean Views", icon: "fa-water" },
-        { name: "Full Staff Available", icon: "fa-concierge-bell" },
-        { name: "Similar Size to Tropical", icon: "fa-home" },
-        { name: "Modern Amenities", icon: "fa-star" },
-        { name: "Private Beach Access", icon: "fa-umbrella-beach" },
-        { name: "Enhanced Security", icon: "fa-shield-alt" },
-        { name: "Next to Palacio Tropical", icon: "fa-map-marker-alt" },
-        { name: "Combinable Booking", icon: "fa-link" }
+        { name: "Private Pool", icon: "fa-swimming-pool" },
+        { name: "Mountain Views", icon: "fa-mountain" },
+        { name: "Full-time Caretaker", icon: "fa-user-tie" },
+        { name: "Air Conditioning", icon: "fa-snowflake" },
+        { name: "Resort-style Grounds", icon: "fa-tree" },
+        { name: "Peaceful Setting", icon: "fa-leaf" },
+        { name: "32 Miles to Beach", icon: "fa-umbrella-beach" },
+        { name: "Cultural Experience", icon: "fa-heart" },
+        { name: "Family Friendly", icon: "fa-home" },
+        { name: "Event Hosting", icon: "fa-calendar" }
       ],
-      detailedDescription: "Experience luxury in this newly renovated villa, similar in size to Palacio Tropical but featuring a unique professional music studio. Perfect for artists, musicians, or those seeking creative inspiration alongside oceanfront luxury. This villa has been completely renovated with modern amenities while maintaining the same high-end standards as its sister property. Located directly next to Palacio Tropical, both villas can be booked together for ultimate privacy and space for large groups, events, or extended stays.",
-      locationDescription: "Situated directly next to Palacio Tropical in the pristine area of Tambor, Costa Rica. Both properties can be combined for the ultimate luxury experience, offering unparalleled privacy and space.",
+      detailedDescription: "This beautiful mountain villa is nestled in the hills of Atenas, Costa Rica. Atenas offers a wonderful opportunity to experience authentic Costa Rican culture, known as a local favorite. The property provides a tranquil, peaceful, and quiet environment perfect for family vacations, intimate weddings, reunions, or personal and business retreats. With 4 bedrooms (3 upstairs with full AC, 1 downstairs), the villa accommodates up to 8 guests comfortably. Additional sleeping options include a queen pull-out sofa and futon.",
+      locationDescription: "Located in the hills of Atenas, just 32 miles from the nearest beach and marina on the Pacific coast. Experience authentic Costa Rican culture while staying close to all the adventures Costa Rica offers.",
       specialFeatures: [
-        { name: "Professional Music Studio", icon: "fa-music" },
-        { name: "Newly Renovated", icon: "fa-tools" },
-        { name: "Combinable with Palacio Tropical", icon: "fa-link" }
+        { name: "Full-time Caretaker (Don Manuel)", icon: "fa-user-tie" },
+        { name: "Resort-style Grounds", icon: "fa-tree" },
+        { name: "Perfect for Events", icon: "fa-calendar" }
       ]
     }
   ];

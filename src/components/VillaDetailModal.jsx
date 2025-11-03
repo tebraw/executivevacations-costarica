@@ -2,6 +2,16 @@ import React, { useState, useEffect } from 'react';
 
 const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
+
+  // Helper function to get correct image path for GitHub Pages
+  const BASE_URL = import.meta.env.BASE_URL;
+  const getImagePath = (path) => {
+    return `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
+  };
+
+  const images = villa?.detailImages || villa?.images || [];
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -9,6 +19,10 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
+      // Reset lightbox when modal opens
+      setIsLightboxOpen(false);
+      setCurrentImageIndex(0);
+      setLightboxImageIndex(0);
     } else {
       document.body.style.overflow = '';
       document.body.style.position = '';
@@ -21,101 +35,117 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
     };
   }, [isOpen]);
 
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+    
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') {
+        setLightboxImageIndex((prev) => (prev + 1) % images.length);
+      }
+      if (e.key === 'ArrowLeft') {
+        setLightboxImageIndex((prev) => (prev - 1 + images.length) % images.length);
+      }
+      if (e.key === 'Escape') {
+        setIsLightboxOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isLightboxOpen, images.length]);
+
   if (!isOpen || !villa) return null;
-
-  // Helper function to get correct image path for GitHub Pages
-  const BASE_URL = import.meta.env.BASE_URL;
-  const getImagePath = (path) => {
-    return `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
-  };
-
-  const images = villa.detailImages || villa.images || [];
   
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  const openLightbox = (index) => {
+    setLightboxImageIndex(index);
+    setIsLightboxOpen(true);
   };
 
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  const closeLightbox = () => {
+    setIsLightboxOpen(false);
+  };
+
+  const nextLightboxImage = () => {
+    setLightboxImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevLightboxImage = () => {
+    setLightboxImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-0 md:p-4" onClick={onClose}>
-      <div 
-        className="bg-white rounded-none md:rounded-xl max-w-7xl w-full h-full md:h-auto md:max-h-[95vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 md:p-6 flex justify-between items-start z-10">
-          <div className="flex-1">
-            <h2 className="heading-2 mb-2">{villa.name}</h2>
-            <div className="flex items-center gap-4 text-gray">
-              <span className="body-regular">★ {villa.rating} • {villa.location}</span>
+    <>
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+        <div 
+          className="bg-white rounded-xl max-w-7xl w-full max-h-[95vh] overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="sticky top-0 bg-white border-b border-gray-200 p-4 md:p-6 flex justify-between items-start z-10">
+            <div className="flex-1">
+              <h2 className="heading-2 mb-2">{villa.name}</h2>
+              <div className="flex items-center gap-4 text-gray">
+                <span className="body-regular">★ {villa.rating} • {villa.location}</span>
+              </div>
             </div>
+            <button 
+              onClick={onClose}
+              className="w-10 h-10 rounded-full hover:bg-light flex items-center justify-center text-2xl text-gray ml-4"
+            >
+              ×
+            </button>
           </div>
-          <button 
-            onClick={onClose}
-            className="w-10 h-10 rounded-full hover:bg-light flex items-center justify-center text-2xl text-gray ml-4"
-          >
-            ×
-          </button>
-        </div>
 
-        <div className="block lg:grid lg:grid-cols-3 gap-6 p-4 md:p-6">
-          {/* Image Gallery - Mobile: Stack vertically, Desktop: Side by side */}
-          <div className="lg:col-span-2 mb-6 lg:mb-0">
-            <div className="relative overflow-hidden rounded-lg md:rounded-xl mb-4">
-              <img 
-                src={getImagePath(images[currentImageIndex])} 
-                alt={`${villa.name} - ${currentImageIndex + 1}`}
-                className="w-full h-64 md:h-96 object-cover"
-              />
-              
-              {/* Navigation arrows */}
+          <div className="grid lg:grid-cols-3 gap-6 p-4 md:p-6">
+            {/* Image Gallery - Click to open lightbox */}
+            <div className="lg:col-span-2">
+              <div className="relative mb-4 cursor-pointer bg-gray-50 rounded-xl flex items-center justify-center" style={{ minHeight: '400px' }} onClick={() => openLightbox(currentImageIndex)}>
+                <img 
+                  src={getImagePath(images[currentImageIndex])} 
+                  alt={`${villa.name} - ${currentImageIndex + 1}`}
+                  className="w-full max-h-[500px] object-contain"
+                />
+                
+                {/* Click to view full size indicator */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/20">
+                  <div className="bg-white/90 px-4 py-2 rounded-full text-sm font-semibold">
+                    Click to view full size
+                  </div>
+                </div>
+
+                {/* Image counter */}
+                <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
+                  {currentImageIndex + 1} / {images.length}
+                </div>
+              </div>
+
+              {/* Gallery Thumbnail - Single image to open lightbox */}
               {images.length > 1 && (
-                <>
-                  <button 
-                    onClick={prevImage}
-                    className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all text-lg md:text-xl font-bold"
-                  >
-                    ←
-                  </button>
-                  <button 
-                    onClick={nextImage}
-                    className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all text-lg md:text-xl font-bold"
-                  >
-                    →
-                  </button>
-                </>
+                <button
+                  onClick={() => openLightbox(0)}
+                  className="relative w-20 h-16 rounded-lg overflow-hidden group hover:opacity-90 transition-opacity"
+                >
+                  <img 
+                    src={getImagePath(images[1] || images[0])} 
+                    alt="View Gallery"
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Overlay with icon */}
+                  <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-colors flex items-center justify-center">
+                    <div className="text-center text-white">
+                      {/* Gallery Icon */}
+                      <svg className="w-6 h-6 mx-auto mb-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                      </svg>
+                      <span className="text-[10px] font-semibold">+{images.length - 1}</span>
+                    </div>
+                  </div>
+                </button>
               )}
-
-              {/* Image counter */}
-              <div className="absolute bottom-2 md:bottom-4 right-2 md:right-4 bg-black/70 text-white px-2 md:px-3 py-1 rounded-full text-xs md:text-sm">
-                {currentImageIndex + 1} / {images.length}
-              </div>
             </div>
-
-            {/* Thumbnail navigation - Hide on mobile for cleaner look */}
-            {images.length > 1 && (
-              <div className="hidden md:flex gap-2 overflow-x-auto pb-2">
-                {images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                      index === currentImageIndex ? 'border-blue-500' : 'border-gray-200 hover:border-gray-400'
-                    }`}
-                  >
-                    <img 
-                      src={getImagePath(image)} 
-                      alt={`Thumbnail ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
 
           {/* Villa Details - Immediately visible */}
           <div className="lg:col-span-1">
@@ -213,6 +243,73 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
         </div>
       </div>
     </div>
+
+    {/* Lightbox Modal - Full Screen Image Viewer - OUTSIDE modal overlay */}
+    {isLightboxOpen && (
+        <div 
+          className="fixed inset-0 bg-black flex items-center justify-center"
+          style={{ zIndex: 9999 }}
+          onClick={closeLightbox}
+        >
+        {/* Close button */}
+        <button
+          onClick={closeLightbox}
+          className="absolute top-4 right-4 w-12 h-12 bg-black/30 hover:bg-black/50 backdrop-blur-md rounded-lg flex items-center justify-center text-white transition-all hover:scale-105 border border-white/20"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+
+        {/* Image counter */}
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm z-10">
+          {lightboxImageIndex + 1} / {images.length}
+        </div>
+
+        {/* Main image */}
+        <img 
+          src={getImagePath(images[lightboxImageIndex])} 
+          alt={`${villa.name} - ${lightboxImageIndex + 1}`}
+          className="max-w-[90vw] max-h-[90vh] object-contain"
+          onClick={(e) => e.stopPropagation()}
+        />
+
+        {/* Navigation arrows - nur wenn mehr als 1 Bild */}
+        {images.length > 1 && (
+          <>
+            {/* Left arrow */}
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                prevLightboxImage();
+              }}
+              className="w-12 h-12 bg-black/30 hover:bg-black/50 backdrop-blur-md rounded-lg flex items-center justify-center text-white transition-all hover:scale-105 border border-white/20"
+              style={{ position: 'absolute', left: '2rem', top: '50%', transform: 'translateY(-50%)' }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            
+            {/* Right arrow */}
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                nextLightboxImage();
+              }}
+              className="w-12 h-12 bg-black/30 hover:bg-black/50 backdrop-blur-md rounded-lg flex items-center justify-center text-white transition-all hover:scale-105 border border-white/20"
+              style={{ position: 'absolute', right: '2rem', top: '50%', transform: 'translateY(-50%)' }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </>
+        )}
+      </div>
+    )}
+    </>
   );
 };
 
