@@ -179,7 +179,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       isPremium: true,
       isComingSoon: false, // Set to false when available for booking
       images: ["/images/villas/palicio-musical/98986715.jpg"],
-      detailImages: ["/images/villas/palicio-musical/+Cuarto 3 DSC_3345.jpg", "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg", "/images/villas/palicio-musical/198134112.jpg", "/images/villas/palicio-musical/98984225.jpg", "/images/villas/palicio-musical/98986715.jpg", "/images/villas/palicio-musical/98990146.jpg", "/images/villas/palicio-musical/99010031.jpg", "/images/villas/palicio-musical/99498420.jpg", "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG"],
+      detailImages: ["/images/villas/palicio-musical/198134112.jpg", "/images/villas/palicio-musical/98984225.jpg", "/images/villas/palicio-musical/98986715.jpg", "/images/villas/palicio-musical/98990146.jpg", "/images/villas/palicio-musical/99010031.jpg", "/images/villas/palicio-musical/99498420.jpg"],
       topAmenities: ["Music Studio", "Newly Renovated", "Ocean Views", "Full Staff"],
       allAmenities: [
         { name: "Professional Music Studio", icon: "fa-music" },
