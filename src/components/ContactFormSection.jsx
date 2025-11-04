@@ -72,21 +72,37 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
     setIsSubmitting(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Prepare form data for submission
+      const formElement = e.target;
+      const formDataToSend = new FormData(formElement);
       
-      console.log('Booking inquiry submitted:', {
-        ...formData,
-        villa: selectedVilla?.name || 'No villa selected',
-        activities: selectedActivities.map(a => ({
-          id: a.id,
-          name: a.name,
-          duration: a.duration
-        }))
+      // Add selected villa and activities to the form data
+      if (selectedVilla) {
+        formDataToSend.append('Villa Selected', selectedVilla.name);
+      }
+      
+      if (selectedActivities.length > 0) {
+        const activitiesList = selectedActivities.map(a => `${a.name} (${a.duration})`).join(', ');
+        formDataToSend.append('Activities Selected', activitiesList);
+      }
+
+      // Submit to FormSubmit.co
+      const response = await fetch('https://formsubmit.co/ajax/wendymeritt@gmail.com', {
+        method: 'POST',
+        body: formDataToSend,
+        headers: {
+          'Accept': 'application/json'
+        }
       });
-      
-      setIsSubmitted(true);
+
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        throw new Error('Form submission failed');
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
+      alert('There was an error submitting your inquiry. Please try again or contact us directly at wendymeritt@gmail.com');
     } finally {
       setIsSubmitting(false);
     }
@@ -164,6 +180,12 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Hidden fields for FormSubmit configuration */}
+              <input type="hidden" name="_cc" value="grujicic.filip17@gmail.com,sanmariaamin@gmail.com" />
+              <input type="hidden" name="_subject" value="New Inquiry from Executive Vacations Website" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="false" />
+              
               {/* Name */}
               <div>
                 <label htmlFor="name" className="block body-regular font-semibold mb-2">
