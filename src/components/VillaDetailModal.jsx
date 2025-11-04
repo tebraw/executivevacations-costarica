@@ -104,7 +104,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
                 <img 
                   src={getImagePath(images[currentImageIndex])} 
                   alt={`${villa.name} - ${currentImageIndex + 1}`}
-                  className="w-full max-h-[500px] object-contain"
+                  className="w-full max-h-[500px] object-contain" loading="lazy"
                 />
                 
                 {/* Click to view full size indicator */}
@@ -129,7 +129,7 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
                   <img 
                     src={getImagePath(images[1] || images[0])} 
                     alt="View Gallery"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover" loading="lazy"
                   />
                   {/* Overlay with icon */}
                   <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-colors flex items-center justify-center">

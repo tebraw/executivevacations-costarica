@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import VillaDetailModal from './VillaDetailModal';
 
 // Get the base URL from Vite config for proper GitHub Pages paths
@@ -28,7 +28,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         <img 
           src={getImagePath(villa.images[0])} 
           alt={villa.name}
-          className="card-image" loading="lazy"
+          className="card-image"
         />
         
         
@@ -38,7 +38,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         {/* Selected Badge */}
         {isSelected && (
           <div className="absolute top-3 left-3 bg-luxury-gold text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-            <span>✓</span> SELECTED
+            <span>Ô£ô</span> SELECTED
           </div>
         )}
 
@@ -68,7 +68,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         <div className="flex items-center justify-between mb-3">
           <span className="body-regular text-dark font-medium">{villa.location}</span>
           <div className="rating">
-            <span className="body-small">★ {villa.rating}</span>
+            <span className="body-small">Ôÿà {villa.rating}</span>
           </div>
         </div>
 
@@ -111,7 +111,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             onClick={() => onSelect(villa)}
             className={`btn flex-1 ${isSelected ? 'btn-success' : 'btn-luxury'}`}
           >
-            {isSelected ? '✓ Selected' : 'Select Villa'}
+            {isSelected ? 'Ô£ô Selected' : 'Select Villa'}
           </button>
         </div>
       </div>
@@ -250,8 +250,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       detailImages: ["/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp", "/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif", "/images/villas/the-palms-villa-estate/3010682d-f127-4ff9-b647-099323082072.jpeg", "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.jpeg", "/images/villas/the-palms-villa-estate/31f4ba1b-839f-4f90-83ff-9c6dfe7e0c8b.avif", "/images/villas/the-palms-villa-estate/4.Aerial-4.jpeg", "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.jpeg", "/images/villas/the-palms-villa-estate/56.Aerial-9.jpeg", "/images/villas/the-palms-villa-estate/573860c1-ba80-4638-a8b4-bf0375b57abf.avif", "/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif", "/images/villas/the-palms-villa-estate/6.Aerial-5.jpeg", "/images/villas/the-palms-villa-estate/910cba2e-cbaf-41f4-a725-57ddbebf7ac1.jpeg", "/images/villas/the-palms-villa-estate/c2de55f9-02b9-464b-9966-ae056fcee665.avif", "/images/villas/the-palms-villa-estate/f9aafc09-ec54-4b03-a21b-a4d799f059c1.jpeg", "/images/villas/the-palms-villa-estate/IMG_0194.jpeg", "/images/villas/the-palms-villa-estate/IMG_0224.jpeg", "/images/villas/the-palms-villa-estate/IMG_1718.jpeg", "/images/villas/the-palms-villa-estate/IMG_7170.jpeg", "/images/villas/the-palms-villa-estate/IMG_9888.jpeg", "/images/villas/the-palms-villa-estate/IMG_9951.jpeg"],
       topAmenities: ["Private Pool", "Mountain Views", "Full-time Caretaker", "Air Conditioning"],
       allAmenities: [
-        { name: "Private Tennis Court", icon: "fa-table-tennis" },
-        { name: "Private Pool", icon: "fa-swimming-pool" },
+        { name: "Private Tennis Court", icon: "fa-table-tennis" },`n        { name: "Private Pool", icon: "fa-swimming-pool" },
         { name: "Mountain Views", icon: "fa-mountain" },
         { name: "Full-time Caretaker", icon: "fa-user-tie" },
         { name: "Air Conditioning", icon: "fa-snowflake" },
