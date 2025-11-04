@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import VillaDetailModal from './VillaDetailModal';
 
 // Get the base URL from Vite config for proper GitHub Pages paths
