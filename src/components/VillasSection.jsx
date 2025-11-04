@@ -307,6 +307,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
           onContactClick={() => {
             setDetailVilla(null);
           }}
+          onSelect={onVillaSelect}
         />
       </div>
     </section>

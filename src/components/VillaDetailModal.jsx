@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
+const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick, onSelect }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
@@ -177,13 +177,13 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
               
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <button 
-                  onClick={onContactClick}
-                  className="btn btn-luxury w-full mb-3"
+                  onClick={() => {
+                    onSelect(villa);
+                    onClose();
+                  }}
+                  className="btn btn-luxury w-full"
                 >
-                  Contact for Availability
-                </button>
-                <button className="btn btn-secondary w-full">
-                  Save to Favorites
+                  Select Villa
                 </button>
               </div>
             </div>
