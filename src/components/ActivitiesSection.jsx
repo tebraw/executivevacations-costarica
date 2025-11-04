@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ActivityCard from './ActivityCard';
 
-const ActivitiesSection = ({ onActivitiesChange }) => {
+const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
   const [selectedActivities, setSelectedActivities] = useState([]);
 
   // Helper function to get correct image path for GitHub Pages
@@ -14,8 +14,8 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
   const activities = [
     {
       id: 'atv-rainbow',
-      name: 'ATV Rainbow Mountain Adventure',
-      description: 'Embark on a thrilling ATV ride through pristine mountains and lush rainforest. Experience breathtaking views and an adrenaline rush like no other.',
+      name: 'ATV Tour to the Jesus Tree',
+      description: 'Embark on a thrilling ATV ride along the beach to the breathtaking Jesus Tree. Experience stunning coastal views and an unforgettable adventure.',
       duration: '4-5 hours',
       image: getImagePath('images/activities/atv.avif'),
       highlights: ['Professional guide included', 'All safety equipment provided', 'Refreshments included']
@@ -79,7 +79,22 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
     }
   ];
 
+  
+  // Check if activity is available for selected villa
+  const isActivityAvailable = (activityId) => {
+    // The Palms Villa Estate: Only massage and private chef available
+    if (selectedVilla && selectedVilla.name === "The Palms Villa Estate") {
+      return activityId === 'couples-massage' || activityId === 'private-chef';
+    }
+    // All activities available for other villas
+    return true;
+  };
+
   const handleToggleActivity = (activity) => {
+    // Don't allow selecting disabled activities
+    if (!isActivityAvailable(activity.id)) {
+      return;
+    }
     setSelectedActivities(prev => {
       const isSelected = prev.some(a => a.id === activity.id);
       let newSelection;
@@ -128,11 +143,12 @@ const ActivitiesSection = ({ onActivitiesChange }) => {
           <div className="activities-grid">
             {activities.map(activity => (
               <ActivityCard
-                key={activity.id}
-                activity={activity}
-                isSelected={selectedActivities.some(a => a.id === activity.id)}
-                onToggle={handleToggleActivity}
-              />
+                  key={activity.id}
+                  activity={activity}
+                  isSelected={selectedActivities.some(a => a.id === activity.id)}
+                  onToggle={handleToggleActivity}
+                  isDisabled={!isActivityAvailable(activity.id)}
+                />
             ))}
           </div>
 

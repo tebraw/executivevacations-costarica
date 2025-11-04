@@ -71,7 +71,7 @@ function App() {
         selectedVilla={selectedVilla}
         onVillaSelect={handleVillaSelect}
       />
-      <ActivitiesSection onActivitiesChange={handleActivitiesChange} />
+      <ActivitiesSection onActivitiesChange={handleActivitiesChange} selectedVilla={selectedVilla} />
       <ContactFormSection 
         selectedVilla={selectedVilla}
         selectedActivities={selectedActivities}

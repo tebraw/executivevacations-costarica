@@ -246,8 +246,8 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
 
     {/* Lightbox Modal - Full Screen Image Viewer - OUTSIDE modal overlay */}
     {isLightboxOpen && (
-        <div 
-          className="fixed inset-0 bg-black flex items-center justify-center"
+        <div
+          className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center"
           style={{ zIndex: 9999 }}
           onClick={closeLightbox}
         >
@@ -271,7 +271,8 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick }) => {
         <img 
           src={getImagePath(images[lightboxImageIndex])} 
           alt={`${villa.name} - ${lightboxImageIndex + 1}`}
-          className="max-w-[90vw] max-h-[90vh] object-contain"
+          style={{ maxWidth: '90vw', maxHeight: '90vh', width: 'auto', height: 'auto' }}
+          className="object-contain"
           onClick={(e) => e.stopPropagation()}
         />
 

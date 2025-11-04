@@ -6,15 +6,6 @@ const BASE_URL = import.meta.env.BASE_URL;
 const getImagePath = (path) => `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
 
 const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % villa.images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + villa.images.length) % villa.images.length);
-  };
 
   return (
     <div className={`card group ${isSelected ? 'ring-2 ring-luxury-gold' : ''} ${villa.isComingSoon ? 'coming-soon-card' : ''}`}>
@@ -32,45 +23,17 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         </div>
       )}
       
-      {/* Image Gallery */}
+      {/* Single Display Image */}
       <div className="relative overflow-hidden rounded-lg">
         <img 
-          src={getImagePath(villa.images[currentImageIndex])} 
+          src={getImagePath(villa.images[0])} 
           alt={villa.name}
           className="card-image"
         />
         
-        {/* Image Navigation */}
-        {villa.images.length > 1 && (
-          <>
-            <button 
-              onClick={prevImage}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white text-lg"
-            >
-              ‹
-            </button>
-            <button 
-              onClick={nextImage}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white text-lg"
-            >
-              ›
-            </button>
-          </>
-        )}
+        
 
-        {/* Image Dots */}
-        {villa.images.length > 1 && (
-          <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1">
-            {villa.images.map((_, index) => (
-              <div
-                key={index}
-                className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                  index === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        )}
+        
 
         {/* Selected Badge */}
         {isSelected && (
@@ -148,7 +111,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             onClick={() => onSelect(villa)}
             className={`btn flex-1 ${isSelected ? 'btn-success' : 'btn-luxury'}`}
           >
-            {isSelected ? '✓ Selected' : 'Add to Selection'}
+            {isSelected ? '✓ Selected' : 'Select Villa'}
           </button>
         </div>
       </div>
@@ -168,8 +131,8 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.98,
       bedrooms: 7,
-      bathrooms: 9.5,
-      guests: 16,
+      bathrooms: 10,
+      guests: 18,
       size: "10,500 sq ft",
       isPremium: true,
       hasChristmasSpecial: true,
@@ -178,22 +141,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         "/images/villas/palacio-tropical/palaciotropical.dronephoto-03.jpg",
         "/images/villas/palacio-tropical/palaciotropical-518.exterior.jpg"
       ],
-      detailImages: [
-        "/images/villas/palacio-tropical/palaciotropical.dronephoto-03.jpg",
-        "/images/villas/palacio-tropical/palaciotropical.dronephoto-08.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-455.exterior_1.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-469.exterior_1.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-518.exterior.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-532.exterior.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-567.exterior.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-580.exterior.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-056.mainfloor.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-105.mainfloor.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-167.mainfloor.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-250.floor2.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-320.floor2.jpg",
-        "/images/villas/palacio-tropical/palaciotropical-327.floor3.jpg"
-      ],
+      detailImages: ["/images/villas/palacio-tropical/palaciotropical.dronephoto-03.jpg", "/images/villas/palacio-tropical/palaciotropical.dronephoto-08.jpg", "/images/villas/palacio-tropical/palaciotropical-008.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-014.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-021.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-049.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-056.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-063.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-1.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-105.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-167.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-201.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-236.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-250.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-320.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-327.floor3.jpg", "/images/villas/palacio-tropical/palaciotropical-386.basement (1).jpg", "/images/villas/palacio-tropical/palaciotropical-393.basement.jpg", "/images/villas/palacio-tropical/palaciotropical-435.basement.jpg", "/images/villas/palacio-tropical/palaciotropical-455.exterior_1.jpg", "/images/villas/palacio-tropical/palaciotropical-469.exterior_1.jpg", "/images/villas/palacio-tropical/palaciotropical-518.exterior.jpg", "/images/villas/palacio-tropical/palaciotropical-532.exterior.jpg", "/images/villas/palacio-tropical/palaciotropical-567.exterior.jpg", "/images/villas/palacio-tropical/palaciotropical-580.exterior.jpg"],
       topAmenities: ["Private Beach", "Full Staff", "Security", "Ocean Views"],
       allAmenities: [
         { name: "Private Oceanfront Beach", icon: "fa-umbrella-beach" },
@@ -224,22 +172,14 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       location: "Tambor, Puntarenas - Tango Mar",
       fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.97,
-      bedrooms: 8,
+      bedrooms: 7,
       bathrooms: 6,
-      guests: 16,
-      size: "7,200 sq ft",
+      guests: 18,
+      size: "12,500 sq ft",
       isPremium: true,
-      isComingSoon: true, // Set to false when available for booking
-      images: [
-        "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg",
-        "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG",
-        "/images/villas/palicio-musical/+Cuarto 3 DSC_3345.jpg"
-      ],
-      detailImages: [
-        "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg",
-        "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG",
-        "/images/villas/palicio-musical/+Cuarto 3 DSC_3345.jpg"
-      ],
+      isComingSoon: false, // Set to false when available for booking
+      images: ["/images/villas/palicio-musical/98986715.jpg"],
+      detailImages: ["/images/villas/palicio-musical/+Cuarto 3 DSC_3345.jpg", "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg", "/images/villas/palicio-musical/198134112.jpg", "/images/villas/palicio-musical/98984225.jpg", "/images/villas/palicio-musical/98986715.jpg", "/images/villas/palicio-musical/98990146.jpg", "/images/villas/palicio-musical/99010031.jpg", "/images/villas/palicio-musical/99498420.jpg", "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG"],
       topAmenities: ["Music Studio", "Newly Renovated", "Ocean Views", "Full Staff"],
       allAmenities: [
         { name: "Professional Music Studio", icon: "fa-music" },
@@ -253,7 +193,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "Next to Palacio Tropical", icon: "fa-map-marker-alt" },
         { name: "Combinable Booking", icon: "fa-link" }
       ],
-      detailedDescription: "Experience luxury in this newly renovated villa, similar in size to Palacio Tropical but featuring a unique professional music studio. Perfect for artists, musicians, or those seeking creative inspiration alongside oceanfront luxury. This villa has been completely renovated with modern amenities while maintaining the same high-end standards as its sister property. Located directly next to Palacio Tropical, both villas can be booked together for ultimate privacy and space for large groups, events, or extended stays.",
+      detailedDescription: "Experience the ultimate beachfront luxury in this spectacular 12,500 sq ft villa featuring three magnificent decks, each offering breathtaking ocean views. The property includes a unique whale watching observatory - perfect for spotting humpback whales during migration season. With its stunning architecture and expansive outdoor spaces, this villa is ideal for weddings, celebrations, and special events. The three-level deck system provides versatile entertainment areas, from intimate gatherings to grand celebrations. Located directly next to Palacio Tropical, both villas can be combined for the ultimate luxury experience, accommodating large groups and multi-family vacations.",
       locationDescription: "Situated directly next to Palacio Tropical in the pristine area of Tambor, Costa Rica. Both properties can be combined for the ultimate luxury experience, offering unparalleled privacy and space.",
       specialFeatures: [
         { name: "Professional Music Studio", icon: "fa-music" },
@@ -271,23 +211,10 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       bedrooms: 4,
       bathrooms: 2,
       guests: 8,
-      size: "Newly constructed villa",
+      size: "2,400 sq ft",
       isPremium: true,
-      images: [
-        "/images/villas/the-view-house/07754857-bf71-4cc5-953e-39b3f959484a.avif",
-        "/images/villas/the-view-house/25d56bc7-19f0-4a97-b056-f39312120697.avif",
-        "/images/villas/the-view-house/3a85d083-c4c6-4289-93d9-d2e92feff052.avif"
-      ],
-      detailImages: [
-        "/images/villas/the-view-house/07754857-bf71-4cc5-953e-39b3f959484a.avif",
-        "/images/villas/the-view-house/25d56bc7-19f0-4a97-b056-f39312120697.avif",
-        "/images/villas/the-view-house/3a85d083-c4c6-4289-93d9-d2e92feff052.avif",
-        "/images/villas/the-view-house/3c3b16b7-77de-4fdb-97e7-cd4e5d2f533d.avif",
-        "/images/villas/the-view-house/9bcd8e7b-6d80-4b65-b878-68835b7b243b.avif",
-        "/images/villas/the-view-house/caee2b00-03a2-438e-981c-8d98e57f6d43.avif",
-        "/images/villas/the-view-house/d971cd99-3bbc-41d2-900f-8372442d68a9.avif",
-        "/images/villas/the-view-house/f24aa4e9-2615-4491-b70c-90c87f804686.avif"
-      ],
+      images: ["/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif"],
+      detailImages: ["/images/villas/the-view-house/25d56bc7-19f0-4a97-b056-f39312120697.avif", "/images/villas/the-view-house/3a85d083-c4c6-4289-93d9-d2e92feff052.avif", "/images/villas/the-view-house/3c3b16b7-77de-4fdb-97e7-cd4e5d2f533d.avif", "/images/villas/the-view-house/9bcd8e7b-6d80-4b65-b878-68835b7b243b.avif", "/images/villas/the-view-house/caee2b00-03a2-438e-981c-8d98e57f6d43.avif", "/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif", "/images/villas/the-view-house/d971cd99-3bbc-41d2-900f-8372442d68a9.avif", "/images/villas/the-view-house/f24aa4e9-2615-4491-b70c-90c87f804686.avif"],
       topAmenities: ["Pacific Views", "Custom Pool", "New Construction", "Peaceful Setting"],
       allAmenities: [
         { name: "Pacific Ocean Views", icon: "fa-water" },
@@ -299,7 +226,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "5 Min to Palicio Villas", icon: "fa-map-marker-alt" },
         { name: "Group Booking Available", icon: "fa-users" }
       ],
-      detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed villa offers modern luxury and comfort in a tranquil setting. With 4 bedrooms and contemporary amenities, it's perfect for families or groups seeking a serene getaway. Located just 5 minutes from Palicio Tropical and Palicio Musical, it can be booked together with these properties for larger groups or events.",
+      detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for whale watching from your private terrace. Witness humpback whales during migration season while enjoying panoramic ocean vistas. With 4 bedrooms and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palicio Tropical and Palicio Musical, it can be booked together with these properties for larger groups or events.",
       locationDescription: "Located in Puntarenas Province with stunning Pacific Ocean views. Just 5 minutes from Palicio Tropical and Palicio Musical villas, perfect for combined bookings and group events.",
       specialFeatures: [
         { name: "Newly Constructed", icon: "fa-hammer" },
@@ -317,26 +244,13 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       bedrooms: 4,
       bathrooms: 3.5,
       guests: 8,
-      size: "Resort-style property",
+      size: "4,700 sq ft",
       isPremium: true,
-      images: [
-        "/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif",
-        "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.jpeg",
-        "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.jpeg"
-      ],
-      detailImages: [
-        "/images/villas/the-palms-villa-estate/3010682d-f127-4ff9-b647-099323082072.jpeg",
-        "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.jpeg",
-        "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.jpeg",
-        "/images/villas/the-palms-villa-estate/910cba2e-cbaf-41f4-a725-57ddbebf7ac1.jpeg",
-        "/images/villas/the-palms-villa-estate/d990535c-645c-4e23-b04f-9c4f3bd9040c.jpeg",
-        "/images/villas/the-palms-villa-estate/f9aafc09-ec54-4b03-a21b-a4d799f059c1.jpeg",
-        "/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp",
-        "/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif"
-      ],
+      images: ["/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif"],
+      detailImages: ["/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp", "/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif", "/images/villas/the-palms-villa-estate/3010682d-f127-4ff9-b647-099323082072.jpeg", "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.jpeg", "/images/villas/the-palms-villa-estate/31f4ba1b-839f-4f90-83ff-9c6dfe7e0c8b.avif", "/images/villas/the-palms-villa-estate/4.Aerial-4.jpeg", "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.jpeg", "/images/villas/the-palms-villa-estate/56.Aerial-9.jpeg", "/images/villas/the-palms-villa-estate/573860c1-ba80-4638-a8b4-bf0375b57abf.avif", "/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif", "/images/villas/the-palms-villa-estate/6.Aerial-5.jpeg", "/images/villas/the-palms-villa-estate/910cba2e-cbaf-41f4-a725-57ddbebf7ac1.jpeg", "/images/villas/the-palms-villa-estate/c2de55f9-02b9-464b-9966-ae056fcee665.avif", "/images/villas/the-palms-villa-estate/f9aafc09-ec54-4b03-a21b-a4d799f059c1.jpeg", "/images/villas/the-palms-villa-estate/IMG_0194.jpeg", "/images/villas/the-palms-villa-estate/IMG_0224.jpeg", "/images/villas/the-palms-villa-estate/IMG_1718.jpeg", "/images/villas/the-palms-villa-estate/IMG_7170.jpeg", "/images/villas/the-palms-villa-estate/IMG_9888.jpeg", "/images/villas/the-palms-villa-estate/IMG_9951.jpeg"],
       topAmenities: ["Private Pool", "Mountain Views", "Full-time Caretaker", "Air Conditioning"],
       allAmenities: [
-        { name: "Private Pool", icon: "fa-swimming-pool" },
+        { name: "Private Tennis Court", icon: "fa-table-tennis" },`n        { name: "Private Pool", icon: "fa-swimming-pool" },
         { name: "Mountain Views", icon: "fa-mountain" },
         { name: "Full-time Caretaker", icon: "fa-user-tie" },
         { name: "Air Conditioning", icon: "fa-snowflake" },
