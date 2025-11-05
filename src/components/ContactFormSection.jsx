@@ -86,6 +86,9 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
         formDataToSend.append('Activities Selected', activitiesList);
       }
 
+      // Add CC recipients
+      formDataToSend.append('_cc', 'grujicic.filip17@gmail.com,sanmariaamin@gmail.com');
+      
       // Submit to FormSubmit.co
       const response = await fetch('https://formsubmit.co/ajax/wendymeritt@gmail.com', {
         method: 'POST',
