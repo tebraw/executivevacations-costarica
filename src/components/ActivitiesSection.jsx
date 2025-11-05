@@ -74,8 +74,24 @@ const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
       description: 'Fly directly to your paradise! Our exclusive private air charter service brings you from SJO or LIR to Tambor Private Airstrip - just 20 minutes from Palicio Tropical, Palicio Musical, and The View House. Skip the long drive and arrive refreshed, enjoying personalized VIP service and flexible scheduling tailored to your travel needs.',
       duration: '45-60 minutes',
       image: getImagePath('images/activities/privateaircharter.jpeg'),
-      highlights: ['20 min to villas', 'Direct to Tambor Airstrip', 'VIP concierge service'],
+      highlights: ['20 min to villas', 'Direct to Tambor Airstrip', 'VIP concierge service'],      isService: true
+    },
+    {
+      id: 'babysitter-service',
+      name: 'Professional Babysitter Service',
+      description: 'Enjoy peace of mind with our carefully vetted, professional babysitters. Every sitter is CPR and First Aid trained, background-checked, and trained in our hospitality standards. Bilingual communication ensures everyone feels at ease.',
+      duration: 'Flexible',
+      image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&h=600&fit=crop',
+      highlights: ['CPR certified', 'Background-checked', 'Bilingual English/Spanish'],
       isService: true
+    },
+    {
+      id: 'crossfit-workout',
+      name: 'Private CrossFit Workout',
+      description: 'Push your limits with an intense CrossFit session led by elite regional trainers. High-energy workouts customized to your fitness level, from beginners to veterans.',
+      duration: '60-90 minutes',
+      image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=600&fit=crop',
+      highlights: ['Elite trainers', 'Personalized plan', 'All equipment provided']
     }
   ];
 
@@ -84,7 +100,7 @@ const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
   const isActivityAvailable = (activityId) => {
     // The Palms Villa Estate: Only massage and private chef available
     if (selectedVilla && selectedVilla.name === "The Palms Villa Estate") {
-      return activityId === 'couples-massage' || activityId === 'private-chef';
+      return activityId === 'massage' || activityId === 'private-chef';
     }
     // All activities available for other villas
     return true;
