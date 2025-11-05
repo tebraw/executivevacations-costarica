@@ -30,8 +30,8 @@ const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
     },
     {
       id: 'couples-massage',
-      name: 'Couples Massage',
-      description: 'Indulge in a relaxing in-villa couples massage. Professional therapists bring the spa experience directly to your accommodation.',
+      name: 'Spa Services',
+      description: 'Indulge in relaxing spa services brought directly to your villa. Mobile masseuse and facial esthetician available for a complete wellness experience.',
       duration: '90 minutes',
       image: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&h=600&fit=crop&auto=format',
       highlights: ['In-villa service', 'Premium oils & lotions', 'Relaxing atmosphere']

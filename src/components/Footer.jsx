@@ -44,9 +44,6 @@ const Footer = () => {
               <div>
                 <span className="body-regular text-white/80">303-881-8588</span>
               </div>
-              <div>
-                <span className="body-regular text-white/80">Peninsula Papagayo<br />Guanacaste, Costa Rica</span>
-              </div>
             </div>
           </div>
         </div>
