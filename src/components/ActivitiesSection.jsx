@@ -92,6 +92,22 @@ const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
       duration: '60-90 minutes',
       image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=600&fit=crop',
       highlights: ['Elite trainers', 'Personalized plan', 'All equipment provided']
+    },
+    {
+      id: 'horseback-riding',
+      name: 'Horseback Riding',
+      description: 'Explore the beautiful Costa Rican countryside on horseback. Ride through tropical forests, along pristine beaches, and discover hidden waterfalls with experienced guides.',
+      duration: '2-3 hours',
+      image: 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=800&h=600&fit=crop',
+      highlights: ['Experienced guides', 'Scenic trails', 'All skill levels welcome']
+    },
+    {
+      id: 'golf',
+      name: 'Golf Experience',
+      description: 'Tee off at world-class golf courses with stunning ocean and mountain views. Enjoy championship-level courses designed by renowned architects in a tropical paradise setting.',
+      duration: 'Half or full day',
+      image: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=800&h=600&fit=crop',
+      highlights: ['Championship courses', 'Equipment rental available', 'Ocean & mountain views']
     }
   ];
 
