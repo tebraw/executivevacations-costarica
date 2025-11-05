@@ -45,17 +45,28 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         {/* Christmas Special Badge */}
         {villa.hasChristmasSpecial && !isSelected && (
           <div className="christmas-special-badge">
-            <div className="christmas-badge-header">CHRISTMAS WEEK SPECIAL</div>
+            <div className="christmas-badge-header">CHRISTMAS + NEW YEAR SPECIAL</div>
             <div className="christmas-badge-divider"></div>
             <div className="christmas-badge-offer">
               <span className="offer-text">FREE</span>
-              <span className="offer-details">ATV + Catamaran Tours</span>
+              <span className="offer-details">ATV + Catamaran Tours (7+ nights)</span>
+            </div>
+          </div>
+        )}
+        {/* Special Offer Badge - The View House */}
+        {villa.hasSpecialOffer && !isSelected && (
+          <div className="christmas-special-badge">
+            <div className="christmas-badge-header">SPECIAL OFFER</div>
+            <div className="christmas-badge-divider"></div>
+            <div className="christmas-badge-offer">
+              <span className="offer-text">FREE</span>
+              <span className="offer-details">ATV Tour</span>
             </div>
           </div>
         )}
 
         {/* Premium Badge */}
-        {villa.isPremium && !isSelected && !villa.hasChristmasSpecial && (
+        {villa.isPremium && !isSelected && !villa.hasChristmasSpecial && !villa.hasSpecialOffer && (
           <div className="absolute top-3 left-3 bg-luxury-gold text-white px-2 py-1 rounded text-xs font-semibold">
             PREMIUM
           </div>
@@ -170,7 +181,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       id: 4,
       name: "Palicio Musical",
       useEnsuites: true,
-      type: "Ultra-Luxury Beach Front Villa",
+      type: "Ultra-Luxury Beachfront Villa",
       location: "Tambor, Puntarenas - Tango Mar",
       fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.97,
@@ -179,6 +190,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       guests: 18,
       size: "12,500 sq ft",
       isPremium: true,
+      hasChristmasSpecial: true,
       isComingSoon: false, // Set to false when available for booking
       images: ["/images/villas/palicio-musical/98986715.jpg"],
       detailImages: ["/images/villas/palicio-musical/198134112.jpg", "/images/villas/palicio-musical/98984225.jpg", "/images/villas/palicio-musical/98986715.jpg", "/images/villas/palicio-musical/98990146.jpg", "/images/villas/palicio-musical/99010031.jpg", "/images/villas/palicio-musical/99498420.jpg"],
@@ -217,6 +229,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       guests: 8,
       size: "2,400 sq ft",
       isPremium: true,
+      hasSpecialOffer: true,
       images: ["/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif"],
       detailImages: ["/images/villas/the-view-house/25d56bc7-19f0-4a97-b056-f39312120697.avif", "/images/villas/the-view-house/3a85d083-c4c6-4289-93d9-d2e92feff052.avif", "/images/villas/the-view-house/3c3b16b7-77de-4fdb-97e7-cd4e5d2f533d.avif", "/images/villas/the-view-house/9bcd8e7b-6d80-4b65-b878-68835b7b243b.avif", "/images/villas/the-view-house/caee2b00-03a2-438e-981c-8d98e57f6d43.avif", "/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif", "/images/villas/the-view-house/d971cd99-3bbc-41d2-900f-8372442d68a9.avif", "/images/villas/the-view-house/f24aa4e9-2615-4491-b70c-90c87f804686.avif"],
       topAmenities: ["Pacific Views", "Custom Pool", "New Construction", "Peaceful Setting"],
