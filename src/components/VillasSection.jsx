@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import VillaDetailModal from './VillaDetailModal';
 
 // Get the base URL from Vite config for proper GitHub Pages paths
@@ -38,7 +38,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         {/* Selected Badge */}
         {isSelected && (
           <div className="absolute top-3 left-3 bg-luxury-gold text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-            <span>✓</span> SELECTED
+            <span>?</span> SELECTED
           </div>
         )}
 
@@ -68,7 +68,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         <div className="flex items-center justify-between mb-3">
           <span className="body-regular text-dark font-medium">{villa.location}</span>
           <div className="rating">
-            <span className="body-small">★ {villa.rating}</span>
+            <span className="body-small">? {villa.rating}</span>
           </div>
         </div>
 
@@ -80,7 +80,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
 
         {/* Villa Details */}
         <div className="flex items-center text-gray mb-4">
-          <span className="body-small">{villa.bedrooms} bedrooms</span>
+          <span className="body-small">{villa.bedrooms} {villa.useEnsuites ? "en-suites" : "bedrooms"}</span>
           <div className="detail-separator"></div>
           <span className="body-small">{villa.bathrooms} bathrooms</span>
           <div className="detail-separator"></div>
@@ -111,7 +111,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             onClick={() => onSelect(villa)}
             className={`btn flex-1 ${isSelected ? 'btn-success' : 'btn-luxury'}`}
           >
-            {isSelected ? '✓ Selected' : 'Select Villa'}
+            {isSelected ? '? Selected' : 'Select Villa'}
           </button>
         </div>
       </div>
@@ -126,11 +126,12 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
     {
       id: 2,
       name: "Palacio Tropical",
+      useEnsuites: true,
       type: "Ultra-Luxury Oceanfront Villa",
       location: "Tambor, Puntarenas - Tango Mar",
       fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.98,
-      bedrooms: 7,
+      bedrooms: 7, // 7 en-suites
       bathrooms: 10,
       guests: 18,
       size: "10,500 sq ft",
@@ -168,12 +169,13 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
     {
       id: 4,
       name: "Palicio Musical",
-      type: "Exclusive Beachfront Villa",
+      useEnsuites: true,
+      type: "Ultra-Luxury Beach Front Villa",
       location: "Tambor, Puntarenas - Tango Mar",
       fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.97,
       bedrooms: 7,
-      bathrooms: 6,
+      bathrooms: 8,
       guests: 18,
       size: "12,500 sq ft",
       isPremium: true,
@@ -226,7 +228,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "5 Min to Palicio Villas", icon: "fa-map-marker-alt" },
         { name: "Group Booking Available", icon: "fa-users" }
       ],
-      detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for whale watching from your private terrace. Witness humpback whales during migration season while enjoying panoramic ocean vistas. With 4 bedrooms and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palicio Tropical and Palicio Musical, it can be booked together with these properties for larger groups or events.",
+      detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for Whale Watching from patio. Witness humpback whales during migration season while enjoying panoramic ocean vistas. With 4 en-suites and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palicio Tropical and Palicio Musical, it can be booked together with these properties for larger groups or events.",
       locationDescription: "Located in Puntarenas Province with stunning Pacific Ocean views. Just 5 minutes from Palicio Tropical and Palicio Musical villas, perfect for combined bookings and group events.",
       specialFeatures: [
         { name: "Newly Constructed", icon: "fa-hammer" },
@@ -237,6 +239,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
     {
       id: 1,
       name: "The Palms Villa Estate",
+      useEnsuites: true,
       type: "Mountain Villa Retreat",
       location: "Atenas",
       fullLocation: "Santa Eulalia, Atenas, Costa Rica",
@@ -262,7 +265,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "Family Friendly", icon: "fa-home" },
         { name: "Event Hosting", icon: "fa-calendar" }
       ],
-      detailedDescription: "This beautiful mountain villa is nestled in the hills of Atenas, Costa Rica. Atenas offers a wonderful opportunity to experience authentic Costa Rican culture, known as a local favorite. The property provides a tranquil, peaceful, and quiet environment perfect for family vacations, intimate weddings, reunions, or personal and business retreats. With 4 bedrooms (3 upstairs with full AC, 1 downstairs), the villa accommodates up to 8 guests comfortably. Additional sleeping options include a queen pull-out sofa and futon.",
+      detailedDescription: "This beautiful mountain villa is nestled in the hills of Atenas, Costa Rica. Atenas offers a wonderful opportunity to experience authentic Costa Rican culture, known as a local favorite. The property provides a tranquil, peaceful, and quiet environment perfect for family vacations, intimate weddings, reunions, or personal and business retreats. With 4 en-suites (3 upstairs with full AC, 1 downstairs), the villa accommodates up to 8 guests comfortably. Additional sleeping options include a queen pull-out sofa and futon.",
       locationDescription: "Located in the hills of Atenas, just 32 miles from the nearest beach and marina on the Pacific coast. Experience authentic Costa Rican culture while staying close to all the adventures Costa Rica offers.",
       specialFeatures: [
         { name: "Full-time Caretaker (Don Manuel)", icon: "fa-user-tie" },
