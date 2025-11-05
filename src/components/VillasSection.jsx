@@ -127,7 +127,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       id: 2,
       name: "Palacio Tropical",
       useEnsuites: true,
-      type: "Ultra-Luxury Oceanfront Villa",
+      type: "Ultra-Luxury Beachfront Villa",
       location: "Tambor, Puntarenas - Tango Mar",
       fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.98,
@@ -143,12 +143,12 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         "/images/villas/palacio-tropical/palaciotropical-518.exterior.jpg"
       ],
       detailImages: ["/images/villas/palacio-tropical/palaciotropical.dronephoto-03.jpg", "/images/villas/palacio-tropical/palaciotropical.dronephoto-08.jpg", "/images/villas/palacio-tropical/palaciotropical-008.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-014.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-021.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-049.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-056.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-063.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-1.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-105.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-167.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-201.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-236.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-250.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-320.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-327.floor3.jpg", "/images/villas/palacio-tropical/palaciotropical-386.basement (1).jpg", "/images/villas/palacio-tropical/palaciotropical-393.basement.jpg", "/images/villas/palacio-tropical/palaciotropical-435.basement.jpg", "/images/villas/palacio-tropical/palaciotropical-455.exterior_1.jpg", "/images/villas/palacio-tropical/palaciotropical-469.exterior_1.jpg", "/images/villas/palacio-tropical/palaciotropical-518.exterior.jpg", "/images/villas/palacio-tropical/palaciotropical-532.exterior.jpg", "/images/villas/palacio-tropical/palaciotropical-567.exterior.jpg", "/images/villas/palacio-tropical/palaciotropical-580.exterior.jpg"],
-      topAmenities: ["Private Beach", "Full Staff", "Security", "Ocean Views"],
+      topAmenities: ["Private Beach", "Full Staff", "Security", "Beach Views"],
       allAmenities: [
-        { name: "Private Oceanfront Beach", icon: "fa-umbrella-beach" },
+        { name: "Private Beachfront Access", icon: "fa-umbrella-beach" },
         { name: "Full Staff Available", icon: "fa-concierge-bell" },
         { name: "Enhanced Security", icon: "fa-shield-alt" },
-        { name: "Ocean Views", icon: "fa-water" },
+        { name: "Beach Views", icon: "fa-water" },
         { name: "7 En-suite Bedrooms", icon: "fa-bed" },
         { name: "Grand Dining Room (14 seats)", icon: "fa-utensils" },
         { name: "Outside Bar & Dining", icon: "fa-glass-cheers" },
@@ -158,7 +158,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "VIP Privacy Protection", icon: "fa-user-shield" },
         { name: "Separate Security Quarters", icon: "fa-home" }
       ],
-      detailedDescription: "Experience private luxury throughout this stunning 10,500 sq ft oceanfront villa. Featuring 7 en-suites, each with private bath and A/C, plus a grand dining room seating 14. Multiple large gathering areas open to an outside bar, dining area, and large pool. Safe and private for traveling dignitaries, officials, and politicians. The house can be fully staffed with cooks, housekeeping, and concierge service for outings and excursions. Located directly next to Palicio Musical, both properties can be booked together for larger events and groups. Palacio Tropical offers an unforgettable oceanfront experience with complete privacy and security.",
+      detailedDescription: "Experience private luxury throughout this stunning 10,500 sq ft beachfront villa. Featuring 7 en-suites, each with private bath and A/C, plus a grand dining room seating 14. Multiple large gathering areas open to an outside bar, dining area, and large pool. Safe and private for traveling dignitaries, officials, and politicians. The house can be fully staffed with cooks, housekeeping, and concierge service for outings and excursions. Located directly next to Palicio Musical, both properties can be booked together for larger events and groups. Palacio Tropical offers an unforgettable beachfront experience with complete privacy and security.",
       locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and private beach allow you to enjoy family and guests without unwanted attention from media or paparazzi. Situated directly next to Palicio Musical - both villas can be combined for ultimate luxury accommodation.",
       specialFeatures: [
         { name: "VIP Privacy & Security", icon: "fa-user-shield" },
@@ -182,11 +182,13 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       isComingSoon: false, // Set to false when available for booking
       images: ["/images/villas/palicio-musical/98986715.jpg"],
       detailImages: ["/images/villas/palicio-musical/198134112.jpg", "/images/villas/palicio-musical/98984225.jpg", "/images/villas/palicio-musical/98986715.jpg", "/images/villas/palicio-musical/98990146.jpg", "/images/villas/palicio-musical/99010031.jpg", "/images/villas/palicio-musical/99498420.jpg"],
-      topAmenities: ["Music Studio", "Newly Renovated", "Ocean Views", "Full Staff"],
+      topAmenities: ["A/C", "Music Studio", "Spectacular Ocean Views", "Tiki Bar"],
       allAmenities: [
+        { name: "Air Conditioning", icon: "fa-snowflake" },
         { name: "Professional Music Studio", icon: "fa-music" },
         { name: "Newly Renovated", icon: "fa-tools" },
-        { name: "Ocean Views", icon: "fa-water" },
+        { name: "Spectacular Ocean Views", icon: "fa-water" },
+        { name: "Whale Watching Deck with Tiki Bar", icon: "fa-cocktail" },
         { name: "Full Staff Available", icon: "fa-concierge-bell" },
         { name: "Similar Size to Tropical", icon: "fa-home" },
         { name: "Modern Amenities", icon: "fa-star" },
