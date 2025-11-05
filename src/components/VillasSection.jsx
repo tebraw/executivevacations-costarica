@@ -38,7 +38,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         {/* Selected Badge */}
         {isSelected && (
           <div className="absolute top-3 left-3 bg-luxury-gold text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-            <span>?</span> SELECTED
+            <span></span> SELECTED
           </div>
         )}
 
@@ -68,7 +68,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         <div className="flex items-center justify-between mb-3">
           <span className="body-regular text-dark font-medium">{villa.location}</span>
           <div className="rating">
-            <span className="body-small">? {villa.rating}</span>
+            <span className="body-small">{villa.rating}</span>
           </div>
         </div>
 
@@ -111,7 +111,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             onClick={() => onSelect(villa)}
             className={`btn flex-1 ${isSelected ? 'btn-success' : 'btn-luxury'}`}
           >
-            {isSelected ? '? Selected' : 'Select Villa'}
+            {isSelected ? ' Selected' : 'Select Villa'}
           </button>
         </div>
       </div>
@@ -132,7 +132,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
       rating: 4.98,
       bedrooms: 7, // 7 en-suites
-      bathrooms: 10,
+      bathrooms: 9.5,
       guests: 18,
       size: "10,500 sq ft",
       isPremium: true,
@@ -228,7 +228,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "5 Min to Palicio Villas", icon: "fa-map-marker-alt" },
         { name: "Group Booking Available", icon: "fa-users" }
       ],
-      detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for Whale Watching from patio. Witness humpback whales during migration season while enjoying panoramic ocean vistas. With 4 en-suites and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palicio Tropical and Palicio Musical, it can be booked together with these properties for larger groups or events.",
+      detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for Whale Watching from patio. With 4 en-suites and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palicio Tropical and Palicio Musical, it can be booked together with these properties for larger groups or events.",
       locationDescription: "Located in Puntarenas Province with stunning Pacific Ocean views. Just 5 minutes from Palicio Tropical and Palicio Musical villas, perfect for combined bookings and group events.",
       specialFeatures: [
         { name: "Newly Constructed", icon: "fa-hammer" },
