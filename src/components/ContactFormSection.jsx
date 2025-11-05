@@ -72,26 +72,26 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
     setIsSubmitting(true);
 
     try {
-      // Netlify Forms automatically handles form submission
-      // Just submit the form normally, Netlify will intercept it
-      const formElement = e.target;
-      const formDataToSend = new FormData(formElement);
-      
-      // Add selected villa and activities to the form data
-      if (selectedVilla) {
-        formDataToSend.set('villa-selected', selectedVilla.name);
-      }
-      
-      if (selectedActivities.length > 0) {
-        const activitiesList = selectedActivities.map(a => `${a.name} (${a.duration})`).join(', ');
-        formDataToSend.set('activities-selected', activitiesList);
-      }
+      // Create form data object for Netlify
+      const formDataObject = {
+        'form-name': 'contact',
+        'name': formData.name,
+        'email': formData.email,
+        'phone': formData.phone,
+        'travelDate': formData.travelDate,
+        'numberOfPeople': formData.numberOfPeople,
+        'message': formData.message,
+        'villa-selected': selectedVilla?.name || 'None',
+        'activities-selected': selectedActivities.length > 0 
+          ? selectedActivities.map(a => `${a.name} (${a.duration})`).join(', ')
+          : 'None'
+      };
 
       // Submit to Netlify
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formDataToSend).toString()
+        body: new URLSearchParams(formDataObject).toString()
       });
 
       if (response.ok) {

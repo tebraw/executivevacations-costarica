@@ -22,6 +22,18 @@
     </script>
   </head>
   <body>
+    <!-- Hidden form for Netlify Forms detection -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="date" name="travelDate" />
+      <input type="number" name="numberOfPeople" />
+      <textarea name="message"></textarea>
+      <input type="text" name="villa-selected" />
+      <input type="text" name="activities-selected" />
+    </form>
+    
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
