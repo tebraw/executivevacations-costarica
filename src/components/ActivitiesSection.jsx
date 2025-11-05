@@ -15,7 +15,7 @@ const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
     {
       id: 'atv-rainbow',
       name: 'ATV Tour to the Jesus Tree',
-      description: 'Embark on a thrilling ATV ride along the beach to the breathtaking Jesus Tree. Experience stunning coastal views and an unforgettable adventure.',
+      description: 'Embark on a thrilling ATV ride along the beach to the breathtaking Jesus Tree, with a trip to monkey forest. Experience stunning coastal views and an unforgettable adventure.',
       duration: '4-5 hours',
       image: getImagePath('images/activities/atv.avif'),
       highlights: ['Professional guide included', 'All safety equipment provided', 'Refreshments included']
