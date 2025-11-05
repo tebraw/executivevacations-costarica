@@ -222,21 +222,6 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick, onSelect }) 
                 <p className="body-regular text-gray mb-6">
                   {villa.locationDescription || "Located in one of Costa Rica's most prestigious areas, offering breathtaking views and easy access to pristine beaches, lush rainforests, and world-class amenities."}
                 </p>
-                
-                <div className="space-y-3">
-                  <button 
-                    onClick={onContactClick}
-                    className="btn btn-luxury w-full"
-                  >
-                    Contact for Availability
-                  </button>
-                  <button className="btn btn-secondary w-full">
-                    Request Virtual Tour
-                  </button>
-                  <button className="btn btn-secondary w-full">
-                    Save to Favorites
-                  </button>
-                </div>
               </div>
             </div>
           </div>
