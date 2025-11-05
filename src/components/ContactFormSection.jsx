@@ -72,30 +72,26 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
     setIsSubmitting(true);
 
     try {
-      // Prepare form data for submission
+      // Netlify Forms automatically handles form submission
+      // Just submit the form normally, Netlify will intercept it
       const formElement = e.target;
       const formDataToSend = new FormData(formElement);
       
       // Add selected villa and activities to the form data
       if (selectedVilla) {
-        formDataToSend.append('Villa Selected', selectedVilla.name);
+        formDataToSend.set('villa-selected', selectedVilla.name);
       }
       
       if (selectedActivities.length > 0) {
         const activitiesList = selectedActivities.map(a => `${a.name} (${a.duration})`).join(', ');
-        formDataToSend.append('Activities Selected', activitiesList);
+        formDataToSend.set('activities-selected', activitiesList);
       }
 
-      // Add CC recipients
-      formDataToSend.append('_cc', 'grujicic.filip17@gmail.com,sanmariaamin@gmail.com');
-      
-      // Submit to FormSubmit.co
-      const response = await fetch('https://formsubmit.co/ajax/wendymeritt@gmail.com', {
+      // Submit to Netlify
+      const response = await fetch('/', {
         method: 'POST',
-        body: formDataToSend,
-        headers: {
-          'Accept': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formDataToSend).toString()
       });
 
       if (response.ok) {
@@ -105,7 +101,7 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('There was an error submitting your inquiry. Please try again or contact us directly at wendymeritt@gmail.com');
+      alert('There was an error submitting your inquiry. Please try again or contact us directly at propertieswithmeritt@yahoo.com');
     } finally {
       setIsSubmitting(false);
     }
@@ -182,12 +178,21 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Hidden fields for FormSubmit configuration */}
-              <input type="hidden" name="_cc" value="grujicic.filip17@gmail.com,sanmariaamin@gmail.com" />
-              <input type="hidden" name="_subject" value="New Inquiry from Executive Vacations Website" />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_captcha" value="false" />
+            <form 
+              name="contact" 
+              method="POST" 
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+              onSubmit={handleSubmit} 
+              className="space-y-6"
+            >
+              {/* Netlify Forms required fields */}
+              <input type="hidden" name="form-name" value="contact" />
+              <input type="hidden" name="bot-field" />
+              
+              {/* Hidden fields for villa and activities */}
+              <input type="hidden" name="villa-selected" value={selectedVilla?.name || ''} />
+              <input type="hidden" name="activities-selected" value={selectedActivities.map(a => `${a.name} (${a.duration})`).join(', ')} />
               
               {/* Name */}
               <div>
