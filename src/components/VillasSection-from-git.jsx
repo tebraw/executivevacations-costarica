@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import VillaDetailModal from './VillaDetailModal';
 
 // Christmas + New Year Special Badge enabled
@@ -39,7 +39,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         {/* Selected Badge */}
         {isSelected && (
           <div className="absolute top-3 left-3 bg-luxury-gold text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-            <span>Ô£ô</span> SELECTED
+            <span>ԣ�</span> SELECTED
           </div>
         )}
 
@@ -69,7 +69,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         <div className="flex items-center justify-between mb-3">
           <span className="body-regular text-dark font-medium">{villa.location}</span>
           <div className="rating">
-            <span className="body-small">Ôÿà {villa.rating}</span>
+            <span className="body-small">��� {villa.rating}</span>
           </div>
         </div>
 
@@ -112,7 +112,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             onClick={() => onSelect(villa)}
             className={`btn flex-1 ${isSelected ? 'btn-success' : 'btn-luxury'}`}
           >
-            {isSelected ? 'Ô£ô Selected' : 'Select Villa'}
+            {isSelected ? 'ԣ� Selected' : 'Select Villa'}
           </button>
         </div>
       </div>
@@ -158,8 +158,8 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "VIP Privacy Protection", icon: "fa-user-shield" },
         { name: "Separate Security Quarters", icon: "fa-home" }
       ],
-      detailedDescription: "Experience private luxury throughout this stunning 10,500 sq ft oceanfront villa. Featuring 7 en-suites, each with private bath and A/C, plus a grand dining room seating 14. Multiple large gathering areas open to an outside bar, dining area, and large pool. Safe and private for traveling dignitaries, officials, and politicians. The house can be fully staffed with cooks, housekeeping, and concierge service for outings and excursions. Located directly next to Palicio Musical, both properties can be booked together for larger events and groups. Palacio Tropical offers an unforgettable oceanfront experience with complete privacy and security.",
-      locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and private beach allow you to enjoy family and guests without unwanted attention from media or paparazzi. Situated directly next to Palicio Musical - both villas can be combined for ultimate luxury accommodation.",
+      detailedDescription: "Experience private luxury throughout this stunning 10,500 sq ft oceanfront villa. Featuring 7 en-suites, each with private bath and A/C, plus a grand dining room seating 14. Multiple large gathering areas open to an outside bar, dining area, and large pool. Safe and private for traveling dignitaries, officials, and politicians. The house can be fully staffed with cooks, housekeeping, and concierge service for outings and excursions. Located directly next to Palacio Musical, both properties can be booked together for larger events and groups. Palacio Tropical offers an unforgettable oceanfront experience with complete privacy and security.",
+      locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and private beach allow you to enjoy family and guests without unwanted attention from media or paparazzi. Situated directly next to Palacio Musical - both villas can be combined for ultimate luxury accommodation.",
       specialFeatures: [
         { name: "VIP Privacy & Security", icon: "fa-user-shield" },
         { name: "Full Staff Service", icon: "fa-concierge-bell" },
@@ -168,7 +168,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
     },
     {
       id: 4,
-      name: "Palicio Musical",
+      name: "Palacio Musical",
       type: "Exclusive Beachfront Villa",
       location: "Tambor, Puntarenas - Tango Mar",
       fullLocation: "Tambor, Puntarenas - Tango Mar, Costa Rica",
@@ -180,8 +180,8 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       isPremium: true,
       hasChristmasSpecial: true,
       isComingSoon: false, // Set to false when available for booking
-      images: ["/images/villas/palicio-musical/98986715.jpg"],
-      detailImages: ["/images/villas/palicio-musical/+Cuarto 3 DSC_3345.jpg", "/images/villas/palicio-musical/+Pacifica_DSC_4756 (1).jpg", "/images/villas/palicio-musical/198134112.jpg", "/images/villas/palicio-musical/98984225.jpg", "/images/villas/palicio-musical/98986715.jpg", "/images/villas/palicio-musical/98990146.jpg", "/images/villas/palicio-musical/99010031.jpg", "/images/villas/palicio-musical/99498420.jpg", "/images/villas/palicio-musical/Pacifica_DSC_4188.JPG"],
+      images: ["/images/villas/Palacio-musical/98986715.jpg"],
+      detailImages: ["/images/villas/Palacio-musical/+Cuarto 3 DSC_3345.jpg", "/images/villas/Palacio-musical/+Pacifica_DSC_4756 (1).jpg", "/images/villas/Palacio-musical/198134112.jpg", "/images/villas/Palacio-musical/98984225.jpg", "/images/villas/Palacio-musical/98986715.jpg", "/images/villas/Palacio-musical/98990146.jpg", "/images/villas/Palacio-musical/99010031.jpg", "/images/villas/Palacio-musical/99498420.jpg", "/images/villas/Palacio-musical/Pacifica_DSC_4188.JPG"],
       topAmenities: ["Music Studio", "Newly Renovated", "Ocean Views", "Full Staff"],
       allAmenities: [
         { name: "Professional Music Studio", icon: "fa-music" },
@@ -225,15 +225,15 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "Peaceful & Stylish", icon: "fa-leaf" },
         { name: "4 Comfortable Bedrooms", icon: "fa-bed" },
         { name: "Modern Amenities", icon: "fa-star" },
-        { name: "5 Min to Palicio Villas", icon: "fa-map-marker-alt" },
+        { name: "5 Min to Palacio Villas", icon: "fa-map-marker-alt" },
         { name: "Group Booking Available", icon: "fa-users" }
       ],
-      detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for whale watching from your private terrace. Witness humpback whales during migration season while enjoying panoramic ocean vistas. With 4 bedrooms and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palicio Tropical and Palicio Musical, it can be booked together with these properties for larger groups or events.",
-      locationDescription: "Located in Puntarenas Province with stunning Pacific Ocean views. Just 5 minutes from Palicio Tropical and Palicio Musical villas, perfect for combined bookings and group events.",
+      detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for whale watching from your private terrace. Witness humpback whales during migration season while enjoying panoramic ocean vistas. With 4 bedrooms and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palacio Tropical and Palacio Musical, it can be booked together with these properties for larger groups or events.",
+      locationDescription: "Located in Puntarenas Province with stunning Pacific Ocean views. Just 5 minutes from Palacio Tropical and Palacio Musical villas, perfect for combined bookings and group events.",
       specialFeatures: [
         { name: "Newly Constructed", icon: "fa-hammer" },
         { name: "Custom Pool Design", icon: "fa-swimming-pool" },
-        { name: "Combinable with Palicio Villas", icon: "fa-link" }
+        { name: "Combinable with Palacio Villas", icon: "fa-link" }
       ]
     },
     {
