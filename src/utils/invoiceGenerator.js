@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 // Villa prices per night (in USD)
 const VILLA_PRICES = {
@@ -114,7 +114,7 @@ export const generateInvoice = (booking) => {
     ...activityItems
   ];
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: 115,
     head: [['Description', 'Quantity', 'Unit Price', 'Amount']],
     body: tableData,
@@ -134,7 +134,7 @@ export const generateInvoice = (booking) => {
   });
   
   // Totals
-  const finalY = doc.lastAutoTable.finalY + 10;
+  const finalY = doc.previousAutoTable.finalY + 10;
   const totalX = pageWidth - 20;
   
   const subtotal = villaSubtotal + activitiesSubtotal;
