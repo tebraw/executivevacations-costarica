@@ -8,18 +8,22 @@ const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBooking, setEditingBooking] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadBookings();
   }, []);
 
-  const loadBookings = () => {
-    setBookings(getBookings());
+  const loadBookings = async () => {
+    setLoading(true);
+    const data = await getBookings();
+    setBookings(data);
+    setLoading(false);
   };
 
-  const handleCreateBooking = (bookingData) => {
-    saveBooking(bookingData);
-    loadBookings();
+  const handleCreateBooking = async (bookingData) => {
+    await saveBooking(bookingData);
+    await loadBookings();
     setIsModalOpen(false);
     setEditingBooking(null);
   };
@@ -29,9 +33,9 @@ const AdminDashboard = () => {
     setIsModalOpen(true);
   };
 
-  const handleDeleteBooking = (bookingId) => {
-    deleteBooking(bookingId);
-    loadBookings();
+  const handleDeleteBooking = async (bookingId) => {
+    await deleteBooking(bookingId);
+    await loadBookings();
     setShowDeleteConfirm(null);
     setEditingBooking(null);
     setIsModalOpen(false);

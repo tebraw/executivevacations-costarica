@@ -1,4 +1,4 @@
-﻿// LocalStorage-based booking management system
+﻿// API-based booking management system with Netlify Blobs backend
 
 const STORAGE_KEY = 'executivevacations_bookings';
 
@@ -26,43 +26,57 @@ export const VILLA_COLORS = {
   }
 };
 
-// Get all bookings from localStorage
-export const getBookings = () => {
+// Get all bookings from API (or localStorage as fallback)
+export const getBookings = async () => {
   try {
+    const response = await fetch('/api/bookings');
+    if (response.ok) {
+      return await response.json();
+    }
+    // Fallback to localStorage if API fails
     const bookings = localStorage.getItem(STORAGE_KEY);
     return bookings ? JSON.parse(bookings) : [];
   } catch (error) {
     console.error('Error reading bookings:', error);
-    return [];
+    // Fallback to localStorage
+    const bookings = localStorage.getItem(STORAGE_KEY);
+    return bookings ? JSON.parse(bookings) : [];
   }
 };
 
 // Save a new booking or update existing one
-export const saveBooking = (bookingData) => {
+export const saveBooking = async (bookingData) => {
   try {
-    const bookings = getBookings();
     const now = new Date().toISOString();
     
-    if (bookingData.id) {
-      // Update existing booking
-      const index = bookings.findIndex(b => b.id === bookingData.id);
-      if (index !== -1) {
-        bookings[index] = {
-          ...bookingData,
-          updatedAt: now
-        };
-      }
-    } else {
-      // Create new booking
-      const newBooking = {
-        ...bookingData,
-        id: Date.now().toString(),
-        createdAt: now,
-        updatedAt: now
-      };
-      bookings.push(newBooking);
+    const booking = bookingData.id ? {
+      ...bookingData,
+      updatedAt: now
+    } : {
+      ...bookingData,
+      id: Date.now().toString(),
+      createdAt: now,
+      updatedAt: now
+    };
+    
+    const response = await fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(booking)
+    });
+    
+    if (response.ok) {
+      return true;
     }
     
+    // Fallback to localStorage if API fails
+    const bookings = await getBookings();
+    const index = bookings.findIndex(b => b.id === booking.id);
+    if (index !== -1) {
+      bookings[index] = booking;
+    } else {
+      bookings.push(booking);
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
     return true;
   } catch (error) {
@@ -72,9 +86,20 @@ export const saveBooking = (bookingData) => {
 };
 
 // Delete a booking by ID
-export const deleteBooking = (bookingId) => {
+export const deleteBooking = async (bookingId) => {
   try {
-    const bookings = getBookings();
+    const response = await fetch('/api/bookings/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: bookingId })
+    });
+    
+    if (response.ok) {
+      return true;
+    }
+    
+    // Fallback to localStorage if API fails
+    const bookings = await getBookings();
     const filtered = bookings.filter(b => b.id !== bookingId);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
     return true;
