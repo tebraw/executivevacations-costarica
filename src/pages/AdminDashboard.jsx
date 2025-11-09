@@ -42,9 +42,21 @@ const AdminDashboard = () => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    
     // Parse as local date to avoid timezone shift
-    const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
+    let date;
+    if (dateString.includes('-') && dateString.split('-').length === 3) {
+      const [year, month, day] = dateString.split('-').map(Number);
+      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+        date = new Date(year, month - 1, day);
+      } else {
+        date = new Date(dateString);
+      }
+    } else {
+      date = new Date(dateString);
+    }
+    
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
 

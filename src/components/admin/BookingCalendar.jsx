@@ -6,8 +6,18 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
 
   // Helper function to parse date string as local date (without timezone shift)
   const parseLocalDate = (dateString) => {
-    const [year, month, day] = dateString.split('-').map(Number);
-    return new Date(year, month - 1, day);
+    if (!dateString) return new Date();
+    
+    // Check if it's in YYYY-MM-DD format
+    if (dateString.includes('-') && dateString.split('-').length === 3) {
+      const [year, month, day] = dateString.split('-').map(Number);
+      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+        return new Date(year, month - 1, day);
+      }
+    }
+    
+    // Fallback to standard Date parsing
+    return new Date(dateString);
   };
 
   const { year, month } = useMemo(() => ({
