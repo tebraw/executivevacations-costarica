@@ -5,6 +5,10 @@
   # Publish Directory (the built output)
   publish = "dist"
 
+# Functions Directory
+[functions]
+  directory = "netlify/functions"
+
 # Redirects for Single Page Application
 [[redirects]]
   from = "/*"
