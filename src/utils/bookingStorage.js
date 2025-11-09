@@ -29,10 +29,15 @@ export const VILLA_COLORS = {
 // Get all bookings from API (or localStorage as fallback)
 export const getBookings = async () => {
   try {
+    console.log('Fetching bookings from Netlify Blobs...');
     const response = await fetch('/.netlify/functions/get-bookings');
+    console.log('Response status:', response.status);
     if (response.ok) {
-      return await response.json();
+      const data = await response.json();
+      console.log('Bookings loaded from API:', data);
+      return data;
     }
+    console.warn('API failed, using localStorage fallback');
     // Fallback to localStorage if API fails
     const bookings = localStorage.getItem(STORAGE_KEY);
     return bookings ? JSON.parse(bookings) : [];
@@ -59,16 +64,20 @@ export const saveBooking = async (bookingData) => {
       updatedAt: now
     };
     
+    console.log('Saving booking to Netlify Blobs:', booking);
     const response = await fetch('/.netlify/functions/save-booking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(booking)
     });
     
+    console.log('Save response status:', response.status);
     if (response.ok) {
+      console.log('Booking saved successfully to Netlify Blobs!');
       return true;
     }
     
+    console.warn('API save failed, using localStorage fallback');
     // Fallback to localStorage if API fails
     const bookings = await getBookings();
     const index = bookings.findIndex(b => b.id === booking.id);
@@ -78,6 +87,7 @@ export const saveBooking = async (bookingData) => {
       bookings.push(booking);
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
+    console.log('Booking saved to localStorage as fallback');
     return true;
   } catch (error) {
     console.error('Error saving booking:', error);
