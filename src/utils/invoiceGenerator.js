@@ -1,16 +1,28 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// Villa prices per night (in USD)
-const VILLA_PRICES = {
-  'Palacio Tropical': 850,
-  'Palacio Musical': 750,
+// Seasonal pricing for 2025
+const SEASONAL_PRICING_2025 = {
+  'Palacio Tropical': {
+    high1: { start: '2025-01-05', end: '2025-04-30', price: 4200 },
+    low: { start: '2025-05-01', end: '2025-11-16', price: 3200 },
+    high2: { start: '2025-11-17', end: '2025-12-19', price: 4200 }
+  },
+  'Palacio Musical': {
+    high1: { start: '2025-01-05', end: '2025-04-30', price: 4400 },
+    low: { start: '2025-05-01', end: '2025-11-16', price: 3400 },
+    high2: { start: '2025-11-17', end: '2025-12-19', price: 4400 }
+  }
+};
+
+// Static prices for villas without seasonal pricing (fallback)
+const STATIC_VILLA_PRICES = {
   'The View House': 650,
   'The Palms Villa Estate': 950
 };
 
-// Activity prices (in USD)
-const ACTIVITY_PRICES = {
+// Default activity prices (in USD per person)
+const DEFAULT_ACTIVITY_PRICES = {
   'ATV Tour': 120,
   'Zipline Adventure': 95,
   'Private Air Charter': 2500,
@@ -19,6 +31,27 @@ const ACTIVITY_PRICES = {
   'Spa Treatment': 150,
   'Private Chef': 200,
   'Yoga Session': 60
+};
+
+// Get villa price for a specific date
+const getVillaPriceForDate = (villaName, dateStr) => {
+  // Check if villa has seasonal pricing
+  if (SEASONAL_PRICING_2025[villaName]) {
+    const seasons = SEASONAL_PRICING_2025[villaName];
+    const date = new Date(dateStr);
+    
+    // Check each season
+    for (const season of Object.values(seasons)) {
+      const seasonStart = new Date(season.start);
+      const seasonEnd = new Date(season.end);
+      if (date >= seasonStart && date <= seasonEnd) {
+        return season.price;
+      }
+    }
+  }
+  
+  // Fallback to static price
+  return STATIC_VILLA_PRICES[villaName] || 0;
 };
 
 const calculateNights = (startDate, endDate) => {
@@ -93,19 +126,43 @@ export const generateInvoice = (booking) => {
   let villaSubtotal = 0;
   let activitiesSubtotal = 0;
   
-  // Villa items
+  // Villa items - use custom price if provided, otherwise calculate from seasonal pricing
   const villaItems = booking.villas.map(villa => {
-    const pricePerNight = VILLA_PRICES[villa] || 0;
+    let pricePerNight;
+    
+    // Check if booking has custom villa price
+    if (booking.villaPrice && booking.villaPrice[villa]) {
+      pricePerNight = booking.villaPrice[villa];
+    } else {
+      // Use seasonal pricing for average (simplified - take price from start date)
+      pricePerNight = getVillaPriceForDate(villa, booking.startDate);
+    }
+    
     const total = pricePerNight * nights;
     villaSubtotal += total;
-    return [villa, nights, `$${pricePerNight.toFixed(2)}`, `$${total.toFixed(2)}`];
+    return [villa, nights, `$${pricePerNight.toLocaleString('en-US', {minimumFractionDigits: 2})}`, `$${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`];
   });
   
-  // Activity items
+  // Activity items - support new format with price per person and number of people
   const activityItems = (booking.selectedActivities || []).map(activity => {
-    const price = ACTIVITY_PRICES[activity] || 0;
-    activitiesSubtotal += price;
-    return [activity, 1, `$${price.toFixed(2)}`, `$${price.toFixed(2)}`];
+    // Check if activity is in new format (object with details)
+    if (typeof activity === 'object' && activity.name) {
+      const pricePerPerson = activity.pricePerPerson || DEFAULT_ACTIVITY_PRICES[activity.name] || 0;
+      const numberOfPeople = activity.numberOfPeople || 1;
+      const total = pricePerPerson * numberOfPeople;
+      activitiesSubtotal += total;
+      
+      const description = numberOfPeople > 1 
+        ? `${activity.name} (${numberOfPeople} people @ $${pricePerPerson.toLocaleString('en-US', {minimumFractionDigits: 2})})`
+        : activity.name;
+      
+      return [description, numberOfPeople, `$${pricePerPerson.toLocaleString('en-US', {minimumFractionDigits: 2})}`, `$${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`];
+    } else {
+      // Old format - just activity name as string
+      const price = DEFAULT_ACTIVITY_PRICES[activity] || 0;
+      activitiesSubtotal += price;
+      return [activity, 1, `$${price.toLocaleString('en-US', {minimumFractionDigits: 2})}`, `$${price.toLocaleString('en-US', {minimumFractionDigits: 2})}`];
+    }
   });
   
   // Items Table
@@ -182,3 +239,6 @@ export const generateInvoice = (booking) => {
   const fileName = `Invoice_${booking.customerName.replace(/\s+/g, '_')}_${invoiceNumber}.pdf`;
   doc.save(fileName);
 };
+
+// Export helper functions for use in booking modal
+export { getVillaPriceForDate, DEFAULT_ACTIVITY_PRICES, SEASONAL_PRICING_2025, STATIC_VILLA_PRICES };
