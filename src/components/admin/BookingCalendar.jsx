@@ -4,6 +4,12 @@ import { getVillaColor } from '../../utils/bookingStorage';
 const BookingCalendar = ({ bookings, onBookingClick }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  // Helper function to parse date string as local date (without timezone shift)
+  const parseLocalDate = (dateString) => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   const { year, month } = useMemo(() => ({
     year: currentDate.getFullYear(),
     month: currentDate.getMonth()
@@ -30,8 +36,8 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
     const spans = [];
     
     bookings.forEach(booking => {
-      const start = new Date(booking.startDate);
-      const end = new Date(booking.endDate);
+      const start = parseLocalDate(booking.startDate);
+      const end = parseLocalDate(booking.endDate);
       start.setHours(0, 0, 0, 0);
       end.setHours(0, 0, 0, 0);
       
