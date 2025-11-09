@@ -2,6 +2,7 @@
 import BookingCalendar from '../components/admin/BookingCalendar';
 import BookingModal from '../components/admin/BookingModal';
 import { getBookings, saveBooking, deleteBooking } from '../utils/bookingStorage';
+import { generateInvoice } from '../utils/invoiceGenerator';
 
 const AdminDashboard = () => {
   const [bookings, setBookings] = useState([]);
@@ -571,6 +572,32 @@ const AdminDashboard = () => {
               }}
             >
               <div className="flex gap-2 justify-end">
+                <button
+                  onClick={() => {
+                    generateInvoice(showDeleteConfirm);
+                  }}
+                  className="transition-all duration-300 hover:scale-105"
+                  style={{
+                    padding: '10px 24px',
+                    borderRadius: '10px',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    color: 'white',
+                    fontWeight: '700',
+                    fontSize: '13px',
+                    boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download Invoice
+                  </span>
+                </button>
                 <button
                   onClick={() => {
                     setShowDeleteConfirm(null);
