@@ -8,7 +8,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="md:col-span-2">
             <div className="mb-6">
-              <h3 className="heading-3 mb-2 text-luxury">Executive Vacations</h3>
+              <h3 className="heading-3 mb-2" style={{ color: '#D4AF37' }}>Executive Vacations</h3>
               <span className="text-luxury">Costa Rica</span>
             </div>
             <p className="body-regular text-white/80 mb-6 leading-relaxed max-w-md">
@@ -26,7 +26,7 @@ const Footer = () => {
           
           {/* Quick Links */}
           <div>
-            <h4 className="heading-3 mb-4 text-luxury">Explore</h4>
+            <h4 className="heading-3 mb-4" style={{ color: '#D4AF37' }}>Explore</h4>
             <ul className="space-y-3">
               <li><a href="#villas" className="body-regular text-white/80 hover:text-white transition-colors">Our Villas</a></li>
               <li><a href="#experiences" className="body-regular text-white/80 hover:text-white transition-colors">Experiences</a></li>
@@ -36,7 +36,7 @@ const Footer = () => {
           
           {/* Contact Info */}
           <div>
-            <h4 className="heading-3 mb-4 text-luxury">Contact</h4>
+            <h4 className="heading-3 mb-4" style={{ color: '#D4AF37' }}>Contact</h4>
             <div className="space-y-3">
               <div>
                 <span className="body-regular text-white/80">propertieswithmeritt@gmail.com</span>
