@@ -125,16 +125,16 @@ export const generateInvoice = (booking) => {
       fontStyle: 'bold'
     },
     columnStyles: {
-      0: { cellWidth: 80 },
-      1: { cellWidth: 30, halign: 'center' },
-      2: { cellWidth: 35, halign: 'right' },
-      3: { cellWidth: 35, halign: 'right' }
+      0: { cellWidth: 'auto' },
+      1: { cellWidth: 25, halign: 'center' },
+      2: { cellWidth: 30, halign: 'right' },
+      3: { cellWidth: 30, halign: 'right' }
     },
     margin: { left: 20, right: 20 }
   });
   
   // Totals
-  const finalY = doc.previousAutoTable.finalY + 10;
+  const finalY = doc.lastAutoTable.finalY + 10;
   const totalX = pageWidth - 20;
   
   const subtotal = villaSubtotal + activitiesSubtotal;
