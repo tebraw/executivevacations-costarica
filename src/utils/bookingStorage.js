@@ -29,7 +29,7 @@ export const VILLA_COLORS = {
 // Get all bookings from API (or localStorage as fallback)
 export const getBookings = async () => {
   try {
-    const response = await fetch('/api/bookings');
+    const response = await fetch('/.netlify/functions/get-bookings');
     if (response.ok) {
       return await response.json();
     }
@@ -59,7 +59,7 @@ export const saveBooking = async (bookingData) => {
       updatedAt: now
     };
     
-    const response = await fetch('/api/bookings', {
+    const response = await fetch('/.netlify/functions/save-booking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(booking)
@@ -88,7 +88,7 @@ export const saveBooking = async (bookingData) => {
 // Delete a booking by ID
 export const deleteBooking = async (bookingId) => {
   try {
-    const response = await fetch('/api/bookings/delete', {
+    const response = await fetch('/.netlify/functions/delete-booking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: bookingId })
