@@ -70,6 +70,44 @@ const AdminDashboard = () => {
     }
   };
 
+  const migrateFromLocalStorage = async () => {
+    try {
+      // Get data from localStorage
+      const localData = localStorage.getItem('executivevacations_bookings');
+      if (!localData) {
+        alert('No data found in localStorage!');
+        return;
+      }
+
+      const localBookings = JSON.parse(localData);
+      if (!Array.isArray(localBookings) || localBookings.length === 0) {
+        alert('No bookings to migrate!');
+        return;
+      }
+
+      const confirmMsg = `Found ${localBookings.length} booking(s) in localStorage:\n\n${localBookings.map(b => `- ${b.customerName} (${b.startDate} to ${b.endDate})`).join('\n')}\n\nMigrate these to Netlify Blobs?`;
+      
+      if (!window.confirm(confirmMsg)) {
+        return;
+      }
+
+      // Save each booking to Netlify Blobs
+      let successCount = 0;
+      for (const booking of localBookings) {
+        const success = await saveBooking(booking);
+        if (success) {
+          successCount++;
+        }
+      }
+
+      await loadBookings();
+      alert(`✅ Successfully migrated ${successCount} of ${localBookings.length} bookings!\n\nYou can now refresh the page to see all bookings.`);
+    } catch (error) {
+      console.error('Migration error:', error);
+      alert('❌ Error during migration: ' + error.message);
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     
@@ -109,6 +147,14 @@ const AdminDashboard = () => {
               <p className="body-regular text-gray">Manage villa reservations and bookings</p>
             </div>
             <div className="flex items-center gap-3">
+              <button
+                onClick={migrateFromLocalStorage}
+                className="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2 text-sm">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                Restore Bookings
+              </button>
               <button
                 onClick={cleanupInvalidBookings}
                 className="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2 text-sm">
