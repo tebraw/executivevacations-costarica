@@ -5,6 +5,9 @@ export default async (req, context) => {
     const store = getStore('bookings');
     const bookings = await store.get('all-bookings', { type: 'json' }) || [];
 
+    console.log('iCal Feed - Total bookings in storage:', bookings.length);
+    console.log('Booking IDs:', bookings.map(b => b.id));
+
     // Generate iCal content
     const ical = generateICalendar(bookings);
 
@@ -13,7 +16,9 @@ export default async (req, context) => {
       headers: {
         'Content-Type': 'text/calendar; charset=utf-8',
         'Content-Disposition': 'inline; filename="executive-vacations.ics"',
-        'Cache-Control': 'no-cache, no-store, must-revalidate'
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
       }
     });
   } catch (error) {
@@ -39,7 +44,8 @@ function generateICalendar(bookings) {
 
   bookings.forEach(booking => {
     const startDate = formatICalDate(booking.startDate);
-    const endDate = formatICalDate(booking.endDate);
+    // DTEND is exclusive, so add one day to include the checkout day
+    const endDate = formatICalDate(booking.endDate, true); // true = add one day
     const created = timestamp;
     const uid = `booking-${booking.id}@executivevacations.net`;
 
@@ -68,8 +74,17 @@ function generateICalendar(bookings) {
   return ical.join('\r\n');
 }
 
-function formatICalDate(dateString) {
+function formatICalDate(dateString, addOneDay = false) {
   // Convert YYYY-MM-DD to YYYYMMDD
+  if (addOneDay) {
+    // Add one day for DTEND (which is exclusive in iCal)
+    const date = new Date(dateString);
+    date.setDate(date.getDate() + 1);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}${month}${day}`;
+  }
   return dateString.replace(/-/g, '');
 }
 
