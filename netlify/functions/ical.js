@@ -6,15 +6,10 @@ export default async (req) => {
   }
 
   try {
-    // Get version parameter (used as cache buster, not actually used in logic)
-    const url = new URL(req.url);
-    const version = url.searchParams.get('v') || 'default';
-    
     const store = getStore('bookings');
     const allBookings = await store.get('all-bookings', { type: 'json' }) || [];
 
     console.log('=== iCal Feed Generation ===');
-    console.log('Version:', version);
     console.log('Total bookings in storage:', allBookings.length);
     
     // Filter: Only bookings where end >= start (valid bookings)
