@@ -750,8 +750,8 @@ const AdminDashboard = () => {
                 <h3 className="font-semibold text-green-900 mb-2">🔄 Auto-Sync:</h3>
                 <ul className="text-sm text-green-800 space-y-1">
                   <li>• The calendar feed updates automatically when you add/edit/delete bookings</li>
-                  <li>• Calendar apps check for updates every 1-12 hours (varies by app)</li>
-                  <li>• For immediate updates in Google Calendar: Calendar Settings → ⋮ → Refresh</li>
+                  <li>• Google Calendar syncs every 8-24 hours automatically</li>
+                  <li>• For immediate updates: Remove and re-add the calendar in Google Calendar settings</li>
                 </ul>
               </div>
             </div>
