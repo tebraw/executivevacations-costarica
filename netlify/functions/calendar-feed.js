@@ -1,6 +1,10 @@
 import { getStore } from '@netlify/blobs';
 
-export default async (req, context) => {
+export default async (req) => {
+  if (req.method !== 'GET') {
+    return new Response('Method not allowed', { status: 405 });
+  }
+
   try {
     const store = getStore('bookings');
     const bookings = await store.get('all-bookings', { type: 'json' }) || [];
@@ -75,17 +79,19 @@ function generateICalendar(bookings) {
 }
 
 function formatICalDate(dateString, addOneDay = false) {
-  // Convert YYYY-MM-DD to YYYYMMDD
+  // Parse YYYY-MM-DD and ensure we're in local time, not UTC
+  const [year, month, day] = dateString.split('-').map(Number);
+  const date = new Date(year, month - 1, day); // Month is 0-indexed
+  
   if (addOneDay) {
     // Add one day for DTEND (which is exclusive in iCal)
-    const date = new Date(dateString);
     date.setDate(date.getDate() + 1);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}${month}${day}`;
   }
-  return dateString.replace(/-/g, '');
+  
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}${m}${d}`;
 }
 
 function getActivitiesSummary(activities) {
