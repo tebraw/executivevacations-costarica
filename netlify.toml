@@ -9,12 +9,7 @@
 [functions]
   directory = "netlify/functions"
 
-# Redirects for Single Page Application
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
+# Redirects are now in public/_redirects file
 
 # Headers for better performance
 [[headers]]
