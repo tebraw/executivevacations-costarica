@@ -1,11 +1,8 @@
 import { getStore } from '@netlify/blobs';
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod !== 'GET') {
-    return {
-      statusCode: 405,
-      body: 'Method not allowed'
-    };
+export default async (req) => {
+  if (req.method !== 'GET') {
+    return new Response('Method not allowed', { status: 405 });
   }
 
   try {
@@ -38,8 +35,8 @@ exports.handler = async (event, context) => {
     // Generate iCal content
     const ical = generateICalendar(validBookings);
 
-    return {
-      statusCode: 200,
+    return new Response(ical, {
+      status: 200,
       headers: {
         'Content-Type': 'text/calendar; charset=utf-8',
         'Content-Disposition': 'inline; filename="executive-vacations.ics"',
@@ -48,15 +45,11 @@ exports.handler = async (event, context) => {
         'Expires': '0',
         'Last-Modified': new Date().toUTCString(),
         'ETag': `"${Date.now()}"` // Force refresh
-      },
-      body: ical
-    };
+      }
+    });
   } catch (error) {
     console.error('Error generating iCal feed:', error);
-    return {
-      statusCode: 500,
-      body: 'Error generating calendar feed'
-    };
+    return new Response('Error generating calendar feed', { status: 500 });
   }
 };
 

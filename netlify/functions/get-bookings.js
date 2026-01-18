@@ -1,29 +1,26 @@
 import { getStore } from '@netlify/blobs';
 
-exports.handler = async (event, context) => {
+export default async (req, context) => {
   try {
     const store = getStore('bookings');
     const bookingsData = await store.get('all-bookings');
     
     if (!bookingsData) {
-      return {
-        statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify([])
-      };
+      return new Response(JSON.stringify([]), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: bookingsData
-    };
+    return new Response(bookingsData, {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (error) {
     console.error('Error getting bookings:', error);
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Failed to get bookings' })
-    };
+    return new Response(JSON.stringify({ error: 'Failed to get bookings' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };

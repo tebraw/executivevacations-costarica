@@ -1,8 +1,8 @@
 import { getStore } from '@netlify/blobs';
 
-exports.handler = async (event, context) => {
+export default async (req, context) => {
   try {
-    const { id } = JSON.parse(event.body);
+    const { id } = await req.json();
     const store = getStore('bookings');
     
     // Get existing bookings
@@ -15,17 +15,15 @@ exports.handler = async (event, context) => {
     // Save back to blob storage
     await store.set('all-bookings', JSON.stringify(filteredBookings));
     
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ success: true })
-    };
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (error) {
     console.error('Error deleting booking:', error);
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Failed to delete booking' })
-    };
+    return new Response(JSON.stringify({ error: 'Failed to delete booking' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };
