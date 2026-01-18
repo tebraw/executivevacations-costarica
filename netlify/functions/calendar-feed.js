@@ -9,7 +9,8 @@ export default async (req) => {
     const store = getStore('bookings');
     const allBookings = await store.get('all-bookings', { type: 'json' }) || [];
 
-    console.log('iCal Feed - Total bookings in storage:', allBookings.length);
+    console.log('=== iCal Feed Generation ===');
+    console.log('Total bookings in storage:', allBookings.length);
     
     // Filter out invalid bookings (where end date is before start date)
     const validBookings = allBookings.filter(booking => {
@@ -17,15 +18,16 @@ export default async (req) => {
       const end = new Date(booking.endDate);
       const isValid = end >= start;
       if (!isValid) {
-        console.log(`Skipping invalid booking: ${booking.customerName} (${booking.startDate} to ${booking.endDate})`);
+        console.log(`❌ SKIPPING invalid booking: ${booking.customerName} (${booking.startDate} to ${booking.endDate}) - End before start`);
+      } else {
+        console.log(`✅ VALID booking: ${booking.customerName} (${booking.startDate} to ${booking.endDate})`);
       }
       return isValid;
     });
 
-    console.log('Valid bookings for iCal:', validBookings.length);
-    console.log('Booking IDs:', validBookings.map(b => `${b.customerName} (${b.id})`));
+    console.log(`Including ${validBookings.length} valid bookings in iCal feed`);
 
-    // Generate iCal content
+    // Generate iCal content with timestamp for cache busting
     const ical = generateICalendar(validBookings);
 
     return new Response(ical, {
@@ -33,9 +35,10 @@ export default async (req) => {
       headers: {
         'Content-Type': 'text/calendar; charset=utf-8',
         'Content-Disposition': 'inline; filename="executive-vacations.ics"',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
         'Pragma': 'no-cache',
-        'Expires': '0'
+        'Expires': '0',
+        'Last-Modified': new Date().toUTCString()
       }
     });
   } catch (error) {
@@ -47,6 +50,7 @@ export default async (req) => {
 function generateICalendar(bookings) {
   const now = new Date();
   const timestamp = now.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  const sequence = Math.floor(now.getTime() / 1000); // Unix timestamp as sequence
   
   let ical = [
     'BEGIN:VCALENDAR',
@@ -56,7 +60,9 @@ function generateICalendar(bookings) {
     'METHOD:PUBLISH',
     'X-WR-CALNAME:Executive Vacations - All Villas',
     'X-WR-TIMEZONE:America/Costa_Rica',
-    'X-WR-CALDESC:Bookings for all 4 luxury villas in Costa Rica'
+    'X-WR-CALDESC:Bookings for all 4 luxury villas in Costa Rica',
+    `X-PUBLISHED-TTL:PT1H`, // Tell clients to refresh every hour
+    `SEQUENCE:${sequence}` // Increment on each generation
   ];
 
   bookings.forEach(booking => {
@@ -75,6 +81,7 @@ function generateICalendar(bookings) {
         'BEGIN:VEVENT',
         `UID:${uid}-${villa.replace(/\s+/g, '-')}`,
         `DTSTAMP:${created}`,
+        `SEQUENCE:${sequence}`,
         `DTSTART;VALUE=DATE:${startDate}`,
         `DTEND;VALUE=DATE:${endDate}`,
         `SUMMARY:${villa} - ${booking.customerName || 'Guest'}`,
