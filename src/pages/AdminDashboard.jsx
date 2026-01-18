@@ -11,6 +11,7 @@ const AdminDashboard = () => {
   const [editingBooking, setEditingBooking] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showICalModal, setShowICalModal] = useState(false);
 
   useEffect(() => {
     loadBookings();
@@ -118,12 +119,12 @@ const AdminDashboard = () => {
                 Cleanup
               </button>
               <button
-                onClick={() => downloadICalFile(bookings)}
+                onClick={() => setShowICalModal(true)}
                 className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                Download iCal
+                iCal Link
               </button>
               <button
                 onClick={() => {
@@ -692,6 +693,81 @@ const AdminDashboard = () => {
                     </svg>
                     Delete
                   </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* iCal Modal */}
+      {showICalModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">📅 iCal Calendar Feed</h2>
+              <button
+                onClick={() => setShowICalModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-gray-600">
+                Use this URL to subscribe to the calendar in Google Calendar, Apple Calendar, Outlook, or any other calendar app that supports iCal feeds.
+              </p>
+
+              <div className="bg-gray-50 border-2 border-gray-200 rounded-xl p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <code className="text-sm text-gray-700 break-all flex-1">
+                    {window.location.origin}/.netlify/functions/ical
+                  </code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${window.location.origin}/.netlify/functions/ical`);
+                      alert('iCal URL copied to clipboard!');
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
+                  >
+                    Copy URL
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <h3 className="font-semibold text-blue-900 mb-2">📖 How to use:</h3>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• <strong>Google Calendar:</strong> Settings → Add calendar → From URL</li>
+                  <li>• <strong>Apple Calendar:</strong> File → New Calendar Subscription</li>
+                  <li>• <strong>Outlook:</strong> Add calendar → Subscribe from web</li>
+                </ul>
+              </div>
+
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                <h3 className="font-semibold text-green-900 mb-2">🔄 Auto-Sync:</h3>
+                <ul className="text-sm text-green-800 space-y-1">
+                  <li>• Bookings sync automatically when you add/edit/delete them</li>
+                  <li>• The feed updates in real-time (no manual refresh needed)</li>
+                  <li>• Calendar apps check for updates every 1-24 hours automatically</li>
+                </ul>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    downloadICalFile(bookings);
+                    setShowICalModal(false);
+                  }}
+                  className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Download as File
                 </button>
               </div>
             </div>
