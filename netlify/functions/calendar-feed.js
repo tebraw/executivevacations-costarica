@@ -87,7 +87,3 @@ function getVillaLocation(villaName) {
   };
   return locations[villaName] || 'Costa Rica';
 }
-
-export const config = {
-  path: '/api/calendar-feed'
-};
