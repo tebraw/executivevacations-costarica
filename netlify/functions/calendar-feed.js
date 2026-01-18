@@ -7,13 +7,26 @@ export default async (req) => {
 
   try {
     const store = getStore('bookings');
-    const bookings = await store.get('all-bookings', { type: 'json' }) || [];
+    const allBookings = await store.get('all-bookings', { type: 'json' }) || [];
 
-    console.log('iCal Feed - Total bookings in storage:', bookings.length);
-    console.log('Booking IDs:', bookings.map(b => b.id));
+    console.log('iCal Feed - Total bookings in storage:', allBookings.length);
+    
+    // Filter out invalid bookings (where end date is before start date)
+    const validBookings = allBookings.filter(booking => {
+      const start = new Date(booking.startDate);
+      const end = new Date(booking.endDate);
+      const isValid = end >= start;
+      if (!isValid) {
+        console.log(`Skipping invalid booking: ${booking.customerName} (${booking.startDate} to ${booking.endDate})`);
+      }
+      return isValid;
+    });
+
+    console.log('Valid bookings for iCal:', validBookings.length);
+    console.log('Booking IDs:', validBookings.map(b => `${b.customerName} (${b.id})`));
 
     // Generate iCal content
-    const ical = generateICalendar(bookings);
+    const ical = generateICalendar(validBookings);
 
     return new Response(ical, {
       status: 200,
