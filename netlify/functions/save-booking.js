@@ -1,8 +1,8 @@
 import { getStore } from '@netlify/blobs';
 
-export default async (req, context) => {
+exports.handler = async (event, context) => {
   try {
-    const booking = await req.json();
+    const booking = JSON.parse(event.body);
     const store = getStore('bookings');
     
     // Get existing bookings
@@ -20,15 +20,17 @@ export default async (req, context) => {
     // Save back to blob storage
     await store.set('all-bookings', JSON.stringify(bookings));
     
-    return new Response(JSON.stringify({ success: true, booking }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ success: true, booking })
+    };
   } catch (error) {
     console.error('Error saving booking:', error);
-    return new Response(JSON.stringify({ error: 'Failed to save booking' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Failed to save booking' })
+    };
   }
 };
