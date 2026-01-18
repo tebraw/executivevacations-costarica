@@ -11,6 +11,7 @@ const AdminDashboard = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showICalModal, setShowICalModal] = useState(false);
+  const [icalVersion, setIcalVersion] = useState(Date.now());
 
   useEffect(() => {
     loadBookings();
@@ -28,6 +29,7 @@ const AdminDashboard = () => {
     await loadBookings();
     setIsModalOpen(false);
     setEditingBooking(null);
+    setIcalVersion(Date.now()); // Update iCal URL version
   };
 
   const handleEditBooking = (booking) => {
@@ -41,6 +43,7 @@ const AdminDashboard = () => {
     setShowDeleteConfirm(null);
     setEditingBooking(null);
     setIsModalOpen(false);
+    setIcalVersion(Date.now()); // Update iCal URL version
   };
 
   const handleBookingClick = (booking) => {
@@ -66,6 +69,7 @@ const AdminDashboard = () => {
         await deleteBooking(booking.id);
       }
       await loadBookings();
+      setIcalVersion(Date.now()); // Update iCal URL version
       alert(`Deleted ${invalidBookings.length} invalid booking(s)!`);
     }
   };
@@ -723,11 +727,11 @@ const AdminDashboard = () => {
               <div className="bg-gray-50 border-2 border-gray-200 rounded-xl p-4">
                 <div className="flex items-center justify-between gap-3">
                   <code className="text-sm text-gray-700 break-all flex-1">
-                    {window.location.origin}/.netlify/functions/ical
+                    {window.location.origin}/.netlify/functions/ical?v={icalVersion}
                   </code>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(`${window.location.origin}/.netlify/functions/ical`);
+                      navigator.clipboard.writeText(`${window.location.origin}/.netlify/functions/ical?v=${icalVersion}`);
                       alert('iCal URL copied to clipboard!');
                     }}
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
@@ -743,7 +747,15 @@ const AdminDashboard = () => {
                   <li>• <strong>Google Calendar:</strong> Settings → Add calendar → From URL</li>
                   <li>• <strong>Apple Calendar:</strong> File → New Calendar Subscription</li>
                   <li>• <strong>Outlook:</strong> Add calendar → Subscribe from web</li>
-                  <li>• The calendar updates automatically when you add/edit bookings</li>
+                </ul>
+              </div>
+
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <h3 className="font-semibold text-amber-900 mb-2">🔄 Important:</h3>
+                <ul className="text-sm text-amber-800 space-y-1">
+                  <li>• When you add/edit/delete a booking, the URL version updates automatically</li>
+                  <li>• Copy the NEW URL and update it in your calendar app to see changes immediately</li>
+                  <li>• Otherwise, calendar apps may take 1-12 hours to refresh automatically</li>
                 </ul>
               </div>
             </div>
