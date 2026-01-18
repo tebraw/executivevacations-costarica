@@ -723,11 +723,11 @@ const AdminDashboard = () => {
               <div className="bg-gray-50 border-2 border-gray-200 rounded-xl p-4">
                 <div className="flex items-center justify-between gap-3">
                   <code className="text-sm text-gray-700 break-all flex-1">
-                    {window.location.origin}/.netlify/functions/calendar-feed
+                    {window.location.origin}/.netlify/functions/ical
                   </code>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(`${window.location.origin}/.netlify/functions/calendar-feed`);
+                      navigator.clipboard.writeText(`${window.location.origin}/.netlify/functions/ical`);
                       alert('iCal URL copied to clipboard!');
                     }}
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
