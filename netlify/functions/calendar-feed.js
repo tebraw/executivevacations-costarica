@@ -1,0 +1,93 @@
+import { getStore } from '@netlify/blobs';
+
+export default async (req, context) => {
+  try {
+    const store = getStore('bookings');
+    const bookings = await store.get('all-bookings', { type: 'json' }) || [];
+
+    // Generate iCal content
+    const ical = generateICalendar(bookings);
+
+    return new Response(ical, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/calendar; charset=utf-8',
+        'Content-Disposition': 'inline; filename="executive-vacations.ics"',
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
+      }
+    });
+  } catch (error) {
+    console.error('Error generating iCal feed:', error);
+    return new Response('Error generating calendar feed', { status: 500 });
+  }
+};
+
+function generateICalendar(bookings) {
+  const now = new Date();
+  const timestamp = now.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  
+  let ical = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Executive Vacations//Costa Rica Villas//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:Executive Vacations - All Villas',
+    'X-WR-TIMEZONE:America/Costa_Rica',
+    'X-WR-CALDESC:Bookings for all 4 luxury villas in Costa Rica'
+  ];
+
+  bookings.forEach(booking => {
+    const startDate = formatICalDate(booking.startDate);
+    const endDate = formatICalDate(booking.endDate);
+    const created = timestamp;
+    const uid = `booking-${booking.id}@executivevacations.net`;
+
+    // Create event for each villa in the booking
+    booking.villas.forEach(villa => {
+      const activities = getActivitiesSummary(booking.selectedActivities);
+      const description = `Villa: ${villa}\\nGuest: ${booking.customerName}\\nPhone: ${booking.customerPhone || 'N/A'}\\nActivities: ${activities}\\nNotes: ${booking.additionalNotes || 'None'}`;
+      
+      ical.push(
+        'BEGIN:VEVENT',
+        `UID:${uid}-${villa.replace(/\s+/g, '-')}`,
+        `DTSTAMP:${created}`,
+        `DTSTART;VALUE=DATE:${startDate}`,
+        `DTEND;VALUE=DATE:${endDate}`,
+        `SUMMARY:${villa} - ${booking.customerName || 'Guest'}`,
+        `DESCRIPTION:${description}`,
+        `LOCATION:${getVillaLocation(villa)}`,
+        'STATUS:CONFIRMED',
+        'TRANSP:OPAQUE',
+        'END:VEVENT'
+      );
+    });
+  });
+
+  ical.push('END:VCALENDAR');
+  return ical.join('\r\n');
+}
+
+function formatICalDate(dateString) {
+  // Convert YYYY-MM-DD to YYYYMMDD
+  return dateString.replace(/-/g, '');
+}
+
+function getActivitiesSummary(activities) {
+  if (!activities || activities.length === 0) return 'None';
+  return activities.map(a => a.name || a).join(', ');
+}
+
+function getVillaLocation(villaName) {
+  const locations = {
+    'Palacio Tropical': 'Playa Flamingo, Guanacaste, Costa Rica',
+    'Palacio Musical': 'Playa Flamingo, Guanacaste, Costa Rica',
+    'The View House': 'Playa Flamingo, Guanacaste, Costa Rica',
+    'The Palms Villa Estate': 'Playa Flamingo, Guanacaste, Costa Rica'
+  };
+  return locations[villaName] || 'Costa Rica';
+}
+
+export const config = {
+  path: '/api/calendar-feed'
+};
