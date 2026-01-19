@@ -724,24 +724,53 @@ const AdminDashboard = () => {
 
             <div className="space-y-4">
               <p className="text-gray-600">
-                Use this URL to subscribe to the calendar in Google Calendar, Apple Calendar, Outlook, or any other calendar app that supports iCal feeds.
+                Choose a calendar feed for all villas or individual villa calendars.
               </p>
 
-              <div className="bg-gray-50 border-2 border-gray-200 rounded-xl p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <code className="text-sm text-gray-700 break-all flex-1">
-                    {window.location.origin}/.netlify/functions/ical
-                  </code>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(`${window.location.origin}/.netlify/functions/ical`);
-                      alert('iCal URL copied to clipboard!');
-                    }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
-                  >
-                    Copy URL
-                  </button>
+              <div className="space-y-3">
+                <h3 className="font-semibold text-gray-900">🏡 All Villas (Combined)</h3>
+                <div className="bg-gray-50 border-2 border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <code className="text-sm text-gray-700 break-all flex-1">
+                      {window.location.origin}/.netlify/functions/ical
+                    </code>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/.netlify/functions/ical`);
+                        alert('All Villas URL copied!');
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
+                    >
+                      Copy
+                    </button>
+                  </div>
                 </div>
+              </div>
+
+              <div className="space-y-3">
+                <h3 className="font-semibold text-gray-900">🏘️ Individual Villas</h3>
+                
+                {['Palacio Tropical', 'Palacio Musical', 'The View House', 'The Palms Villa Estate'].map(villa => (
+                  <div key={villa} className="bg-gray-50 border border-gray-200 rounded-xl p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900 text-sm mb-1">{villa}</div>
+                        <code className="text-xs text-gray-600 break-all">
+                          {window.location.origin}/.netlify/functions/ical-villa?villa={encodeURIComponent(villa)}
+                        </code>
+                      </div>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/.netlify/functions/ical-villa?villa=${encodeURIComponent(villa)}`);
+                          alert(`${villa} URL copied!`);
+                        }}
+                        className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap text-sm"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
