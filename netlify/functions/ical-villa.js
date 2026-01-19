@@ -1,10 +1,6 @@
 import { getStore } from '@netlify/blobs';
 
 export default async (req) => {
-  if (req.httpMethod !== 'GET') {
-    return new Response('Method not allowed', { status: 405 });
-  }
-
   try {
     // Get villa name from URL parameter
     const url = new URL(req.url);
