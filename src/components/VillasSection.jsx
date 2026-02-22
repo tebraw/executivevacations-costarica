@@ -192,8 +192,19 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
       isPremium: true,
       hasChristmasSpecial: true,
       isComingSoon: false, // Set to false when available for booking
-      images: ["/images/villas/palacio-musical/98986715.jpg"],
-      detailImages: ["/images/villas/palacio-musical/198134112.jpg", "/images/villas/palacio-musical/98984225.jpg", "/images/villas/palacio-musical/98986715.jpg", "/images/villas/palacio-musical/98990146.jpg", "/images/villas/palacio-musical/99010031.jpg", "/images/villas/palacio-musical/99498420.jpg"],
+      images: ["/images/villas/palacio-musical/image-gen - 2026-02-18T175803.790.png"],
+      detailImages: [
+        "/images/villas/palacio-musical/image-gen - 2026-02-18T175803.790.png",
+        "/images/villas/palacio-musical/image-gen - 2026-02-18T180720.490.png",
+        "/images/villas/palacio-musical/image-gen - 2026-02-18T180507.326.png",
+        "/images/villas/palacio-musical/image-gen - 2026-02-18T180250.226.png",
+        "/images/villas/palacio-musical/image-gen - 2026-02-18T175212.165.png",
+        "/images/villas/palacio-musical/image-gen - 2026-02-18T174957.164.png",
+        "/images/villas/palacio-musical/image-gen - 2026-02-13T230153.480.png",
+        "/images/villas/palacio-musical/image-gen - 2026-02-13T225837.220.png",
+        "/images/villas/palacio-musical/image-gen - 2026-02-13T225808.341.png",
+        "/images/villas/palacio-musical/image-gen - 2026-02-13T225635.504.png"
+      ],
       topAmenities: ["A/C", "Music Studio", "Spectacular Ocean Views", "Tiki Bar"],
       allAmenities: [
         { name: "Air Conditioning", icon: "fa-snowflake" },
