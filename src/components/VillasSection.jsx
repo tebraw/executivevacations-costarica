@@ -175,7 +175,8 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "VIP Privacy & Security", icon: "fa-user-shield" },
         { name: "Full Staff Service", icon: "fa-concierge-bell" },
         { name: "Airport Transfer Service", icon: "fa-plane" }
-      ]
+      ],
+      virtualTour: "https://my.matterport.com/show/?m=fyPUdmtVF1H"
     },
     {
       id: 4,

@@ -175,7 +175,22 @@ const VillaDetailModal = ({ villa, isOpen, onClose, onContactClick, onSelect }) 
                 </div>
               </div>
               
-              <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
+                {villa.virtualTour && (
+                  <a 
+                    href={villa.virtualTour}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-secondary w-full flex items-center justify-center gap-2"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                      <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    Virtual 3D Tour
+                  </a>
+                )}
                 <button 
                   onClick={() => {
                     onSelect(villa);
