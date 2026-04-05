@@ -242,7 +242,8 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "Professional Music Studio", icon: "fa-music" },
         { name: "Newly Renovated", icon: "fa-tools" },
         { name: "Combinable with Palacio Tropical", icon: "fa-link" }
-      ]
+      ],
+      virtualTour: "https://my.matterport.com/show/?m=PAjrDDM98oj"
     },
     {
       id: 3,
