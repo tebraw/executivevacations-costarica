@@ -42,14 +42,12 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
           </div>
         )}
 
-        {/* Christmas Special Badge */}
+        {/* Catamaran Special Badge */}
         {villa.hasChristmasSpecial && !isSelected && (
           <div className="christmas-special-badge">
-            <div className="christmas-badge-header">CHRISTMAS + NEW YEAR SPECIAL</div>
-            <div className="christmas-badge-divider"></div>
             <div className="christmas-badge-offer">
               <span className="offer-text">FREE</span>
-              <span className="offer-details">ATV + Catamaran Tours (7+ nights)</span>
+              <span className="offer-details">Catamaran Tour (7+ nights)</span>
             </div>
           </div>
         )}
