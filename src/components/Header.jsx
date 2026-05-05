@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import BecomeHostModal from './BecomeHostModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isHostModalOpen, setIsHostModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -29,16 +27,6 @@ const Header = () => {
 
           {/* Right Menu */}
           <div className="flex items-center gap-4">
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-4">
-              <a href="#host" className="body-regular text-dark hover:text-blue transition-colors font-semibold">
-                Become a Host
-              </a>
-              <button className="body-small text-dark hover:text-blue transition-colors">
-                EN
-              </button>
-            </div>
-
             {/* User Menu */}
             <div className="relative">
               <button 
@@ -51,15 +39,6 @@ const Header = () => {
               {/* Dropdown Menu */}
               {isMenuOpen && (
                 <div className="absolute right-0 top-full mt-2 w-60 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
-                  <button 
-                    onClick={() => {
-                      setIsHostModalOpen(true);
-                      setIsMenuOpen(false);
-                    }}
-                    className="block w-full text-left px-4 py-3 body-regular text-dark hover:bg-light"
-                  >
-                    Become a Host
-                  </button>
                   <a href="#contact" className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={handleContact}>
                     Contact
                   </a>
@@ -70,12 +49,6 @@ const Header = () => {
         </div>
 
       </div>
-
-      {/* Become a Host Modal */}
-      <BecomeHostModal 
-        isOpen={isHostModalOpen} 
-        onClose={() => setIsHostModalOpen(false)} 
-      />
     </header>
   );
 };
