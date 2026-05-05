@@ -12,10 +12,17 @@ const AdminDashboard = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showICalModal, setShowICalModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('bookings');
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
 
   useEffect(() => {
     loadBookings();
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'reviews') loadAllReviews();
+  }, [activeTab]);
 
   const loadBookings = async () => {
     setLoading(true);
@@ -90,6 +97,44 @@ const AdminDashboard = () => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
+  const VILLA_NAMES = ['Palacio Tropical', 'Palacio Musical', 'The View House', 'The Palms Villa Estate'];
+
+  const loadAllReviews = async () => {
+    setReviewsLoading(true);
+    try {
+      const results = await Promise.all(
+        VILLA_NAMES.map(async (villa) => {
+          const res = await fetch(`/.netlify/functions/get-reviews?villa=${encodeURIComponent(villa)}`);
+          if (!res.ok) return [];
+          const data = await res.json();
+          return Array.isArray(data) ? data.map(r => ({ ...r, villaName: villa })) : [];
+        })
+      );
+      setReviews(results.flat().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+    } catch {
+      setReviews([]);
+    }
+    setReviewsLoading(false);
+  };
+
+  const handleDeleteReview = async (villa, id) => {
+    if (!window.confirm('Delete this review?')) return;
+    try {
+      const res = await fetch('/.netlify/functions/delete-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ villa, id }),
+      });
+      if (res.ok) {
+        setReviews(prev => prev.filter(r => !(r.villaName === villa && r.id === id)));
+      } else {
+        alert('Failed to delete review.');
+      }
+    } catch {
+      alert('Failed to delete review.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
@@ -144,43 +189,174 @@ const AdminDashboard = () => {
       </div>
 
       <div className="container py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-dark">{bookings.length}</div>
-                <div className="text-sm text-gray">Total Bookings</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-dark">
-                  {bookings.filter(b => new Date(b.endDate) >= new Date()).length}
-                </div>
-                <div className="text-sm text-gray">Active Bookings</div>
-              </div>
-            </div>
-          </div>
+        {/* Tab switcher */}
+        <div className="flex gap-2 mb-8">
+          <button
+            onClick={() => setActiveTab('bookings')}
+            className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+              activeTab === 'bookings'
+                ? 'text-white shadow-md'
+                : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-400'
+            }`}
+            style={activeTab === 'bookings' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
+          >
+            📅 Bookings
+          </button>
+          <button
+            onClick={() => setActiveTab('reviews')}
+            className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+              activeTab === 'reviews'
+                ? 'text-white shadow-md'
+                : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-400'
+            }`}
+            style={activeTab === 'reviews' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
+          >
+            ⭐ Reviews
+          </button>
         </div>
 
-        <BookingCalendar 
-          bookings={bookings} 
-          onBookingClick={handleBookingClick}
-        />
+        {activeTab === 'bookings' && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-dark">{bookings.length}</div>
+                    <div className="text-sm text-gray">Total Bookings</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-dark">
+                      {bookings.filter(b => new Date(b.endDate) >= new Date()).length}
+                    </div>
+                    <div className="text-sm text-gray">Active Bookings</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <BookingCalendar
+              bookings={bookings}
+              onBookingClick={handleBookingClick}
+            />
+          </>
+        )}
+
+        {activeTab === 'reviews' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Guest Reviews</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  {reviews.length} review{reviews.length !== 1 ? 's' : ''} across all villas
+                </p>
+              </div>
+              <button
+                onClick={loadAllReviews}
+                disabled={reviewsLoading}
+                className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:border-gray-400 transition-all duration-200 flex items-center gap-2"
+              >
+                <svg
+                  className={`w-4 h-4 ${reviewsLoading ? 'animate-spin' : ''}`}
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                {reviewsLoading ? 'Loading…' : 'Refresh'}
+              </button>
+            </div>
+
+            {reviewsLoading && (
+              <div className="text-center py-16 text-gray-400">Loading reviews…</div>
+            )}
+
+            {!reviewsLoading && reviews.length === 0 && (
+              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                <div className="text-5xl mb-4">⭐</div>
+                <p className="text-gray-500 font-medium">No reviews yet</p>
+              </div>
+            )}
+
+            {!reviewsLoading && reviews.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-100">
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Villa</th>
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Guest</th>
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Rating</th>
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Review</th>
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Date</th>
+                      <th className="px-6 py-3"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reviews.map((review) => (
+                      <tr
+                        key={`${review.villaName}-${review.id}`}
+                        className="border-b border-gray-50 hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-6 py-4">
+                          <span
+                            className="inline-block px-3 py-1 rounded-full text-xs font-bold"
+                            style={{ background: '#fef3c7', color: '#92400e' }}
+                          >
+                            {review.villaName}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 font-medium text-gray-900">{review.name}</td>
+                        <td className="px-6 py-4">
+                          <span className="text-yellow-500">{'★'.repeat(review.rating)}</span>
+                          <span className="text-gray-300">{'★'.repeat(5 - review.rating)}</span>
+                        </td>
+                        <td className="px-6 py-4 text-gray-600 max-w-xs">
+                          <span title={review.text}>
+                            {review.text.length > 80 ? review.text.slice(0, 80) + '…' : review.text}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
+                          {review.createdAt
+                            ? new Date(review.createdAt).toLocaleDateString('en-US', {
+                                month: 'short', day: 'numeric', year: 'numeric'
+                              })
+                            : '—'}
+                        </td>
+                        <td className="px-6 py-4">
+                          <button
+                            onClick={() => handleDeleteReview(review.villaName, review.id)}
+                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
+                            title="Delete review"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <polyline points="3 6 5 6 21 6"/>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <BookingModal
