@@ -55,7 +55,7 @@ function MiniCalendar({ checkIn, checkOut, onChange }) {
         <button onClick={prevM} style={{ background:'none', border:'none', cursor:'pointer', padding:'5px 8px', color:'#9ca3af', lineHeight:1 }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <span style={{ fontFamily:"'Playfair Display', serif", fontSize:'0.88rem', fontWeight:600, color:'#111' }}>
+        <span style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'0.88rem', fontWeight:600, color:'#111' }}>
           {MONTH_NAMES[mo]} {yr}
         </span>
         <button onClick={nextM} style={{ background:'none', border:'none', cursor:'pointer', padding:'5px 8px', color:'#9ca3af', lineHeight:1 }}>
@@ -163,7 +163,7 @@ const VillaDetailPage = () => {
 
   const GOLD = '#b8972e';
   const WRAP = { maxWidth:'1380px', margin:'0 auto', padding:'0 2rem' };
-  const SEC = { fontFamily:"'Playfair Display', serif", fontSize:'1.4rem', fontWeight:600, color:'#111', whiteSpace:'nowrap' };
+  const SEC = { fontFamily:"'Cormorant Garamond', serif", fontSize:'1.4rem', fontWeight:600, color:'#111', whiteSpace:'nowrap' };
 
   return (
     <>
@@ -220,7 +220,7 @@ const VillaDetailPage = () => {
               background:'rgba(255,255,255,0.96)', backdropFilter:'blur(6px)',
               border:'1.5px solid rgba(0,0,0,0.12)', borderRadius:'10px', padding:'9px 18px',
               cursor:'pointer', display:'flex', alignItems:'center', gap:'7px',
-              fontSize:'0.78rem', fontWeight:700, fontFamily:"'Montserrat', sans-serif",
+              fontSize:'0.78rem', fontWeight:700, fontFamily:"'DM Sans', sans-serif",
               boxShadow:'0 2px 12px rgba(0,0,0,0.12)',
             }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -280,7 +280,7 @@ const VillaDetailPage = () => {
                     <span style={{ background:'#9ca3af', color:'#fff', fontSize:'10px', fontWeight:700, letterSpacing:'0.12em', padding:'3px 10px', borderRadius:'4px' }}>AVAILABLE SOON</span>
                   )}
                 </div>
-                <h1 style={{ fontFamily:"'Playfair Display', serif", fontSize:'clamp(2rem,4vw,3rem)', fontWeight:700, color:'#111', lineHeight:1.1, marginBottom:'6px' }}>
+                <h1 style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'clamp(2rem,4vw,3rem)', fontWeight:700, color:'#111', lineHeight:1.1, marginBottom:'6px' }}>
                   {villa.name}
                 </h1>
                 <p style={{ color:'#6b7280', fontSize:'0.95rem', marginBottom:'10px' }}>{villa.type}</p>
@@ -301,7 +301,7 @@ const VillaDetailPage = () => {
                     { v: villa.size || '—', l: 'Property Size', sm: true },
                   ].map((s, i, arr) => (
                     <div key={i} className="text-center" style={{ borderRight: i < arr.length - 1 ? '1px solid #e5e7eb' : 'none', padding:'0 12px' }}>
-                      <div style={{ fontFamily:"'Playfair Display', serif", fontSize: s.sm ? '1rem' : '1.7rem', fontWeight:700, color:'#111', lineHeight:1 }}>{s.v}</div>
+                      <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize: s.sm ? '1rem' : '1.7rem', fontWeight:700, color:'#111', lineHeight:1 }}>{s.v}</div>
                       <div style={{ fontSize:'9px', color:'#9ca3af', marginTop:'5px', textTransform:'uppercase', letterSpacing:'0.08em' }}>{s.l}</div>
                     </div>
                   ))}
@@ -314,10 +314,10 @@ const VillaDetailPage = () => {
                   <div style={{ height:'3px', background:'linear-gradient(to right,#c9a227,#e8c84e,#c9a227)' }} />
                   <div style={{ padding:'18px 20px' }}>
                     {/* Price */}
-                    <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'Montserrat', sans-serif" }}>Starting from</div>
+                    <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>Starting from</div>
                     {villa.pricePerNight && (
                       <div style={{ display:'flex', alignItems:'baseline', gap:'6px', marginBottom:'4px' }}>
-                        <span style={{ fontFamily:"'Playfair Display', serif", fontSize:'2rem', fontWeight:700, color:'#111', lineHeight:1 }}>
+                        <span style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'2rem', fontWeight:700, color:'#111', lineHeight:1 }}>
                           ${villa.pricePerNight.toLocaleString()}
                         </span>
                         <span style={{ color:'#9ca3af', fontSize:'0.82rem' }}>/night</span>
@@ -332,13 +332,13 @@ const VillaDetailPage = () => {
                     {/* Check-in / Check-out */}
                     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', border:'1.5px solid #e5e7eb', borderRadius:'12px', overflow:'hidden', marginBottom:'12px' }}>
                       <div style={{ padding:'10px 14px', borderRight:'1px solid #e5e7eb' }}>
-                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'Montserrat', sans-serif" }}>Check-in</div>
+                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'DM Sans', sans-serif" }}>Check-in</div>
                         <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkIn ? '#111' : '#9ca3af' }}>
                           {checkIn ? fmtShort(checkIn) : 'Add date'}
                         </div>
                       </div>
                       <div style={{ padding:'10px 14px' }}>
-                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'Montserrat', sans-serif" }}>Check-out</div>
+                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'DM Sans', sans-serif" }}>Check-out</div>
                         <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkOut ? '#111' : '#9ca3af' }}>
                           {checkOut ? fmtShort(checkOut) : 'Add date'}
                         </div>
@@ -379,12 +379,12 @@ const VillaDetailPage = () => {
                     <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
                       {villa.virtualTour && (
                         <a href={villa.virtualTour} target="_blank" rel="noopener noreferrer"
-                          style={{ display:'flex', alignItems:'center', justifyContent:'center', border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'12px', color:GOLD, fontSize:'0.75rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', fontFamily:"'Montserrat', sans-serif" }}>
+                          style={{ display:'flex', alignItems:'center', justifyContent:'center', border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'12px', color:GOLD, fontSize:'0.75rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', fontFamily:"'DM Sans', sans-serif" }}>
                           Virtual 3D Tour
                         </a>
                       )}
                       <button onClick={handleInquire}
-                        style={{ display:'flex', alignItems:'center', justifyContent:'center', background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.75rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'Montserrat', sans-serif", width:'100%' }}>
+                        style={{ display:'flex', alignItems:'center', justifyContent:'center', background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.75rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'DM Sans', sans-serif", width:'100%' }}>
                         Inquire &amp; Reserve
                       </button>
                     </div>
@@ -473,19 +473,19 @@ const VillaDetailPage = () => {
 
                   {/* Price header */}
                   <div style={{ padding:'22px 24px 0' }}>
-                    <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'Montserrat', sans-serif" }}>
+                    <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>
                       Starting from
                     </div>
                     <div className="flex items-baseline gap-2 mb-1">
                       {villa.pricePerNight ? (
                         <>
-                          <span style={{ fontFamily:"'Playfair Display', serif", fontSize:'2.4rem', fontWeight:700, color:'#111', lineHeight:1 }}>
+                          <span style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'2.4rem', fontWeight:700, color:'#111', lineHeight:1 }}>
                             ${villa.pricePerNight.toLocaleString()}
                           </span>
                           <span style={{ color:'#9ca3af', fontSize:'0.85rem' }}>/night</span>
                         </>
                       ) : (
-                        <span style={{ fontFamily:"'Playfair Display', serif", fontSize:'1.4rem', fontWeight:700, color:'#111' }}>Contact for Pricing</span>
+                        <span style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'1.4rem', fontWeight:700, color:'#111' }}>Contact for Pricing</span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 mb-5">
@@ -497,13 +497,13 @@ const VillaDetailPage = () => {
                     {/* Check-in / Check-out */}
                     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', border:'1.5px solid #e5e7eb', borderRadius:'12px', overflow:'hidden', marginBottom:'12px' }}>
                       <div style={{ padding:'11px 14px', borderRight:'1px solid #e5e7eb' }}>
-                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'Montserrat', sans-serif" }}>Check-in</div>
+                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'DM Sans', sans-serif" }}>Check-in</div>
                         <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkIn ? '#111' : '#9ca3af' }}>
                           {checkIn ? fmtShort(checkIn) : 'Add date'}
                         </div>
                       </div>
                       <div style={{ padding:'11px 14px' }}>
-                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'Montserrat', sans-serif" }}>Check-out</div>
+                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'DM Sans', sans-serif" }}>Check-out</div>
                         <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkOut ? '#111' : '#9ca3af' }}>
                           {checkOut ? fmtShort(checkOut) : 'Add date'}
                         </div>
@@ -538,7 +538,7 @@ const VillaDetailPage = () => {
                           {villa.pricePerNight ? `$${villa.pricePerNight.toLocaleString()} × ` : ''}{nights} nights
                         </span>
                         {villa.pricePerNight && (
-                          <span style={{ fontFamily:"'Playfair Display', serif", fontWeight:700, color:'#111', fontSize:'1rem' }}>
+                          <span style={{ fontFamily:"'Cormorant Garamond', serif", fontWeight:700, color:'#111', fontSize:'1rem' }}>
                             ${(villa.pricePerNight * nights).toLocaleString()}
                           </span>
                         )}
@@ -559,7 +559,7 @@ const VillaDetailPage = () => {
                     ].map((r, i, arr) => (
                       <div key={i} className="flex justify-between" style={{ padding:'7px 0', borderBottom: i < arr.length - 1 ? '1px solid #f9f9f7' : 'none' }}>
                         <span style={{ color:'#9ca3af', fontSize:'0.8rem' }}>{r.label}</span>
-                        <span style={{ fontFamily:"'Playfair Display', serif", color:'#111', fontWeight:700, fontSize:'0.85rem' }}>{r.value}</span>
+                        <span style={{ fontFamily:"'Cormorant Garamond', serif", color:'#111', fontWeight:700, fontSize:'0.85rem' }}>{r.value}</span>
                       </div>
                     ))}
 
@@ -568,7 +568,7 @@ const VillaDetailPage = () => {
                     {villa.virtualTour && (
                       <a href={villa.virtualTour} target="_blank" rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2 w-full"
-                        style={{ border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'11px', color:GOLD, fontSize:'0.74rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', marginBottom:'8px', display:'flex', fontFamily:"'Montserrat', sans-serif" }}>
+                        style={{ border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'11px', color:GOLD, fontSize:'0.74rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', marginBottom:'8px', display:'flex', fontFamily:"'DM Sans', sans-serif" }}>
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                           <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
@@ -578,7 +578,7 @@ const VillaDetailPage = () => {
                     )}
 
                     <button onClick={handleInquire} className="w-full flex items-center justify-center gap-2"
-                      style={{ background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.76rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'Montserrat', sans-serif" }}>
+                      style={{ background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.76rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'DM Sans', sans-serif" }}>
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.5 16z"/>
                       </svg>
