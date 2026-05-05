@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-
 /* Base Reset */
 * {
   margin: 0;
@@ -768,8 +766,8 @@ input:focus {
   --bg-navy: #0F172A;
   
   /* Typography - Luxury Premium */
-  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-primary: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-accent: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   
   /* Spacing */

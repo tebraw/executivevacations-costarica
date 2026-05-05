@@ -55,7 +55,7 @@ function MiniCalendar({ checkIn, checkOut, onChange }) {
         <button onClick={prevM} style={{ background:'none', border:'none', cursor:'pointer', padding:'5px 8px', color:'#9ca3af', lineHeight:1 }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <span style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'0.88rem', fontWeight:600, color:'#111' }}>
+        <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'0.88rem', fontWeight:600, color:'#111' }}>
           {MONTH_NAMES[mo]} {yr}
         </span>
         <button onClick={nextM} style={{ background:'none', border:'none', cursor:'pointer', padding:'5px 8px', color:'#9ca3af', lineHeight:1 }}>
@@ -163,7 +163,7 @@ const VillaDetailPage = () => {
 
   const GOLD = '#b8972e';
   const WRAP = { maxWidth:'1380px', margin:'0 auto', padding:'0 2rem' };
-  const SEC = { fontFamily:"'Cormorant Garamond', serif", fontSize:'1.4rem', fontWeight:600, color:'#111', whiteSpace:'nowrap' };
+  const SEC = { fontFamily:"'DM Sans', sans-serif", fontSize:'1.4rem', fontWeight:600, color:'#111', whiteSpace:'nowrap' };
 
   return (
     <>
@@ -280,7 +280,7 @@ const VillaDetailPage = () => {
                     <span style={{ background:'#9ca3af', color:'#fff', fontSize:'10px', fontWeight:700, letterSpacing:'0.12em', padding:'3px 10px', borderRadius:'4px' }}>AVAILABLE SOON</span>
                   )}
                 </div>
-                <h1 style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'clamp(2rem,4vw,3rem)', fontWeight:700, color:'#111', lineHeight:1.1, marginBottom:'6px' }}>
+                <h1 style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'clamp(2rem,4vw,3rem)', fontWeight:700, color:'#111', lineHeight:1.1, marginBottom:'6px' }}>
                   {villa.name}
                 </h1>
                 <p style={{ color:'#6b7280', fontSize:'0.95rem', marginBottom:'10px' }}>{villa.type}</p>
@@ -301,7 +301,7 @@ const VillaDetailPage = () => {
                     { v: villa.size || '—', l: 'Property Size', sm: true },
                   ].map((s, i, arr) => (
                     <div key={i} className="text-center" style={{ borderRight: i < arr.length - 1 ? '1px solid #e5e7eb' : 'none', padding:'0 12px' }}>
-                      <div style={{ fontFamily:"'Cormorant Garamond', serif", fontSize: s.sm ? '1rem' : '1.7rem', fontWeight:700, color:'#111', lineHeight:1 }}>{s.v}</div>
+                      <div style={{ fontFamily:"'DM Sans', sans-serif", fontSize: s.sm ? '1rem' : '1.7rem', fontWeight:700, color:'#111', lineHeight:1 }}>{s.v}</div>
                       <div style={{ fontSize:'9px', color:'#9ca3af', marginTop:'5px', textTransform:'uppercase', letterSpacing:'0.08em' }}>{s.l}</div>
                     </div>
                   ))}
@@ -317,7 +317,7 @@ const VillaDetailPage = () => {
                     <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>Starting from</div>
                     {villa.pricePerNight && (
                       <div style={{ display:'flex', alignItems:'baseline', gap:'6px', marginBottom:'4px' }}>
-                        <span style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'2rem', fontWeight:700, color:'#111', lineHeight:1 }}>
+                        <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'2rem', fontWeight:700, color:'#111', lineHeight:1 }}>
                           ${villa.pricePerNight.toLocaleString()}
                         </span>
                         <span style={{ color:'#9ca3af', fontSize:'0.82rem' }}>/night</span>
@@ -479,13 +479,13 @@ const VillaDetailPage = () => {
                     <div className="flex items-baseline gap-2 mb-1">
                       {villa.pricePerNight ? (
                         <>
-                          <span style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'2.4rem', fontWeight:700, color:'#111', lineHeight:1 }}>
+                          <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'2.4rem', fontWeight:700, color:'#111', lineHeight:1 }}>
                             ${villa.pricePerNight.toLocaleString()}
                           </span>
                           <span style={{ color:'#9ca3af', fontSize:'0.85rem' }}>/night</span>
                         </>
                       ) : (
-                        <span style={{ fontFamily:"'Cormorant Garamond', serif", fontSize:'1.4rem', fontWeight:700, color:'#111' }}>Contact for Pricing</span>
+                        <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'1.4rem', fontWeight:700, color:'#111' }}>Contact for Pricing</span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 mb-5">
@@ -538,7 +538,7 @@ const VillaDetailPage = () => {
                           {villa.pricePerNight ? `$${villa.pricePerNight.toLocaleString()} × ` : ''}{nights} nights
                         </span>
                         {villa.pricePerNight && (
-                          <span style={{ fontFamily:"'Cormorant Garamond', serif", fontWeight:700, color:'#111', fontSize:'1rem' }}>
+                          <span style={{ fontFamily:"'DM Sans', sans-serif", fontWeight:700, color:'#111', fontSize:'1rem' }}>
                             ${(villa.pricePerNight * nights).toLocaleString()}
                           </span>
                         )}
@@ -559,7 +559,7 @@ const VillaDetailPage = () => {
                     ].map((r, i, arr) => (
                       <div key={i} className="flex justify-between" style={{ padding:'7px 0', borderBottom: i < arr.length - 1 ? '1px solid #f9f9f7' : 'none' }}>
                         <span style={{ color:'#9ca3af', fontSize:'0.8rem' }}>{r.label}</span>
-                        <span style={{ fontFamily:"'Cormorant Garamond', serif", color:'#111', fontWeight:700, fontSize:'0.85rem' }}>{r.value}</span>
+                        <span style={{ fontFamily:"'DM Sans', sans-serif", color:'#111', fontWeight:700, fontSize:'0.85rem' }}>{r.value}</span>
                       </div>
                     ))}
 
