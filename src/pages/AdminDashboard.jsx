@@ -104,7 +104,7 @@ const AdminDashboard = () => {
     try {
       const results = await Promise.all(
         VILLA_NAMES.map(async (villa) => {
-          const res = await fetch(`/.netlify/functions/get-reviews?villa=${encodeURIComponent(villa)}`);
+          const res = await fetch(`/.netlify/functions/get-reviews?villa=${encodeURIComponent(villa)}&all=1`);
           if (!res.ok) return [];
           const data = await res.json();
           return Array.isArray(data) ? data.map(r => ({ ...r, villaName: villa })) : [];
@@ -132,6 +132,25 @@ const AdminDashboard = () => {
       }
     } catch {
       alert('Failed to delete review.');
+    }
+  };
+
+  const handleApproveReview = async (villa, id) => {
+    try {
+      const res = await fetch('/.netlify/functions/approve-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ villa, id }),
+      });
+      if (res.ok) {
+        setReviews(prev => prev.map(r =>
+          r.villaName === villa && r.id === id ? { ...r, approved: true } : r
+        ));
+      } else {
+        alert('Failed to approve review.');
+      }
+    } catch {
+      alert('Failed to approve review.');
     }
   };
 
@@ -264,6 +283,11 @@ const AdminDashboard = () => {
                 <h2 className="text-xl font-bold text-gray-900">Guest Reviews</h2>
                 <p className="text-sm text-gray-500 mt-1">
                   {reviews.length} review{reviews.length !== 1 ? 's' : ''} across all villas
+                  {reviews.filter(r => !r.approved).length > 0 && (
+                    <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold" style={{ background: '#fef3c7', color: '#92400e' }}>
+                      {reviews.filter(r => !r.approved).length} pending
+                    </span>
+                  )}
                 </p>
               </div>
               <button
@@ -298,6 +322,7 @@ const AdminDashboard = () => {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Status</th>
                       <th className="text-left px-6 py-3 font-semibold text-gray-600">Villa</th>
                       <th className="text-left px-6 py-3 font-semibold text-gray-600">Guest</th>
                       <th className="text-left px-6 py-3 font-semibold text-gray-600">Rating</th>
@@ -311,7 +336,21 @@ const AdminDashboard = () => {
                       <tr
                         key={`${review.villaName}-${review.id}`}
                         className="border-b border-gray-50 hover:bg-gray-50 transition-colors"
+                        style={!review.approved ? { background: '#fffbeb' } : {}}
                       >
+                        <td className="px-6 py-4">
+                          {review.approved ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold" style={{ background: '#d1fae5', color: '#065f46' }}>
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                              Live
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold" style={{ background: '#fef3c7', color: '#92400e' }}>
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                              Pending
+                            </span>
+                          )}
+                        </td>
                         <td className="px-6 py-4">
                           <span
                             className="inline-block px-3 py-1 rounded-full text-xs font-bold"
@@ -338,16 +377,29 @@ const AdminDashboard = () => {
                             : '—'}
                         </td>
                         <td className="px-6 py-4">
-                          <button
-                            onClick={() => handleDeleteReview(review.villaName, review.id)}
-                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
-                            title="Delete review"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <polyline points="3 6 5 6 21 6"/>
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                            </svg>
-                          </button>
+                          <div className="flex items-center gap-1">
+                            {!review.approved && (
+                              <button
+                                onClick={() => handleApproveReview(review.villaName, review.id)}
+                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200"
+                                title="Approve review"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleDeleteReview(review.villaName, review.id)}
+                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
+                              title="Delete review"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                              </svg>
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

@@ -11,11 +11,14 @@ export default async (req, context) => {
       });
     }
 
+    const showAll = url.searchParams.get('all') === '1';
     const store = getStore('reviews');
     const key = `reviews-${villa.toLowerCase().replace(/\s+/g, '-')}`;
     const data = await store.get(key);
+    const all = JSON.parse(data || '[]');
+    const result = showAll ? all : all.filter(r => r.approved === true);
 
-    return new Response(data || '[]', {
+    return new Response(JSON.stringify(result), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });

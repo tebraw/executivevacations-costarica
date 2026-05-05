@@ -31,7 +31,8 @@ export default async (req, context) => {
       name: name.trim().slice(0, 100),
       rating: Number(rating),
       text: text.trim().slice(0, 1000),
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
+      approved: false
     };
 
     reviews.unshift(newReview); // newest first

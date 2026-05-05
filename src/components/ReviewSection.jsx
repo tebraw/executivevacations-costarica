@@ -14,7 +14,8 @@ async function fetchReviews(villaName) {
   // localStorage fallback (local dev)
   try {
     const raw = localStorage.getItem(REVIEWS_KEY(villaName));
-    return raw ? JSON.parse(raw) : [];
+    const all = raw ? JSON.parse(raw) : [];
+    return all.filter(r => r.approved === true);
   } catch (_) { return []; }
 }
 
@@ -31,7 +32,7 @@ async function postReview(payload) {
     }
   } catch (_) {}
   // localStorage fallback (local dev)
-  const review = { ...payload, id: Date.now().toString(), date: new Date().toISOString() };
+  const review = { ...payload, id: Date.now().toString(), date: new Date().toISOString(), approved: false };
   try {
     const raw = localStorage.getItem(REVIEWS_KEY(payload.villa));
     const existing = raw ? JSON.parse(raw) : [];
@@ -278,6 +279,103 @@ function ReviewModal({ villaName, onClose, onSubmitted }) {
   );
 }
 
+// ── ReviewSlider ───────────────────────────────────────────────
+function ReviewSlider({ reviews }) {
+  const [index, setIndex] = useState(0);
+  const [animDir, setAnimDir] = useState(null); // 'left' | 'right'
+  const [visible, setVisible] = useState(true);
+
+  const CARDS_VISIBLE = window.innerWidth >= 900 ? 3 : window.innerWidth >= 580 ? 2 : 1;
+  const maxIndex = Math.max(0, reviews.length - CARDS_VISIBLE);
+
+  function go(dir) {
+    const next = Math.max(0, Math.min(maxIndex, index + dir));
+    if (next === index) return;
+    setAnimDir(dir > 0 ? 'left' : 'right');
+    setVisible(false);
+    setTimeout(() => {
+      setIndex(next);
+      setAnimDir(null);
+      setVisible(true);
+    }, 200);
+  }
+
+  return (
+    <div style={{ position: 'relative' }}>
+      {/* Arrow buttons */}
+      {index > 0 && (
+        <button
+          onClick={() => go(-1)}
+          aria-label="Previous review"
+          style={{
+            position: 'absolute', left: '-20px', top: '50%', transform: 'translateY(-50%)',
+            zIndex: 10, width: '44px', height: '44px', borderRadius: '50%',
+            background: '#fff', border: '1.5px solid #e5e7eb',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.1)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'box-shadow 0.2s, transform 0.2s',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.18)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1.08)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+      )}
+      {index < maxIndex && (
+        <button
+          onClick={() => go(1)}
+          aria-label="Next review"
+          style={{
+            position: 'absolute', right: '-20px', top: '50%', transform: 'translateY(-50%)',
+            zIndex: 10, width: '44px', height: '44px', borderRadius: '50%',
+            background: '#fff', border: '1.5px solid #e5e7eb',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.1)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'box-shadow 0.2s, transform 0.2s',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.18)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1.08)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      )}
+
+      {/* Cards row */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(${CARDS_VISIBLE}, 1fr)`,
+        gap: '20px',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateX(0)' : animDir === 'left' ? 'translateX(-24px)' : 'translateX(24px)',
+        transition: 'opacity 0.2s ease, transform 0.2s ease',
+      }}>
+        {reviews.slice(index, index + CARDS_VISIBLE).map((r) => (
+          <ReviewCard key={r.id} review={r} />
+        ))}
+      </div>
+
+      {/* Dot indicators */}
+      {maxIndex > 0 && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '28px' }}>
+          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => go(i - index)}
+              aria-label={`Go to review ${i + 1}`}
+              style={{
+                width: i === index ? '24px' : '8px', height: '8px',
+                borderRadius: '4px', border: 'none', cursor: 'pointer', padding: 0,
+                background: i === index ? GOLD : '#d1d5db',
+                transition: 'width 0.25s ease, background 0.2s',
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── ReviewSection (main export) ───────────────────────────────
 export default function ReviewSection({ villa }) {
   const [reviews, setReviews] = useState([]);
@@ -295,7 +393,7 @@ export default function ReviewSection({ villa }) {
   }, [villa?.name]);
 
   function handleSubmitted(review) {
-    setReviews((prev) => [review, ...prev]);
+    // Don't add to the public list yet — it's pending approval
     setModalOpen(false);
     setSuccessMsg(true);
     setTimeout(() => setSuccessMsg(false), 5000);
@@ -359,7 +457,7 @@ export default function ReviewSection({ villa }) {
             fontFamily: "'DM Sans', sans-serif", fontSize: '0.9rem', color: '#065f46', fontWeight: 600,
           }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            Thank you for your review! It's now live on the page.
+            Thank you for your review! It will appear on the page after approval.
           </div>
         )}
 
@@ -379,13 +477,7 @@ export default function ReviewSection({ villa }) {
             </p>
           </div>
         ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: '20px',
-          }}>
-            {reviews.map((r) => <ReviewCard key={r.id} review={r} />)}
-          </div>
+          <ReviewSlider reviews={reviews} />
         )}
       </div>
 
