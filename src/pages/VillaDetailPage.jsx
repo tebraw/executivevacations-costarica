@@ -241,6 +241,35 @@ const VillaDetailPage = () => {
                 </div>
               </div>
 
+              {/* Mobile-only CTA (shown below stats on small screens, sidebar hidden on mobile) */}
+              <div className="lg:hidden mb-8">
+                {villa.virtualTour && (
+                  <a
+                    href={villa.virtualTour}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full mb-3"
+                    style={{ border: '1.5px solid #b8972e', borderRadius: '10px', padding: '13px', color: '#b8972e', fontFamily: "'Montserrat', sans-serif", fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textDecoration: 'none', textTransform: 'uppercase' }}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                    </svg>
+                    Virtual 3D Tour
+                  </a>
+                )}
+                <button
+                  onClick={handleSelectVilla}
+                  className="w-full flex items-center justify-center gap-2"
+                  style={{ background: 'linear-gradient(135deg, #c9a227, #e8c84e)', borderRadius: '10px', padding: '14px', color: '#111', fontFamily: "'Montserrat', sans-serif", fontWeight: 700, fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', border: 'none', cursor: 'pointer' }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.5 16z"/>
+                  </svg>
+                  Inquire &amp; Reserve
+                </button>
+              </div>
+
               {/* Special offer */}
               {villa.hasChristmasSpecial && (
                 <div className="mb-6 flex items-center gap-4" style={{ background: 'linear-gradient(135deg, #fefce8, #fef9c3)', border: '1px solid #fbbf24', borderRadius: '12px', padding: '16px 20px' }}>
@@ -314,30 +343,23 @@ const VillaDetailPage = () => {
               </div>
             </div>
 
-            {/* RIGHT COLUMN – Dark luxury card */}
-            <div className="lg:col-span-1 order-1 lg:order-2">
+            {/* RIGHT COLUMN – Light luxury card (desktop only) */}
+            <div className="hidden lg:block lg:col-span-1 order-1 lg:order-2">
               <div className="lg:sticky lg:top-24">
-                <div style={{
-                  background: 'linear-gradient(160deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)',
-                  borderRadius: '20px',
-                  padding: '32px',
-                  boxShadow: '0 24px 64px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.15)',
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}>
-                  {/* Gold top line */}
-                  <div style={{ position: 'absolute', top: 0, left: '32px', right: '32px', height: '2px', background: 'linear-gradient(to right, transparent, #c9a227, transparent)' }} />
+                <div style={{ background: '#fff', borderRadius: '20px', padding: '28px 28px 24px', border: '1px solid #e9e4da', boxShadow: '0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
+                  {/* Gold top accent line */}
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(to right, #c9a227, #e8c84e, #c9a227)' }} />
 
-                  <div style={{ color: '#9ca3af', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <div style={{ fontFamily: "'Montserrat', sans-serif", color: '#b8972e', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px' }}>
                     Executive Vacations
                   </div>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", color: '#fff', fontSize: '1.4rem', fontWeight: 600, marginBottom: '6px' }}>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", color: '#111', fontSize: '1.35rem', fontWeight: 700, marginBottom: '4px', lineHeight: 1.2 }}>
                     {villa.name}
                   </h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '28px' }}>
-                    <span style={{ color: '#c9a227', fontSize: '0.8rem' }}>★ {villa.rating}</span>
-                    <span style={{ color: '#374151' }}>·</span>
-                    <span style={{ color: '#9ca3af', fontSize: '0.8rem' }}>{villa.location}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '24px' }}>
+                    <span style={{ color: '#b8972e', fontSize: '0.82rem', fontWeight: 600 }}>★ {villa.rating}</span>
+                    <span style={{ color: '#d1d5db' }}>·</span>
+                    <span style={{ color: '#9ca3af', fontSize: '0.82rem' }}>{villa.location}</span>
                   </div>
 
                   {[
@@ -347,13 +369,13 @@ const VillaDetailPage = () => {
                     { label: 'Property Size', value: villa.size || '—' },
                     { label: 'Rating', value: `★ ${villa.rating}` },
                   ].map((row, i, arr) => (
-                    <div key={i} className="flex justify-between items-center" style={{ padding: '11px 0', borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none' }}>
-                      <span style={{ color: '#9ca3af', fontSize: '0.85rem' }}>{row.label}</span>
-                      <span style={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>{row.value}</span>
+                    <div key={i} className="flex justify-between items-center" style={{ padding: '10px 0', borderBottom: i < arr.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+                      <span style={{ fontFamily: "'Inter', sans-serif", color: '#6b7280', fontSize: '0.85rem' }}>{row.label}</span>
+                      <span style={{ fontFamily: "'Playfair Display', serif", color: '#111', fontWeight: 700, fontSize: '0.95rem' }}>{row.value}</span>
                     </div>
                   ))}
 
-                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '24px 0' }} />
+                  <div style={{ height: '1px', background: '#e9e4da', margin: '22px 0' }} />
 
                   {villa.virtualTour && (
                     <a
@@ -361,9 +383,9 @@ const VillaDetailPage = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 w-full"
-                      style={{ border: '1px solid rgba(201,162,39,0.5)', borderRadius: '10px', padding: '12px', color: '#c9a227', fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.08em', textDecoration: 'none', textTransform: 'uppercase', marginBottom: '12px', transition: 'all 0.2s' }}
+                      style={{ border: '1.5px solid #b8972e', borderRadius: '10px', padding: '12px', color: '#b8972e', fontFamily: "'Montserrat', sans-serif", fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em', textDecoration: 'none', textTransform: 'uppercase', marginBottom: '10px', display: 'flex', transition: 'all 0.2s' }}
                     >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                         <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
                       </svg>
@@ -374,7 +396,7 @@ const VillaDetailPage = () => {
                   <button
                     onClick={handleSelectVilla}
                     className="w-full flex items-center justify-center gap-2"
-                    style={{ background: 'linear-gradient(135deg, #c9a227, #e8c84e)', borderRadius: '10px', padding: '14px', color: '#111', fontWeight: 700, fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', border: 'none', cursor: 'pointer' }}
+                    style={{ background: 'linear-gradient(135deg, #c9a227, #e8c84e)', borderRadius: '10px', padding: '14px', color: '#111', fontFamily: "'Montserrat', sans-serif", fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', border: 'none', cursor: 'pointer' }}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.5 16z"/>
@@ -382,10 +404,10 @@ const VillaDetailPage = () => {
                     Inquire &amp; Reserve
                   </button>
 
-                  <div className="flex items-center justify-center gap-4 mt-5">
+                  <div className="flex items-center justify-center gap-4 mt-4">
                     {['Instant Response', 'No Fees', 'Private'].map((badge) => (
-                      <div key={badge} className="flex items-center gap-1" style={{ color: '#6b7280', fontSize: '10px' }}>
-                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#c9a227" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                      <div key={badge} className="flex items-center gap-1" style={{ color: '#9ca3af', fontSize: '10px', fontFamily: "'Inter', sans-serif" }}>
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b8972e" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
                         {badge}
                       </div>
                     ))}
@@ -433,24 +455,21 @@ const VillaDetailPage = () => {
           </div>
 
           {/* Image */}
-          <div style={{ maxWidth: '90vw', maxHeight: '90vh' }} onClick={(e) => e.stopPropagation()}>
-            {/* Mobile: 4:3 */}
-            <img
-              src={getImagePath(images[lightboxImageIndex])}
-              alt={`${villa.name} - ${lightboxImageIndex + 1}`}
-              className="block md:hidden rounded-xl"
-              style={{ width: '90vw', aspectRatio: '4/3', objectFit: 'cover' }}
-              draggable={false}
-            />
-            {/* Desktop: natural proportions */}
-            <img
-              src={getImagePath(images[lightboxImageIndex])}
-              alt={`${villa.name} - ${lightboxImageIndex + 1}`}
-              className="hidden md:block rounded-xl"
-              style={{ maxWidth: '88vw', maxHeight: '88vh', width: 'auto', height: 'auto', objectFit: 'contain' }}
-              draggable={false}
-            />
-          </div>
+          <img
+            src={getImagePath(images[lightboxImageIndex])}
+            alt={`${villa.name} - ${lightboxImageIndex + 1}`}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              display: 'block',
+              maxWidth: '100vw',
+              maxHeight: '88vh',
+              width: 'auto',
+              height: 'auto',
+              borderRadius: '8px',
+              cursor: 'default',
+            }}
+            draggable={false}
+          />
 
           {images.length > 1 && (
             <>
