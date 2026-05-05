@@ -5,6 +5,7 @@ import { getBookings } from '../utils/bookingStorage';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ContactModal from '../components/ContactModal';
+import ReviewSection from '../components/ReviewSection';
 
 const BASE_URL = import.meta.env.BASE_URL;
 const getImagePath = (path) => {
@@ -637,6 +638,8 @@ const VillaDetailPage = () => {
           </div>
         </div>
       </main>
+
+      <ReviewSection villa={villa} />
 
       <Footer />
 
