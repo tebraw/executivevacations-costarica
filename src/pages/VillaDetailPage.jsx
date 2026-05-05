@@ -184,23 +184,31 @@ const VillaDetailPage = () => {
           <div className="hidden md:block" style={{ position:'relative', height:'520px', borderRadius:'20px', overflow:'hidden' }}>
             <div style={{ display:'grid', gridTemplateColumns:'60% calc(40% - 4px)', gridTemplateRows:'1fr 1fr', height:'100%', gap:'4px' }}>
               {/* Large main image — spans 2 rows */}
-              <div className="row-span-2 relative cursor-pointer overflow-hidden group" onClick={() => openLightbox(0)}>
+              <div onClick={() => openLightbox(0)}
+                style={{ gridRow:'span 2 / span 2', position:'relative', cursor:'pointer', overflow:'hidden' }}
+                onMouseEnter={e => e.currentTarget.querySelector('img').style.transform='scale(1.03)'}
+                onMouseLeave={e => e.currentTarget.querySelector('img').style.transform='scale(1)'}>
                 <img src={getImagePath(images[0])} alt={villa.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.06] transition-colors" />
+                  style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.7s ease', display:'block' }} />
               </div>
               {/* Top-right */}
               {images[1] && (
-                <div className="relative cursor-pointer overflow-hidden group" onClick={() => openLightbox(1)}>
-                  <img src={getImagePath(images[1])} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.06] transition-colors" />
+                <div onClick={() => openLightbox(1)}
+                  style={{ position:'relative', cursor:'pointer', overflow:'hidden' }}
+                  onMouseEnter={e => e.currentTarget.querySelector('img').style.transform='scale(1.03)'}
+                  onMouseLeave={e => e.currentTarget.querySelector('img').style.transform='scale(1)'}>
+                  <img src={getImagePath(images[1])} alt=""
+                    style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.7s ease', display:'block' }} />
                 </div>
               )}
               {/* Bottom-right */}
               {images[2] && (
-                <div className="relative cursor-pointer overflow-hidden group" onClick={() => openLightbox(2)}>
-                  <img src={getImagePath(images[2])} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.06] transition-colors" />
+                <div onClick={() => openLightbox(2)}
+                  style={{ position:'relative', cursor:'pointer', overflow:'hidden' }}
+                  onMouseEnter={e => e.currentTarget.querySelector('img').style.transform='scale(1.03)'}
+                  onMouseLeave={e => e.currentTarget.querySelector('img').style.transform='scale(1)'}>
+                  <img src={getImagePath(images[2])} alt=""
+                    style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.7s ease', display:'block' }} />
                 </div>
               )}
             </div>
@@ -227,7 +235,8 @@ const VillaDetailPage = () => {
               onClick={() => openLightbox(currentImageIndex)}
               onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
               <img src={getImagePath(images[currentImageIndex])} alt={villa.name}
-                className="absolute inset-0 w-full h-full object-cover" loading="eager" draggable={false} />
+                style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover' }}
+                loading="eager" draggable={false} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
               <div className="absolute bottom-3 right-3 bg-black/55 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-xs font-medium">
                 {currentImageIndex + 1} / {images.length}
