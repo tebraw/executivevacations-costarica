@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './index.css'
 import Home from './pages/Home'
 import AdminDashboard from './pages/AdminDashboard'
+import VillaDetailPage from './pages/VillaDetailPage'
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/villa/:slug" element={<VillaDetailPage />} />
         <Route path="/admin12345" element={<AdminDashboard />} />
       </Routes>
     </Router>

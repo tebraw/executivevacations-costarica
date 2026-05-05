@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import VillasSection from '../components/VillasSection'
@@ -6,12 +7,27 @@ import ActivitiesSection from '../components/ActivitiesSection'
 import ContactFormSection from '../components/ContactFormSection'
 import InstructionModal from '../components/InstructionModal'
 import Footer from '../components/Footer'
+import villas from '../data/villas'
 
 function Home() {
+  const location = useLocation();
   const [selectedVilla, setSelectedVilla] = useState(null);
   const [selectedActivities, setSelectedActivities] = useState([]);
   const [showInstructionModal, setShowInstructionModal] = useState(false);
   const [hasSeenModal, setHasSeenModal] = useState(false);
+
+  // Auto-select villa when navigated back from VillaDetailPage
+  useEffect(() => {
+    if (location.state?.selectVilla) {
+      const villa = villas.find((v) => v.id === location.state.selectVilla);
+      if (villa) {
+        setSelectedVilla(villa);
+        setTimeout(() => {
+          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
+      }
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const modalSeen = localStorage.getItem('instructionModalSeen');
