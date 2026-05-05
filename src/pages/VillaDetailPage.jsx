@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import villas, { getVillaPrice, calculateTotalPrice } from '../data/villas';
+import { getBookings } from '../utils/bookingStorage';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ContactModal from '../components/ContactModal';
@@ -26,18 +27,32 @@ function sameDay(a, b) { return a && b && a.toDateString() === b.toDateString();
 function fmtShort(d) { return d ? `${MONTH_NAMES[d.getMonth()].slice(0,3)} ${d.getDate()}` : '—'; }
 
 // ─── MiniCalendar ─────────────────────────────────────────────
-function MiniCalendar({ checkIn, checkOut, onChange }) {
+function MiniCalendar({ checkIn, checkOut, onChange, bookedRanges = [] }) {
   const today = toMidnight(new Date());
   const [yr, setYr] = useState(today.getFullYear());
   const [mo, setMo] = useState(today.getMonth());
   const [hov, setHov] = useState(null);
   const selecting = checkIn && !checkOut;
 
+  function isBlocked(day) {
+    return bookedRanges.some(r => day >= r.start && day < r.end);
+  }
+  function wallAfter(fromDay) {
+    let min = null;
+    for (const r of bookedRanges) {
+      if (r.start > fromDay && (!min || r.start < min)) min = r.start;
+    }
+    return min;
+  }
+
   function clickDay(day) {
     if (day < today) return;
+    if (isBlocked(day)) return;
     if (!checkIn || checkOut) { onChange({ checkIn: day, checkOut: null }); return; }
-    if (day <= checkIn) { onChange({ checkIn: day, checkOut: null }); }
-    else { onChange({ checkIn, checkOut: day }); }
+    if (day <= checkIn) { onChange({ checkIn: day, checkOut: null }); return; }
+    const wall = wallAfter(checkIn);
+    if (wall && day > wall) { onChange({ checkIn, checkOut: wall }); return; }
+    onChange({ checkIn, checkOut: day });
   }
 
   function prevM() { mo === 0 ? (setMo(11), setYr(y => y - 1)) : setMo(m => m - 1); }
@@ -46,7 +61,10 @@ function MiniCalendar({ checkIn, checkOut, onChange }) {
   const dim = new Date(yr, mo + 1, 0).getDate();
   const firstDay = new Date(yr, mo, 1).getDay();
   const cells = [...Array(firstDay).fill(null), ...Array.from({ length: dim }, (_, i) => new Date(yr, mo, i + 1))];
-  const rangeEnd = selecting && hov ? hov : checkOut;
+  // Cap hover at the start of the next booked block so highlight never crosses a booking
+  const wall = selecting && checkIn ? wallAfter(checkIn) : null;
+  const hovCapped = hov && wall && hov > wall ? wall : hov;
+  const rangeEnd = selecting && hovCapped ? hovCapped : checkOut;
   const GOLD = '#b8972e';
 
   return (
@@ -73,24 +91,28 @@ function MiniCalendar({ checkIn, checkOut, onChange }) {
         {cells.map((day, i) => {
           if (!day) return <div key={`b${i}`} />;
           const past = day < today;
+          const booked = !past && isBlocked(day);
+          const disabled = past || booked;
           const isStart = sameDay(day, checkIn);
           const isEnd = sameDay(day, checkOut);
           const inRange = checkIn && rangeEnd && rangeEnd > checkIn && day > checkIn && day < rangeEnd;
           const isToday = sameDay(day, today);
-          let bg = 'transparent', col = past ? '#d1d5db' : '#1f2937', fw = 400, br = '50%';
-          if (isStart || isEnd) { bg = GOLD; col = '#fff'; fw = 700; }
+          let bg = 'transparent', col = disabled ? '#d1d5db' : '#1f2937', fw = 400, br = '50%';
+          if (booked) { bg = '#fee2e2'; br = '4px'; }
+          if (isStart || isEnd) { bg = GOLD; col = '#fff'; fw = 700; br = '50%'; }
           else if (inRange) { bg = 'rgba(184,151,46,0.13)'; br = '2px'; }
           return (
-            <button key={i} disabled={past}
+            <button key={i} disabled={disabled}
               onClick={() => clickDay(toMidnight(day))}
-              onMouseEnter={() => selecting && setHov(toMidnight(day))}
+              onMouseEnter={() => selecting && !booked && setHov(toMidnight(day))}
               onMouseLeave={() => setHov(null)}
               style={{
                 display:'flex', alignItems:'center', justifyContent:'center',
                 height:'31px', borderRadius: br,
                 border: isToday && !isStart && !isEnd ? `1.5px solid ${GOLD}` : '1.5px solid transparent',
                 background: bg, color: col, fontWeight: fw,
-                fontSize:'0.76rem', cursor: past ? 'default' : 'pointer',
+                fontSize:'0.76rem', cursor: disabled ? 'default' : 'pointer',
+                textDecoration: booked ? 'line-through' : 'none',
                 transition:'background 0.1s',
               }}>
               {day.getDate()}
@@ -114,6 +136,7 @@ const VillaDetailPage = () => {
   const [touchStartX, setTouchStartX] = useState(null);
   const [lbTouchStartX, setLbTouchStartX] = useState(null);
   const [dates, setDates] = useState({ checkIn: null, checkOut: null });
+  const [bookedRanges, setBookedRanges] = useState([]);
 
   const images = villa?.detailImages || villa?.images || [];
   const { checkIn, checkOut } = dates;
@@ -136,6 +159,18 @@ const VillaDetailPage = () => {
   const openLightbox = (idx) => { setLightboxImageIndex(idx); setIsLightboxOpen(true); };
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+  useEffect(() => {
+    if (!villa) return;
+    getBookings().then(all => {
+      const ranges = (all || []).filter(b =>
+        Array.isArray(b.villas) && b.villas.includes(villa.name)
+      ).map(b => {
+        const parse = s => { const [y,m,d] = s.split('-').map(Number); return toMidnight(new Date(y, m-1, d)); };
+        return { start: parse(b.startDate), end: parse(b.endDate) };
+      });
+      setBookedRanges(ranges);
+    }).catch(() => {});
+  }, [villa?.name]);
   useEffect(() => {
     document.body.style.overflow = isLightboxOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -350,7 +385,7 @@ const VillaDetailPage = () => {
 
                     {/* Calendar */}
                     <div style={{ border:'1.5px solid #f0ece4', borderRadius:'12px', padding:'12px', background:'#faf9f6', marginBottom:'12px' }}>
-                      <MiniCalendar checkIn={checkIn} checkOut={checkOut}
+                      <MiniCalendar checkIn={checkIn} checkOut={checkOut} bookedRanges={bookedRanges}
                         onChange={({ checkIn: ci, checkOut: co }) => setDates({ checkIn: ci, checkOut: co })} />
                     </div>
 
@@ -515,7 +550,7 @@ const VillaDetailPage = () => {
 
                     {/* Calendar */}
                     <div style={{ border:'1.5px solid #f0ece4', borderRadius:'12px', padding:'14px', background:'#faf9f6', marginBottom: checkIn && !checkOut ? '8px' : '16px' }}>
-                      <MiniCalendar checkIn={checkIn} checkOut={checkOut}
+                      <MiniCalendar checkIn={checkIn} checkOut={checkOut} bookedRanges={bookedRanges}
                         onChange={({ checkIn: ci, checkOut: co }) => setDates({ checkIn: ci, checkOut: co })} />
                     </div>
 
