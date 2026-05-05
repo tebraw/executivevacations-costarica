@@ -1,9 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import BecomeHostModal from './BecomeHostModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHostModalOpen, setIsHostModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleContact = () => {
+    setIsMenuOpen(false);
+    if (location.pathname === '/') {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/#contact');
+    }
+  };
 
   return (
     <header className="fixed top-0 w-full bg-white shadow-md z-50">
@@ -48,7 +60,7 @@ const Header = () => {
                   >
                     Become a Host
                   </button>
-                  <a href="#footer" className="block px-4 py-3 body-regular text-dark hover:bg-light">
+                  <a href="#contact" className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={handleContact}>
                     Contact
                   </a>
                 </div>

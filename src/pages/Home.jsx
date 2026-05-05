@@ -16,6 +16,15 @@ function Home() {
   const [showInstructionModal, setShowInstructionModal] = useState(false);
   const [hasSeenModal, setHasSeenModal] = useState(false);
 
+  // Scroll to contact section when navigated with #contact hash
+  useEffect(() => {
+    if (location.hash === '#contact') {
+      setTimeout(() => {
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [location.hash]);
+
   // Auto-select villa when navigated back from VillaDetailPage
   useEffect(() => {
     if (location.state?.selectVilla) {
