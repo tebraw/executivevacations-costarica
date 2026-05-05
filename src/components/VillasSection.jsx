@@ -88,6 +88,18 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
           ))}
         </div>
 
+        {villa.pricePerNight && (
+          <div className="flex items-baseline gap-1 mb-4">
+            <span style={{ fontSize:'0.72rem', fontWeight:600, color:'#9ca3af', textTransform:'uppercase', letterSpacing:'0.08em' }}>
+              {villa.pricing?.low === villa.pricing?.high ? '' : 'From '}
+            </span>
+            <span style={{ fontSize:'1.35rem', fontWeight:700, color:'#111' }}>
+              ${villa.pricePerNight.toLocaleString()}
+            </span>
+            <span style={{ fontSize:'0.8rem', color:'#9ca3af' }}>/night</span>
+          </div>
+        )}
+
         <div className="flex gap-3">
           <button 
             onClick={() => onViewDetails(villa)}

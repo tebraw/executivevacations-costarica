@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import villas from '../data/villas';
+import villas, { getVillaPrice, calculateTotalPrice } from '../data/villas';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ContactModal from '../components/ContactModal';
@@ -118,6 +118,9 @@ const VillaDetailPage = () => {
   const images = villa?.detailImages || villa?.images || [];
   const { checkIn, checkOut } = dates;
   const nights = checkIn && checkOut ? Math.round((checkOut - checkIn) / 86400000) : 0;
+  const nightlyRate = villa && checkIn ? getVillaPrice(villa, checkIn) : (villa?.pricing?.low ?? villa?.pricePerNight ?? 0);
+  const totalPrice = calculateTotalPrice(villa, checkIn, checkOut);
+  const mixedSeason = nights > 1 && totalPrice !== nightlyRate * nights;
 
   const handleTouchStart = (e) => setTouchStartX(e.touches[0].clientX);
   const handleTouchEnd = (e) => {
@@ -314,11 +317,11 @@ const VillaDetailPage = () => {
                   <div style={{ height:'3px', background:'linear-gradient(to right,#c9a227,#e8c84e,#c9a227)' }} />
                   <div style={{ padding:'18px 20px' }}>
                     {/* Price */}
-                    <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>Starting from</div>
-                    {villa.pricePerNight && (
+                    <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>{checkIn ? 'Per night' : 'Starting from'}</div>
+                    {nightlyRate > 0 && (
                       <div style={{ display:'flex', alignItems:'baseline', gap:'6px', marginBottom:'4px' }}>
                         <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'2rem', fontWeight:700, color:'#111', lineHeight:1 }}>
-                          ${villa.pricePerNight.toLocaleString()}
+                          ${nightlyRate.toLocaleString()}
                         </span>
                         <span style={{ color:'#9ca3af', fontSize:'0.82rem' }}>/night</span>
                       </div>
@@ -366,10 +369,10 @@ const VillaDetailPage = () => {
                       <div style={{ background:'#faf9f6', borderRadius:'10px', padding:'12px 14px', marginBottom:'12px', fontSize:'0.82rem' }}>
                         <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'6px' }}>
                           <span style={{ color:'#6b7280' }}>
-                            ${villa.pricePerNight?.toLocaleString()} × {Math.round((checkOut - checkIn) / 86400000)} nights
+                            {mixedSeason ? `${nights} nights (rates vary by season)` : `$${nightlyRate.toLocaleString()} × ${nights} nights`}
                           </span>
                           <span style={{ fontWeight:600 }}>
-                            ${(villa.pricePerNight * Math.round((checkOut - checkIn) / 86400000)).toLocaleString()}
+                            ${totalPrice.toLocaleString()}
                           </span>
                         </div>
                       </div>
@@ -474,13 +477,13 @@ const VillaDetailPage = () => {
                   {/* Price header */}
                   <div style={{ padding:'22px 24px 0' }}>
                     <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>
-                      Starting from
+                      {checkIn ? 'Per night' : 'Starting from'}
                     </div>
                     <div className="flex items-baseline gap-2 mb-1">
-                      {villa.pricePerNight ? (
+                      {nightlyRate > 0 ? (
                         <>
                           <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'2.4rem', fontWeight:700, color:'#111', lineHeight:1 }}>
-                            ${villa.pricePerNight.toLocaleString()}
+                            ${nightlyRate.toLocaleString()}
                           </span>
                           <span style={{ color:'#9ca3af', fontSize:'0.85rem' }}>/night</span>
                         </>
@@ -535,13 +538,11 @@ const VillaDetailPage = () => {
                     {nights > 0 && (
                       <div style={{ background:'linear-gradient(135deg,#fefce8,#fef9c3)', border:'1px solid #fbbf24', borderRadius:'10px', padding:'12px 14px', marginBottom:'16px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                         <span style={{ fontSize:'0.8rem', color:'#6b7280' }}>
-                          {villa.pricePerNight ? `$${villa.pricePerNight.toLocaleString()} × ` : ''}{nights} nights
+                          {mixedSeason ? `${nights} nights (rates vary by season)` : `$${nightlyRate.toLocaleString()} × ${nights} nights`}
                         </span>
-                        {villa.pricePerNight && (
-                          <span style={{ fontFamily:"'DM Sans', sans-serif", fontWeight:700, color:'#111', fontSize:'1rem' }}>
-                            ${(villa.pricePerNight * nights).toLocaleString()}
-                          </span>
-                        )}
+                        <span style={{ fontFamily:"'DM Sans', sans-serif", fontWeight:700, color:'#111', fontSize:'1rem' }}>
+                          ${totalPrice.toLocaleString()}
+                        </span>
                       </div>
                     )}
                   </div>

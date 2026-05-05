@@ -13,7 +13,8 @@ const villas = [
     guests: 18,
     size: "10,500 sq ft",
     isPremium: true,
-    pricePerNight: 2500,
+    pricePerNight: 2400,
+    pricing: { low: 2400, high: 3200 },
     hasChristmasSpecial: true,
     images: [
       "/images/villas/palacio-tropical/palaciotropical-469.exterior_1.jpg",
@@ -59,7 +60,8 @@ const villas = [
     guests: 18,
     size: "12,500 sq ft",
     isPremium: true,
-    pricePerNight: 2200,
+    pricePerNight: 2700,
+    pricing: { low: 2700, high: 3500 },
     hasChristmasSpecial: true,
     isComingSoon: false,
     images: ["/images/villas/palacio-musical/1. ChatGPT Image Feb 27, 2026, 03_39_10 PM.jpg"],
@@ -127,7 +129,8 @@ const villas = [
     guests: 8,
     size: "2,400 sq ft",
     isPremium: true,
-    pricePerNight: 850,
+    pricePerNight: 399,
+    pricing: { low: 399, high: 500 },
     hasSpecialOffer: true,
     images: ["/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif"],
     detailImages: ["/images/villas/the-view-house/25d56bc7-19f0-4a97-b056-f39312120697.avif", "/images/villas/the-view-house/3a85d083-c4c6-4289-93d9-d2e92feff052.avif", "/images/villas/the-view-house/3c3b16b7-77de-4fdb-97e7-cd4e5d2f533d.avif", "/images/villas/the-view-house/9bcd8e7b-6d80-4b65-b878-68835b7b243b.avif", "/images/villas/the-view-house/caee2b00-03a2-438e-981c-8d98e57f6d43.avif", "/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif", "/images/villas/the-view-house/d971cd99-3bbc-41d2-900f-8372442d68a9.avif", "/images/villas/the-view-house/f24aa4e9-2615-4491-b70c-90c87f804686.avif"],
@@ -164,7 +167,8 @@ const villas = [
     guests: 8,
     size: "4,700 sq ft",
     isPremium: true,
-    pricePerNight: 650,
+    pricePerNight: 950,
+    pricing: { low: 950, high: 950 },
     images: ["/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif"],
     detailImages: ["/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp", "/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif", "/images/villas/the-palms-villa-estate/3010682d-f127-4ff9-b647-099323082072.jpeg", "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.jpeg", "/images/villas/the-palms-villa-estate/31f4ba1b-839f-4f90-83ff-9c6dfe7e0c8b.avif", "/images/villas/the-palms-villa-estate/4.Aerial-4.jpeg", "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.jpeg", "/images/villas/the-palms-villa-estate/56.Aerial-9.jpeg", "/images/villas/the-palms-villa-estate/573860c1-ba80-4638-a8b4-bf0375b57abf.avif", "/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif", "/images/villas/the-palms-villa-estate/6.Aerial-5.jpeg", "/images/villas/the-palms-villa-estate/910cba2e-cbaf-41f4-a725-57ddbebf7ac1.jpeg", "/images/villas/the-palms-villa-estate/c2de55f9-02b9-464b-9966-ae056fcee665.avif", "/images/villas/the-palms-villa-estate/f9aafc09-ec54-4b03-a21b-a4d799f059c1.jpeg", "/images/villas/the-palms-villa-estate/IMG_0194.jpeg", "/images/villas/the-palms-villa-estate/IMG_0224.jpeg", "/images/villas/the-palms-villa-estate/IMG_1718.jpeg", "/images/villas/the-palms-villa-estate/IMG_7170.jpeg", "/images/villas/the-palms-villa-estate/IMG_9888.jpeg", "/images/villas/the-palms-villa-estate/IMG_9951.jpeg"],
     topAmenities: ["Private Pool", "Mountain Views", "Full-time Caretaker", "Air Conditioning"],
@@ -190,5 +194,28 @@ const villas = [
     ]
   }
 ];
+
+// Low season: June (6) through September (9)
+const LOW_SEASON_MONTHS = [6, 7, 8, 9];
+
+export function getVillaPrice(villa, date) {
+  if (!villa.pricing) return villa.pricePerNight || 0;
+  const month = date.getMonth() + 1;
+  return LOW_SEASON_MONTHS.includes(month) ? villa.pricing.low : villa.pricing.high;
+}
+
+export function calculateTotalPrice(villa, checkIn, checkOut) {
+  if (!checkIn || !checkOut) return 0;
+  let total = 0;
+  const current = new Date(checkIn);
+  current.setHours(0, 0, 0, 0);
+  const end = new Date(checkOut);
+  end.setHours(0, 0, 0, 0);
+  while (current < end) {
+    total += getVillaPrice(villa, current);
+    current.setDate(current.getDate() + 1);
+  }
+  return total;
+}
 
 export default villas;
