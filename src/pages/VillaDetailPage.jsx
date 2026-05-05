@@ -136,6 +136,7 @@ const VillaDetailPage = () => {
   const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState(null);
   const [lbTouchStartX, setLbTouchStartX] = useState(null);
+  const [showSwipeHint, setShowSwipeHint] = useState(false);
   const [dates, setDates] = useState({ checkIn: null, checkOut: null });
   const [bookedRanges, setBookedRanges] = useState([]);
 
@@ -157,7 +158,15 @@ const VillaDetailPage = () => {
     setTouchStartX(null);
   };
 
-  const openLightbox = (idx) => { setLightboxImageIndex(idx); setIsLightboxOpen(true); };
+  const openLightbox = (idx) => {
+    setLightboxImageIndex(idx);
+    setIsLightboxOpen(true);
+    // Show swipe hint on touch devices
+    if (window.matchMedia('(hover: none)').matches && images.length > 1) {
+      setShowSwipeHint(true);
+      setTimeout(() => setShowSwipeHint(false), 2500);
+    }
+  };
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
   useEffect(() => {
@@ -298,6 +307,18 @@ const VillaDetailPage = () => {
               ))}
               {images.length > 10 && <span style={{ fontSize:'10px', color:'#9ca3af', alignSelf:'center' }}>+{images.length - 10}</span>}
             </div>
+            {/* Swipe hint for carousel */}
+            {images.length > 1 && (
+              <p style={{ textAlign:'center', marginTop:'8px', fontSize:'11px', color:'#9ca3af', display:'flex', alignItems:'center', justifyContent:'center', gap:'5px' }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M14 8.5C14 7.1 12.9 6 11.5 6S9 7.1 9 8.5v5"/>
+                  <path d="M9 11.5C9 10.1 7.9 9 6.5 9S4 10.1 4 11.5V16a8 8 0 0 0 16 0v-4"/>
+                  <path d="M18 12V8.5C18 7.1 16.9 6 15.5 6S13 7.1 13 8.5"/>
+                  <path d="M13 9.5C13 8.1 11.9 7 10.5 7"/>
+                </svg>
+                Swipe to see more photos
+              </p>
+            )}
           </div>
         </div>
 
@@ -687,6 +708,39 @@ const VillaDetailPage = () => {
               </button>
             </>
           )}
+
+          {/* Mobile swipe hint overlay */}
+          {showSwipeHint && (
+            <div className="md:hidden" style={{
+              position:'absolute', bottom:'72px', left:'50%', transform:'translateX(-50%)',
+              background:'rgba(0,0,0,0.6)', backdropFilter:'blur(6px)',
+              color:'#fff', borderRadius:'999px', padding:'9px 20px',
+              display:'flex', alignItems:'center', gap:'10px',
+              fontSize:'13px', fontWeight:500, whiteSpace:'nowrap',
+              zIndex:20, animation:'lbHintFade 2.5s ease forwards',
+              pointerEvents:'none',
+            }}>
+              <svg width="26" height="26" viewBox="0 0 40 40" fill="none" style={{ animation:'lbSwipe 1.1s ease-in-out infinite' }}>
+                <rect x="15" y="4" width="10" height="18" rx="5" fill="white" opacity="0.9"/>
+                <rect x="7" y="16" width="10" height="16" rx="5" fill="white" opacity="0.7"/>
+                <rect x="23" y="16" width="10" height="16" rx="5" fill="white" opacity="0.7"/>
+              </svg>
+              Swipe left or right
+            </div>
+          )}
+          <style>{`
+            @keyframes lbHintFade {
+              0%   { opacity: 0; transform: translateX(-50%) translateY(6px); }
+              15%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+              75%  { opacity: 1; }
+              100% { opacity: 0; }
+            }
+            @keyframes lbSwipe {
+              0%,100% { transform: translateX(0); }
+              40%     { transform: translateX(-5px); }
+              60%     { transform: translateX(5px); }
+            }
+          `}</style>
         </div>
       )}
 
