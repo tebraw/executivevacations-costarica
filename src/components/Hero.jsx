@@ -21,7 +21,7 @@ const Hero = () => {
           <div className="max-w-3xl animate-fade-in-up mx-auto">
             {/* Hero Text */}
             <div className="mb-8 px-4">
-              <h1 className="heading-1 text-white mb-6" style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.6)' }}>
+              <h1 className="heading-1 text-white mb-6" style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.6)', color: 'white' }}>
                 Discover Luxury Villas in 
                 <span className="block mt-2" style={{ color: '#D4AF37', textShadow: '2px 2px 8px rgba(0,0,0,0.6)' }}>Costa Rica</span>
               </h1>
