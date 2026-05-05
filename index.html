@@ -33,6 +33,18 @@
       <input type="text" name="villa-selected" />
       <input type="text" name="activities-selected" />
     </form>
+
+    <!-- Hidden form for villa detail page inquiries -->
+    <form name="villa-inquiry" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="date" name="checkIn" />
+      <input type="date" name="checkOut" />
+      <input type="number" name="numberOfPeople" />
+      <textarea name="message"></textarea>
+      <input type="text" name="villa-selected" />
+    </form>
     
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

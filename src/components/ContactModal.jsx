@@ -107,7 +107,7 @@ const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose, initial
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -115,22 +115,32 @@ const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose, initial
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      console.log('Contact form submitted:', {
-        ...formData,
-        villa: villa?.name || 'Unknown Villa',
-        selectedActivities: selectedActivities.map(a => ({
-          id: a.id,
-          name: a.name,
-          duration: a.duration
-        }))
+      const formDataObject = {
+        'form-name': 'villa-inquiry',
+        'name': formData.name,
+        'email': formData.email,
+        'phone': formData.phone,
+        'checkIn': formData.checkIn,
+        'checkOut': formData.checkOut,
+        'numberOfPeople': formData.numberOfPeople,
+        'message': formData.message,
+        'villa-selected': villa?.name || 'Unknown Villa',
+      };
+
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formDataObject).toString()
       });
-      
-      setIsSubmitted(true);
+
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        throw new Error('Form submission failed');
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
+      alert('There was an error submitting your inquiry. Please try again or contact us directly at propertieswithmeritt@yahoo.com');
     } finally {
       setIsSubmitting(false);
     }
@@ -215,7 +225,18 @@ const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose, initial
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form
+              name="villa-inquiry"
+              method="POST"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+              onSubmit={handleSubmit}
+              className="space-y-6"
+            >
+              <input type="hidden" name="form-name" value="villa-inquiry" />
+              <input type="hidden" name="bot-field" />
+              <input type="hidden" name="villa-selected" value={villa?.name || ''} />
+
               {/* Name */}
               <div>
                 <label htmlFor="name" className="block body-regular font-semibold mb-2">
