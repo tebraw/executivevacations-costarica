@@ -311,30 +311,78 @@ const VillaDetailPage = () => {
                 <div style={{ background:'#fff', borderRadius:'16px', border:'1px solid #e9e4da', boxShadow:'0 4px 20px rgba(0,0,0,0.07)', overflow:'hidden' }}>
                   <div style={{ height:'3px', background:'linear-gradient(to right,#c9a227,#e8c84e,#c9a227)' }} />
                   <div style={{ padding:'18px 20px' }}>
+                    {/* Price */}
+                    <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'Montserrat', sans-serif" }}>Starting from</div>
                     {villa.pricePerNight && (
-                      <div className="flex items-baseline gap-2 mb-1">
+                      <div style={{ display:'flex', alignItems:'baseline', gap:'6px', marginBottom:'4px' }}>
                         <span style={{ fontFamily:"'Playfair Display', serif", fontSize:'2rem', fontWeight:700, color:'#111', lineHeight:1 }}>
                           ${villa.pricePerNight.toLocaleString()}
                         </span>
                         <span style={{ color:'#9ca3af', fontSize:'0.82rem' }}>/night</span>
-                        <span style={{ marginLeft:'auto', fontSize:'10px', color:GOLD, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase' }}>Starting from</span>
                       </div>
                     )}
-                    <div className="flex items-center gap-2 mb-4" style={{ color:'#9ca3af', fontSize:'0.8rem' }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:'6px', color:'#9ca3af', fontSize:'0.8rem', marginBottom:'16px' }}>
                       <span style={{ color:GOLD, fontWeight:600 }}>★ {villa.rating}</span>
                       <span>·</span>
                       <span>{villa.location}</span>
                     </div>
-                    <div className="flex flex-col gap-2">
+
+                    {/* Check-in / Check-out */}
+                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', border:'1.5px solid #e5e7eb', borderRadius:'12px', overflow:'hidden', marginBottom:'12px' }}>
+                      <div style={{ padding:'10px 14px', borderRight:'1px solid #e5e7eb' }}>
+                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'Montserrat', sans-serif" }}>Check-in</div>
+                        <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkIn ? '#111' : '#9ca3af' }}>
+                          {checkIn ? fmtShort(checkIn) : 'Add date'}
+                        </div>
+                      </div>
+                      <div style={{ padding:'10px 14px' }}>
+                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'Montserrat', sans-serif" }}>Check-out</div>
+                        <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkOut ? '#111' : '#9ca3af' }}>
+                          {checkOut ? fmtShort(checkOut) : 'Add date'}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Calendar */}
+                    <div style={{ border:'1.5px solid #f0ece4', borderRadius:'12px', padding:'12px', background:'#faf9f6', marginBottom:'12px' }}>
+                      <MiniCalendar checkIn={checkIn} checkOut={checkOut}
+                        onChange={({ checkIn: ci, checkOut: co }) => setDates({ checkIn: ci, checkOut: co })} />
+                    </div>
+
+                    {checkIn && !checkOut && (
+                      <div style={{ fontSize:'0.72rem', color:'#9ca3af', textAlign:'center', marginBottom:'10px' }}>Select your check-out date</div>
+                    )}
+                    {(checkIn || checkOut) && (
+                      <button onClick={() => setDates({ checkIn: null, checkOut: null })}
+                        style={{ display:'block', margin:'0 auto 12px', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'#9ca3af', textDecoration:'underline' }}>
+                        Clear dates
+                      </button>
+                    )}
+
+                    {/* Night summary */}
+                    {checkIn && checkOut && (
+                      <div style={{ background:'#faf9f6', borderRadius:'10px', padding:'12px 14px', marginBottom:'12px', fontSize:'0.82rem' }}>
+                        <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'6px' }}>
+                          <span style={{ color:'#6b7280' }}>
+                            ${villa.pricePerNight?.toLocaleString()} × {Math.round((checkOut - checkIn) / 86400000)} nights
+                          </span>
+                          <span style={{ fontWeight:600 }}>
+                            ${(villa.pricePerNight * Math.round((checkOut - checkIn) / 86400000)).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Buttons */}
+                    <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
                       {villa.virtualTour && (
                         <a href={villa.virtualTour} target="_blank" rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-2 w-full"
-                          style={{ border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'12px', color:GOLD, fontSize:'0.75rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', fontFamily:"'Montserrat', sans-serif" }}>
+                          style={{ display:'flex', alignItems:'center', justifyContent:'center', border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'12px', color:GOLD, fontSize:'0.75rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', fontFamily:"'Montserrat', sans-serif" }}>
                           Virtual 3D Tour
                         </a>
                       )}
-                      <button onClick={handleInquire} className="w-full flex items-center justify-center gap-2"
-                        style={{ background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.75rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'Montserrat', sans-serif" }}>
+                      <button onClick={handleInquire}
+                        style={{ display:'flex', alignItems:'center', justifyContent:'center', background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.75rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'Montserrat', sans-serif", width:'100%' }}>
                         Inquire &amp; Reserve
                       </button>
                     </div>
