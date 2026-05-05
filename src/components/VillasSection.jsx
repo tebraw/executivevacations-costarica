@@ -2,6 +2,9 @@
 import { useNavigate } from 'react-router-dom';
 import villas from '../data/villas';
 
+// ── Set to true to re-enable price display ──
+const SHOW_PRICES = false;
+
 // Get the base URL from Vite config for proper GitHub Pages paths
 const BASE_URL = import.meta.env.BASE_URL;
 const getImagePath = (path) => `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
@@ -88,7 +91,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
           ))}
         </div>
 
-        {villa.pricePerNight && (
+        {SHOW_PRICES && villa.pricePerNight && (
           <div className="flex items-baseline gap-1 mb-4">
             <span style={{ fontSize:'0.72rem', fontWeight:600, color:'#9ca3af', textTransform:'uppercase', letterSpacing:'0.08em' }}>
               {villa.pricing?.low === villa.pricing?.high ? '' : 'From '}

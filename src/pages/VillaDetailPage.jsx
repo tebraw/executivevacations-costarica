@@ -8,6 +8,10 @@ import ContactModal from '../components/ContactModal';
 import ReviewSection from '../components/ReviewSection';
 
 const BASE_URL = import.meta.env.BASE_URL;
+
+// ── Set to true to re-enable price display ──
+const SHOW_PRICES = false;
+
 const getImagePath = (path) => {
   const clean = path.startsWith('/') ? path : `/${path}`;
   if (BASE_URL && BASE_URL !== './' && BASE_URL !== '.') {
@@ -385,8 +389,8 @@ const VillaDetailPage = () => {
                   <div style={{ height:'3px', background:'linear-gradient(to right,#c9a227,#e8c84e,#c9a227)' }} />
                   <div style={{ padding:'18px 20px' }}>
                     {/* Price */}
-                    <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>{checkIn ? 'Per night' : 'Starting from'}</div>
-                    {nightlyRate > 0 && (
+                    {SHOW_PRICES && <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>{checkIn ? 'Per night' : 'Starting from'}</div>}
+                    {SHOW_PRICES && nightlyRate > 0 && (
                       <div style={{ display:'flex', alignItems:'baseline', gap:'6px', marginBottom:'4px' }}>
                         <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'2rem', fontWeight:700, color:'#111', lineHeight:1 }}>
                           ${nightlyRate.toLocaleString()}
@@ -433,7 +437,7 @@ const VillaDetailPage = () => {
                     )}
 
                     {/* Night summary */}
-                    {checkIn && checkOut && (
+                    {SHOW_PRICES && checkIn && checkOut && (
                       <div style={{ background:'#faf9f6', borderRadius:'10px', padding:'12px 14px', marginBottom:'12px', fontSize:'0.82rem' }}>
                         <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'6px' }}>
                           <span style={{ color:'#6b7280' }}>
@@ -555,21 +559,25 @@ const VillaDetailPage = () => {
 
                   {/* Price header */}
                   <div style={{ padding:'22px 24px 0' }}>
-                    <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>
-                      {checkIn ? 'Per night' : 'Starting from'}
-                    </div>
-                    <div className="flex items-baseline gap-2 mb-1">
-                      {nightlyRate > 0 ? (
-                        <>
-                          <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'2.4rem', fontWeight:700, color:'#111', lineHeight:1 }}>
-                            ${nightlyRate.toLocaleString()}
-                          </span>
-                          <span style={{ color:'#9ca3af', fontSize:'0.85rem' }}>/night</span>
-                        </>
-                      ) : (
-                        <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'1.4rem', fontWeight:700, color:'#111' }}>Contact for Pricing</span>
-                      )}
-                    </div>
+                    {SHOW_PRICES && (
+                      <>
+                        <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>
+                          {checkIn ? 'Per night' : 'Starting from'}
+                        </div>
+                        <div className="flex items-baseline gap-2 mb-1">
+                          {nightlyRate > 0 ? (
+                            <>
+                              <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'2.4rem', fontWeight:700, color:'#111', lineHeight:1 }}>
+                                ${nightlyRate.toLocaleString()}
+                              </span>
+                              <span style={{ color:'#9ca3af', fontSize:'0.85rem' }}>/night</span>
+                            </>
+                          ) : (
+                            <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'1.4rem', fontWeight:700, color:'#111' }}>Contact for Pricing</span>
+                          )}
+                        </div>
+                      </>
+                    )}
                     <div className="flex items-center gap-2 mb-5">
                       <span style={{ color:GOLD, fontSize:'0.82rem', fontWeight:600 }}>★ {villa.rating}</span>
                       <span style={{ color:'#e5e7eb' }}>·</span>
@@ -614,7 +622,7 @@ const VillaDetailPage = () => {
                     )}
 
                     {/* Nights summary */}
-                    {nights > 0 && (
+                    {SHOW_PRICES && nights > 0 && (
                       <div style={{ background:'linear-gradient(135deg,#fefce8,#fef9c3)', border:'1px solid #fbbf24', borderRadius:'10px', padding:'12px 14px', marginBottom:'12px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                         <span style={{ fontSize:'0.8rem', color:'#6b7280' }}>
                           {mixedSeason ? `${nights} nights (rates vary by season)` : `$${nightlyRate.toLocaleString()} × ${nights} nights`}
