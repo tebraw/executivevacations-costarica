@@ -297,19 +297,40 @@ const VillaDetailPage = () => {
                 </div>
               </div>
 
-              {/* Mobile booking buttons */}
-              <div className="lg:hidden mb-8 flex flex-col gap-3">
-                {villa.virtualTour && (
-                  <a href={villa.virtualTour} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full"
-                    style={{ border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'12px', color:GOLD, fontSize:'0.78rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', fontFamily:"'Montserrat', sans-serif" }}>
-                    Virtual 3D Tour
-                  </a>
-                )}
-                <button onClick={handleInquire} className="w-full flex items-center justify-center gap-2"
-                  style={{ background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.78rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'Montserrat', sans-serif" }}>
-                  Inquire &amp; Reserve
-                </button>
+              {/* Mobile booking card */}
+              <div className="lg:hidden mb-8">
+                <div style={{ background:'#fff', borderRadius:'16px', border:'1px solid #e9e4da', boxShadow:'0 4px 20px rgba(0,0,0,0.07)', overflow:'hidden' }}>
+                  <div style={{ height:'3px', background:'linear-gradient(to right,#c9a227,#e8c84e,#c9a227)' }} />
+                  <div style={{ padding:'18px 20px' }}>
+                    {villa.pricePerNight && (
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span style={{ fontFamily:"'Playfair Display', serif", fontSize:'2rem', fontWeight:700, color:'#111', lineHeight:1 }}>
+                          ${villa.pricePerNight.toLocaleString()}
+                        </span>
+                        <span style={{ color:'#9ca3af', fontSize:'0.82rem' }}>/night</span>
+                        <span style={{ marginLeft:'auto', fontSize:'10px', color:GOLD, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase' }}>Starting from</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2 mb-4" style={{ color:'#9ca3af', fontSize:'0.8rem' }}>
+                      <span style={{ color:GOLD, fontWeight:600 }}>★ {villa.rating}</span>
+                      <span>·</span>
+                      <span>{villa.location}</span>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {villa.virtualTour && (
+                        <a href={villa.virtualTour} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 w-full"
+                          style={{ border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'12px', color:GOLD, fontSize:'0.75rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', fontFamily:"'Montserrat', sans-serif" }}>
+                          Virtual 3D Tour
+                        </a>
+                      )}
+                      <button onClick={handleInquire} className="w-full flex items-center justify-center gap-2"
+                        style={{ background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.75rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'Montserrat', sans-serif" }}>
+                        Inquire &amp; Reserve
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Special offers */}
