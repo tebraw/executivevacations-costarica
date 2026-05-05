@@ -7,7 +7,7 @@ const Hero = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `url('${import.meta.env.BASE_URL}images/villas/palacio-tropical/palaciotropical-567.exterior.jpg')`,
+          backgroundImage: `url('${import.meta.env.BASE_URL}images/hero-bg.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center center'
         }}
@@ -19,14 +19,14 @@ const Hero = () => {
       <div className="relative z-10 h-full flex items-center">
         <div className="container">
           <div className="max-w-3xl animate-fade-in-up mx-auto">
-            {/* Hero Text Card */}
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 md:p-10 border border-white/20 mb-8">
-              <h1 className="heading-1 text-white mb-6" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' }}>
+            {/* Hero Text */}
+            <div className="mb-8 px-4">
+              <h1 className="heading-1 text-white mb-6" style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.6)' }}>
                 Discover Luxury Villas in 
-                <span className="block mt-2" style={{ color: '#D4AF37', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' }}>Costa Rica</span>
+                <span className="block mt-2" style={{ color: '#D4AF37', textShadow: '2px 2px 8px rgba(0,0,0,0.6)' }}>Costa Rica</span>
               </h1>
               
-              <p className="body-large mb-8" style={{ color: 'white', textShadow: '1px 1px 3px rgba(0, 0, 0, 0.7)' }}>
+              <p className="body-large mb-8" style={{ color: 'white', textShadow: '1px 1px 4px rgba(0,0,0,0.8)' }}>
                 Exclusive vacation villas in tropical paradise. From private pools to breathtaking ocean views – 
                 experience unforgettable moments in Costa Rica's most beautiful accommodations.
               </p>
