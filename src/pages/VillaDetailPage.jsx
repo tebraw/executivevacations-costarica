@@ -147,6 +147,17 @@ const VillaDetailPage = () => {
   const totalPrice = calculateTotalPrice(villa, checkIn, checkOut);
   const mixedSeason = nights > 1 && totalPrice !== nightlyRate * nights;
 
+  // Holiday periods: Christmas 2026 and New Year's 2026/2027
+  const HOLIDAY_PERIODS = [
+    { name: 'Christmas', start: new Date(2026, 11, 20), end: new Date(2026, 11, 27), minNights: 7 },
+    { name: "New Year's", start: new Date(2026, 11, 28), end: new Date(2027, 0, 4), minNights: 7 },
+  ];
+  const holidayInfo = (() => {
+    if (!checkIn) return null;
+    const ref = checkOut || checkIn;
+    return HOLIDAY_PERIODS.find(p => checkIn < p.end && ref >= p.start) || null;
+  })();
+
   const handleTouchStart = (e) => setTouchStartX(e.touches[0].clientX);
   const handleTouchEnd = (e) => {
     if (touchStartX === null) return;
@@ -435,6 +446,17 @@ const VillaDetailPage = () => {
                       </div>
                     )}
 
+                    {/* Holiday pricing notice */}
+                    {holidayInfo && (
+                      <div style={{ background:'#fffbeb', border:'1.5px solid #f59e0b', borderRadius:'10px', padding:'11px 14px', marginBottom:'12px', display:'flex', gap:'10px', alignItems:'flex-start' }}>
+                        <span style={{ fontSize:'1.1rem', flexShrink:0 }}>🎄</span>
+                        <div style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'0.75rem', lineHeight:1.5, color:'#92400e' }}>
+                          <div style={{ fontWeight:700, marginBottom:'2px' }}>{holidayInfo.name} Holiday Pricing</div>
+                          <div>This period has special rates — <strong>the price shown is not final.</strong> A {holidayInfo.minNights}-night minimum stay applies. We'll confirm the exact rate when we contact you.</div>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Buttons */}
                     <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
                       {villa.virtualTour && (
@@ -593,13 +615,24 @@ const VillaDetailPage = () => {
 
                     {/* Nights summary */}
                     {nights > 0 && (
-                      <div style={{ background:'linear-gradient(135deg,#fefce8,#fef9c3)', border:'1px solid #fbbf24', borderRadius:'10px', padding:'12px 14px', marginBottom:'16px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                      <div style={{ background:'linear-gradient(135deg,#fefce8,#fef9c3)', border:'1px solid #fbbf24', borderRadius:'10px', padding:'12px 14px', marginBottom:'12px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                         <span style={{ fontSize:'0.8rem', color:'#6b7280' }}>
                           {mixedSeason ? `${nights} nights (rates vary by season)` : `$${nightlyRate.toLocaleString()} × ${nights} nights`}
                         </span>
                         <span style={{ fontFamily:"'DM Sans', sans-serif", fontWeight:700, color:'#111', fontSize:'1rem' }}>
                           ${totalPrice.toLocaleString()}
                         </span>
+                      </div>
+                    )}
+
+                    {/* Holiday pricing notice */}
+                    {holidayInfo && (
+                      <div style={{ background:'#fffbeb', border:'1.5px solid #f59e0b', borderRadius:'10px', padding:'11px 14px', marginBottom:'12px', display:'flex', gap:'10px', alignItems:'flex-start' }}>
+                        <span style={{ fontSize:'1.1rem', flexShrink:0 }}>🎄</span>
+                        <div style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'0.75rem', lineHeight:1.5, color:'#92400e' }}>
+                          <div style={{ fontWeight:700, marginBottom:'2px' }}>{holidayInfo.name} Holiday Pricing</div>
+                          <div>This period has special rates — <strong>the price shown is not final.</strong> A {holidayInfo.minNights}-night minimum stay applies. We'll confirm the exact rate when we contact you.</div>
+                        </div>
                       </div>
                     )}
                   </div>
