@@ -108,10 +108,10 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             View Details
           </button>
           <button 
-            onClick={() => onSelect(villa)}
+            onClick={() => onSelect(isSelected ? null : villa)}
             className={`btn flex-1 ${isSelected ? 'btn-success' : 'btn-luxury'}`}
           >
-            {isSelected ? ' Selected' : 'Select Villa'}
+            {isSelected ? '✓ Selected' : 'Select Villa'}
           </button>
         </div>
       </div>
