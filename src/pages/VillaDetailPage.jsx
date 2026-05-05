@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import villas from '../data/villas';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import ContactModal from '../components/ContactModal';
 
 const BASE_URL = import.meta.env.BASE_URL;
 const getImagePath = (path) => {
@@ -156,7 +157,8 @@ const VillaDetailPage = () => {
     );
   }
 
-  const handleInquire = () => navigate('/', { state: { selectVilla: villa.id } });
+  const [inquireOpen, setInquireOpen] = useState(false);
+  const handleInquire = () => setInquireOpen(true);
   const amenities = villa.allAmenities || villa.topAmenities || [];
 
   const GOLD = '#b8972e';
@@ -648,6 +650,15 @@ const VillaDetailPage = () => {
           )}
         </div>
       )}
+
+      {/* ── Contact / Inquiry Modal ───────────── */}
+      <ContactModal
+        villa={villa}
+        isOpen={inquireOpen}
+        onClose={() => setInquireOpen(false)}
+        initialCheckIn={checkIn}
+        initialCheckOut={checkOut}
+      />
     </>
   );
 };

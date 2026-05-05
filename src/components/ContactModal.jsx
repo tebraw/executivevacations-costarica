@@ -1,18 +1,32 @@
 import React, { useState, useEffect } from 'react';
 
-const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose }) => {
+const fmtDate = (d) => d ? d.toISOString().split('T')[0] : '';
+
+const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose, initialCheckIn = null, initialCheckOut = null }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     message: '',
-    travelDate: '',
+    checkIn: fmtDate(initialCheckIn),
+    checkOut: fmtDate(initialCheckOut),
     numberOfPeople: ''
   });
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Prefill dates when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(prev => ({
+        ...prev,
+        checkIn: fmtDate(initialCheckIn),
+        checkOut: fmtDate(initialCheckOut),
+      }));
+    }
+  }, [isOpen, initialCheckIn, initialCheckOut]);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -67,8 +81,16 @@ const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose }) => {
       newErrors.phone = 'Phone number is required';
     }
 
-    if (!formData.travelDate.trim()) {
-      newErrors.travelDate = 'Travel date is required';
+    if (!formData.checkIn.trim()) {
+      newErrors.checkIn = 'Check-in date is required';
+    }
+
+    if (!formData.checkOut.trim()) {
+      newErrors.checkOut = 'Check-out date is required';
+    }
+
+    if (formData.checkIn && formData.checkOut && formData.checkOut <= formData.checkIn) {
+      newErrors.checkOut = 'Check-out must be after check-in';
     }
 
     if (!formData.numberOfPeople.trim()) {
@@ -120,7 +142,8 @@ const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose }) => {
       email: '',
       phone: '',
       message: '',
-      travelDate: '',
+      checkIn: '',
+      checkOut: '',
       numberOfPeople: ''
     });
     setErrors({});
@@ -136,7 +159,8 @@ const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose }) => {
       email: '',
       phone: '',
       message: '',
-      travelDate: '',
+      checkIn: fmtDate(initialCheckIn),
+      checkOut: fmtDate(initialCheckOut),
       numberOfPeople: ''
     });
   };
@@ -255,29 +279,51 @@ const ContactModal = ({ villa, selectedActivities = [], isOpen, onClose }) => {
                 )}
               </div>
 
-              {/* Travel Date and Number of People in one row */}
+              {/* Check-in / Check-out and Number of People */}
               <div className="grid md:grid-cols-2 gap-4">
-                {/* Travel Date */}
+                {/* Check-in */}
                 <div>
-                  <label htmlFor="travelDate" className="block body-regular font-semibold mb-2">
-                    Approximate Travel Date *
+                  <label htmlFor="checkIn" className="block body-regular font-semibold mb-2">
+                    Check-in Date *
                   </label>
                   <input
                     type="date"
-                    id="travelDate"
-                    name="travelDate"
-                    value={formData.travelDate}
+                    id="checkIn"
+                    name="checkIn"
+                    value={formData.checkIn}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.travelDate ? 'border-red-500' : 'border-gray-300'
+                      errors.checkIn ? 'border-red-500' : 'border-gray-300'
                     }`}
                   />
-                  {errors.travelDate && (
-                    <p className="text-red-500 text-sm mt-1">{errors.travelDate}</p>
+                  {errors.checkIn && (
+                    <p className="text-red-500 text-sm mt-1">{errors.checkIn}</p>
                   )}
                 </div>
 
-                {/* Number of People */}
+                {/* Check-out */}
+                <div>
+                  <label htmlFor="checkOut" className="block body-regular font-semibold mb-2">
+                    Check-out Date *
+                  </label>
+                  <input
+                    type="date"
+                    id="checkOut"
+                    name="checkOut"
+                    value={formData.checkOut}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.checkOut ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                  />
+                  {errors.checkOut && (
+                    <p className="text-red-500 text-sm mt-1">{errors.checkOut}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Number of People */}
+              <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="numberOfPeople" className="block body-regular font-semibold mb-2">
                     Number of People *
