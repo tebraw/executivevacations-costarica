@@ -39,7 +39,7 @@ const Footer = () => {
             <h4 className="heading-3 mb-4" style={{ color: '#D4AF37' }}>Contact</h4>
             <div className="space-y-3">
               <div>
-                <span className="body-regular text-white/80">propertieswithmeritt@gmail.com</span>
+                <span className="body-regular text-white/80">propertieswithmeritt@yahoo.com</span>
               </div>
               <div>
                 <span className="body-regular text-white/80">303-881-8588</span>
