@@ -6,7 +6,8 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
     email: '',
     phone: '',
     message: '',
-    travelDate: '',
+    checkIn: '',
+    checkOut: '',
     numberOfPeople: ''
   });
 
@@ -46,8 +47,14 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
       newErrors.phone = 'Phone number is required';
     }
     
-    if (!formData.travelDate) {
-      newErrors.travelDate = 'Travel date is required';
+    if (!formData.checkIn) {
+      newErrors.checkIn = 'Check-in date is required';
+    }
+    
+    if (!formData.checkOut) {
+      newErrors.checkOut = 'Check-out date is required';
+    } else if (formData.checkIn && formData.checkOut <= formData.checkIn) {
+      newErrors.checkOut = 'Check-out must be after check-in';
     }
     
     if (!formData.numberOfPeople) {
@@ -78,7 +85,8 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
         'name': formData.name,
         'email': formData.email,
         'phone': formData.phone,
-        'travelDate': formData.travelDate,
+        'checkIn': formData.checkIn,
+        'checkOut': formData.checkOut,
         'numberOfPeople': formData.numberOfPeople,
         'message': formData.message,
         'villa-selected': selectedVilla?.name || 'None',
@@ -114,7 +122,8 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
       email: '',
       phone: '',
       message: '',
-      travelDate: '',
+      checkIn: '',
+      checkOut: '',
       numberOfPeople: ''
     });
   };
@@ -189,6 +198,8 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
               {/* Netlify Forms required fields */}
               <input type="hidden" name="form-name" value="contact" />
               <input type="hidden" name="bot-field" />
+              <input type="hidden" name="checkIn" />
+              <input type="hidden" name="checkOut" />
               
               {/* Hidden fields for villa and activities */}
               <input type="hidden" name="villa-selected" value={selectedVilla?.name || ''} />
@@ -258,27 +269,51 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
                 </div>
               </div>
 
-              {/* Travel Date & Number of People Row */}
+              {/* Check-in & Check-out Row */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="travelDate" className="block body-regular font-semibold mb-2">
-                    Preferred Travel Date *
+                  <label htmlFor="checkIn" className="block body-regular font-semibold mb-2">
+                    Check-in Date *
                   </label>
                   <input
                     type="date"
-                    id="travelDate"
-                    name="travelDate"
-                    value={formData.travelDate}
+                    id="checkIn"
+                    name="checkIn"
+                    value={formData.checkIn}
                     onChange={handleInputChange}
+                    min={new Date().toISOString().split('T')[0]}
                     className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.travelDate ? 'border-red-500' : 'border-gray-300'
+                      errors.checkIn ? 'border-red-500' : 'border-gray-300'
                     }`}
                   />
-                  {errors.travelDate && (
-                    <p className="text-red-500 text-sm mt-1">{errors.travelDate}</p>
+                  {errors.checkIn && (
+                    <p className="text-red-500 text-sm mt-1">{errors.checkIn}</p>
                   )}
                 </div>
 
+                <div>
+                  <label htmlFor="checkOut" className="block body-regular font-semibold mb-2">
+                    Check-out Date *
+                  </label>
+                  <input
+                    type="date"
+                    id="checkOut"
+                    name="checkOut"
+                    value={formData.checkOut}
+                    onChange={handleInputChange}
+                    min={formData.checkIn || new Date().toISOString().split('T')[0]}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.checkOut ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                  />
+                  {errors.checkOut && (
+                    <p className="text-red-500 text-sm mt-1">{errors.checkOut}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Number of People */}
+              <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="numberOfPeople" className="block body-regular font-semibold mb-2">
                     Number of Guests *
