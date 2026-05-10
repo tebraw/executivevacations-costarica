@@ -1,6 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    fetch('/.netlify/functions/get-bookings')
+      .then(r => r.json())
+      .then(data => Array.isArray(data) ? setBookings(data) : [])
+      .catch(() => {});
+  }, []);
+
+  // Returns booked ranges relevant to the selected villa (or all if none selected)
+  const getBlockedRanges = () => {
+    return bookings.filter(b => {
+      if (!selectedVilla) return true;
+      return Array.isArray(b.villas) && b.villas.includes(selectedVilla.name);
+    }).map(b => ({ start: b.startDate, end: b.endDate }));
+  };
+
+  const rangeOverlapsBlocked = (checkIn, checkOut) => {
+    if (!checkIn || !checkOut) return null;
+    const ranges = getBlockedRanges();
+    return ranges.find(r => checkIn < r.end && checkOut > r.start) || null;
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,16 +40,30 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    
+    const updated = { ...formData, [name]: value };
+    setFormData(updated);
+
+    // Clear existing error for this field
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+
+    // Live booking conflict check on date changes
+    if (name === 'checkIn' || name === 'checkOut') {
+      const cin = name === 'checkIn' ? value : formData.checkIn;
+      const cout = name === 'checkOut' ? value : formData.checkOut;
+      if (cin && cout) {
+        const conflict = rangeOverlapsBlocked(cin, cout);
+        if (conflict) {
+          setErrors(prev => ({
+            ...prev,
+            checkIn: `These dates overlap an existing booking (${conflict.start} – ${conflict.end})`,
+            checkOut: ' '
+          }));
+        } else {
+          setErrors(prev => ({ ...prev, checkIn: '', checkOut: '' }));
+        }
+      }
     }
   };
 
@@ -55,6 +92,13 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
       newErrors.checkOut = 'Check-out date is required';
     } else if (formData.checkIn && formData.checkOut <= formData.checkIn) {
       newErrors.checkOut = 'Check-out must be after check-in';
+    }
+
+    if (formData.checkIn && formData.checkOut && formData.checkOut > formData.checkIn) {
+      const conflict = rangeOverlapsBlocked(formData.checkIn, formData.checkOut);
+      if (conflict) {
+        newErrors.checkIn = `These dates overlap an existing booking (${conflict.start} – ${conflict.end})`;
+      }
     }
     
     if (!formData.numberOfPeople) {
@@ -311,6 +355,16 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
                   )}
                 </div>
               </div>
+
+              {/* Blocked dates notice */}
+              {getBlockedRanges().length > 0 && (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+                  <span className="font-semibold">Already booked{selectedVilla ? ` for ${selectedVilla.name}` : ''}:</span>{' '}
+                  {getBlockedRanges().map((r, i) => (
+                    <span key={i} className="inline-block mr-2">{r.start} – {r.end}{i < getBlockedRanges().length - 1 ? ',' : ''}</span>
+                  ))}
+                </div>
+              )}
 
               {/* Number of People */}
               <div className="grid md:grid-cols-2 gap-6">
