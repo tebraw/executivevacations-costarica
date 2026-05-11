@@ -41,7 +41,7 @@ const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
       name: 'Private Catamaran Tour',
       description: 'Sail along the stunning Costa Rican coast during golden hour. Includes snorkeling, drinks, and unforgettable sunset views.',
       duration: '3 hours',
-      image: getImagePath('images/activities/Design ohne Titel (56).png'),
+      image: getImagePath('images/activities/Design ohne Titel (56).webp'),
       highlights: ['Open bar included', 'Snorkeling gear provided', 'Light snacks served']
     },
     {
@@ -73,7 +73,7 @@ const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
       name: 'Private Air Charter Service',
       description: 'Fly directly to your paradise! Our exclusive private air charter service brings you from SJO or LIR to Tambor Private Airstrip - just 20 minutes from Palicio Tropical, Palicio Musical, and The View House. Skip the long drive and arrive refreshed, enjoying personalized VIP service and flexible scheduling tailored to your travel needs.',
       duration: '45-60 minutes',
-      image: getImagePath('images/activities/privateaircharter.jpeg'),
+      image: getImagePath('images/activities/privateaircharter.webp'),
       highlights: ['20 min to villas', 'Direct to Tambor Airstrip', 'VIP concierge service'],      isService: true
     },
     {

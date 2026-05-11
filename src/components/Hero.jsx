@@ -7,7 +7,7 @@ const Hero = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: `url('${import.meta.env.BASE_URL}images/hero-bg.png')`,
+          backgroundImage: `url('${import.meta.env.BASE_URL}images/hero-bg.webp')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center center'
         }}
