@@ -1,5 +1,4 @@
 import { Resend } from 'resend';
-import twilio from 'twilio';
 
 
 /**
@@ -60,6 +59,7 @@ export async function sendSms(toPhone, message) {
     return;
   }
 
+  const { default: twilio } = await import('twilio');
   const client = twilio(accountSid, authToken);
   await client.messages.create({
     body: message,
