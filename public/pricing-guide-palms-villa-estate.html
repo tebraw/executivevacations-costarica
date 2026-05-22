@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Palms Villa Estate — Pricing Guide | Executive Vacations</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #b8972e;
+      --gold-light: #c9a96e;
+      --dark: #0f172a;
+      --text: #374151;
+      --muted: #6b7280;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f5f4f0;
+      color: var(--text);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .cover {
+      background: linear-gradient(160deg, #0f172a 0%, #1a2744 100%);
+      padding: 56px 52px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.12);
+      top: -120px; right: -120px;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.08);
+      bottom: -80px; left: -60px;
+    }
+
+    .cover-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 48px; position: relative; z-index: 1; }
+    .brand { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-light); }
+    .brand-sub { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+    .cover-badge { background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 6px 14px; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-light); }
+
+    .cover-hero { position: relative; z-index: 1; }
+    .cover-label { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .cover-title { font-size: 44px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 6px; }
+    .cover-subtitle { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.5); margin-bottom: 32px; letter-spacing: 0.02em; }
+
+    .cover-stats { display: flex; gap: 32px; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 22px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .stat-divider { width: 1px; background: rgba(255,255,255,0.1); align-self: stretch; }
+
+    .cover-image-bar { margin-top: 36px; height: 200px; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 6px; border-radius: 16px; overflow: hidden; position: relative; z-index: 1; }
+    .cover-image-bar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .gold-bar { height: 4px; background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold)); }
+
+    .section { padding: 36px 52px; }
+    .section + .section { border-top: 1px solid #f0ece4; }
+    .section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .section-title { font-size: 24px; font-weight: 800; color: #111; line-height: 1.2; margin-bottom: 14px; }
+    .section-body { font-size: 13px; line-height: 1.8; color: var(--text); }
+
+    .amenities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+    .amenity-item { background: #fafaf8; border: 1px solid #f0ece4; border-radius: 12px; padding: 14px 12px; text-align: center; }
+    .amenity-icon { font-size: 20px; margin-bottom: 6px; line-height: 1; }
+    .amenity-name { font-size: 10px; font-weight: 600; color: #374151; line-height: 1.4; }
+
+    .highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
+    .highlight-card { background: linear-gradient(135deg, #fef9ee, #fef3c7); border: 1px solid #fde68a; border-radius: 14px; padding: 20px 18px; }
+    .highlight-number { font-size: 28px; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+    .highlight-label { font-size: 11px; font-weight: 600; color: #92400e; line-height: 1.4; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f5f4f0; font-size: 12px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row-label { color: var(--muted); }
+    .info-row-value { font-weight: 700; color: #111; }
+
+    .activities-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .activity-tag { background: var(--dark); color: rgba(255,255,255,0.85); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+
+    @media print {
+      body { background: #fff; }
+      .page { width: 100%; margin: 0; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-top">
+      <div>
+        <div class="brand">Executive Vacations</div>
+        <div class="brand-sub">Costa Rica · Luxury Villas</div>
+      </div>
+      <div class="cover-badge">Pricing Guide 2026</div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-label">Santa Eulalia, Atenas, Costa Rica</div>
+      <div class="cover-title">The Palms<br>Villa Estate</div>
+      <div class="cover-subtitle">Mountain Villa Retreat</div>
+
+      <div class="cover-stats">
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-label">En-Suites</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value">8</div>
+          <div class="stat-label">Guests</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value">$650</div>
+          <div class="stat-label">Per Night</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value">4.95★</div>
+          <div class="stat-label">Rating</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-image-bar">
+      <img src="/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif" alt="The Palms Villa Estate" />
+      <img src="/images/villas/the-palms-villa-estate/31f4ba1b-839f-4f90-83ff-9c6dfe7e0c8b.avif" alt="The Palms Pool" />
+      <img src="/images/villas/the-palms-villa-estate/573860c1-ba80-4638-a8b4-bf0375b57abf.avif" alt="The Palms Gardens" />
+    </div>
+  </div>
+
+  <div class="gold-bar"></div>
+
+  <!-- OVERVIEW -->
+  <div class="section">
+    <div class="section-label">The Property</div>
+    <div class="section-title">Authentic Costa Rica in the Hills of Atenas</div>
+    <div class="section-body">
+      Nestled in the lush hillside of Atenas — consistently ranked among the world's best climates — The Palms Villa Estate is a beautiful 4,700 sq ft mountain retreat that offers something the coastal villas cannot: an authentic, deeply personal Costa Rican experience in a tranquil, private setting.
+
+      Four en-suite bedrooms (three upstairs with full air conditioning, one on the ground floor) accommodate up to eight guests in genuine comfort. Resort-style grounds with a private pool, tennis court, and verdant tropical gardens create an environment of total serenity. The property is lovingly maintained by a full-time resident caretaker, Don Manuel, ensuring a seamless and personal stay.
+
+      Perfect for family vacations, intimate weddings, reunions, and corporate or personal retreats — The Palms Villa Estate offers the peace and culture of Costa Rica's heartland, just 32 miles from the Pacific coast and marina.
+    </div>
+  </div>
+
+  <!-- HIGHLIGHTS -->
+  <div class="section" style="padding-top: 0; border-top: none;">
+    <div class="highlights">
+      <div class="highlight-card">
+        <div class="highlight-number">4</div>
+        <div class="highlight-label">En-Suite Bedrooms with Private Baths</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-number">4,700</div>
+        <div class="highlight-label">Square Feet of Resort-Style Living</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-number">32 mi</div>
+        <div class="highlight-label">From the Pacific Coast & Marina</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AMENITIES -->
+  <div class="section">
+    <div class="section-label">Amenities</div>
+    <div class="section-title">Everything for a Perfect Retreat</div>
+    <div class="amenities-grid">
+      <div class="amenity-item">
+        <div class="amenity-icon">🎾</div>
+        <div class="amenity-name">Private Tennis Court</div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">🏊</div>
+        <div class="amenity-name">Private Pool</div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">⛰️</div>
+        <div class="amenity-name">Mountain Views</div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">👨‍🌾</div>
+        <div class="amenity-name">Full-time Caretaker (Don Manuel)</div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">❄️</div>
+        <div class="amenity-name">Air Conditioning</div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">🌴</div>
+        <div class="amenity-name">Resort-style Tropical Grounds</div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">🌿</div>
+        <div class="amenity-name">Peaceful Private Setting</div>
+      </div>
+      <div class="amenity-item">
+        <div class="amenity-icon">📅</div>
+        <div class="amenity-name">Ideal for Events & Retreats</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPERTY INFO + LOCATION -->
+  <div class="section">
+    <div class="info-grid">
+      <div>
+        <div class="section-label">Property Details</div>
+        <div class="info-row"><span class="info-row-label">Property Type</span><span class="info-row-value">Mountain Villa Retreat</span></div>
+        <div class="info-row"><span class="info-row-label">Size</span><span class="info-row-value">4,700 sq ft</span></div>
+        <div class="info-row"><span class="info-row-label">Bedrooms</span><span class="info-row-value">4 En-Suite</span></div>
+        <div class="info-row"><span class="info-row-label">Bathrooms</span><span class="info-row-value">3.5</span></div>
+        <div class="info-row"><span class="info-row-label">Max Guests</span><span class="info-row-value">8</span></div>
+        <div class="info-row"><span class="info-row-label">Extra Sleeping</span><span class="info-row-value">Queen sofa + futon</span></div>
+      </div>
+      <div>
+        <div class="section-label">Location</div>
+        <div class="info-row"><span class="info-row-label">Region</span><span class="info-row-value">Alajuela Province</span></div>
+        <div class="info-row"><span class="info-row-label">Area</span><span class="info-row-value">Santa Eulalia, Atenas</span></div>
+        <div class="info-row"><span class="info-row-label">Country</span><span class="info-row-value">Costa Rica</span></div>
+        <div class="info-row"><span class="info-row-label">From San José Airport</span><span class="info-row-value">~45 min drive</span></div>
+        <div class="info-row"><span class="info-row-label">To Pacific Coast</span><span class="info-row-value">32 miles</span></div>
+        <div class="info-row"><span class="info-row-label">Climate</span><span class="info-row-value">Among world's best</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="section" style="background: linear-gradient(135deg, #111827, #1a2744); border-top: none;">
+    <div class="section-label" style="color: var(--gold-light);">Nightly Rate</div>
+    <div class="section-title" style="color: #fff; margin-bottom: 20px;">Pricing</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div style="background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.4); border-radius: 16px; padding: 28px;">
+        <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 10px;">Year-Round Rate</div>
+        <div style="font-size: 48px; font-weight: 800; color: #fff; line-height: 1;">$650</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 6px;">per night</div>
+        <div style="margin-top: 16px; font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.6;">
+          Consistent pricing all year — no peak surcharges. Contact us for weekly and extended stay rates.
+        </div>
+      </div>
+      <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 28px;">
+        <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 16px;">What's Included</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.7);">
+            <span style="color: var(--gold-light);">✓</span> Full-time on-site caretaker
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.7);">
+            <span style="color: var(--gold-light);">✓</span> Resort-style grounds & pool
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.7);">
+            <span style="color: var(--gold-light);">✓</span> Private tennis court
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.7);">
+            <span style="color: var(--gold-light);">✓</span> All 4 en-suite bedrooms
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.7);">
+            <span style="color: var(--gold-light);">✓</span> Air conditioning (3 rooms)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 14px; font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.6;">
+      Rates are subject to availability. Contact us for weekly rates, event packages, and group pricing.
+    </div>
+  </div>
+
+  <!-- ACTIVITIES -->
+  <div class="section">
+    <div class="section-label">Experiences &amp; Activities</div>
+    <div class="section-title">Culture, Nature & Adventure</div>
+    <div class="section-body">Atenas and the surrounding Central Valley offer a rich blend of authentic Costa Rican culture, natural wonders, and adventure — all within easy reach of the villa.</div>
+    <div class="activities-list">
+      <span class="activity-tag">🌿 Wildlife Tours</span>
+      <span class="activity-tag">☕ Coffee Plantation Tours</span>
+      <span class="activity-tag">🏍️ ATV Excursions</span>
+      <span class="activity-tag">🦅 Zip-lining</span>
+      <span class="activity-tag">🎾 Tennis on Site</span>
+      <span class="activity-tag">🏖️ Pacific Beach Day Trips</span>
+      <span class="activity-tag">🌋 Volcano Visits</span>
+      <span class="activity-tag">🧘 Yoga & Wellness</span>
+      <span class="activity-tag">🚣 White Water Rafting</span>
+      <span class="activity-tag">🏘️ Local Village Tours</span>
+    </div>
+  </div>
+
+  <!-- HOW TO BOOK -->
+  <div class="section">
+    <div class="section-label">Reservations</div>
+    <div class="section-title">How to Book</div>
+    <div class="section-body">
+      To check availability and receive a personalised quote for The Palms Villa Estate, please contact our reservations team directly. We will be happy to assist with planning your stay, transfers, activities, and any special requests.
+    </div>
+    <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+      <div style="background: var(--dark); border-radius: 14px; padding: 20px 22px;">
+        <div style="font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 8px;">Email</div>
+        <div style="font-size: 12px; font-weight: 600; color: #fff; word-break: break-all;">propertieswithmeritt@yahoo.com</div>
+      </div>
+      <div style="background: var(--dark); border-radius: 14px; padding: 20px 22px;">
+        <div style="font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 8px;">Phone</div>
+        <div style="font-size: 12px; font-weight: 600; color: #fff;">303-881-8588</div>
+      </div>
+      <div style="background: var(--dark); border-radius: 14px; padding: 20px 22px;">
+        <div style="font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 8px;">Instagram</div>
+        <div style="font-size: 12px; font-weight: 600; color: #fff;">@executive_vacations_cr</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
