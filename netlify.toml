@@ -8,7 +8,6 @@
 # Functions Directory
 [functions]
   directory = "netlify/functions"
-  node_bundler = "esbuild"
 
 # Scheduled function — daily follow-up emails/SMS at 10:00 AM UTC
 [functions."follow-up"]
