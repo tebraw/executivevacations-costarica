@@ -21,6 +21,51 @@ const VILLA_PDF_MAP = {
   'The Palms Villa Estate': '/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf',
 };
 
+const Field = ({ name, label, type = 'text', placeholder, as, form, setForm, errors }) => (
+  <div>
+    <label style={{
+      display: 'block', fontSize: '0.8rem', fontWeight: 700,
+      color: '#374151', marginBottom: '6px', fontFamily: "'DM Sans', sans-serif",
+      letterSpacing: '0.02em',
+    }}>
+      {label} <span style={{ color: GOLD }}>*</span>
+    </label>
+    {as === 'select' ? (
+      <select
+        value={form[name]}
+        onChange={e => setForm(f => ({ ...f, [name]: e.target.value }))}
+        style={{
+          ...inputStyle,
+          borderColor: errors[name] ? '#ef4444' : '#e5e7eb',
+          appearance: 'none',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'right 14px center',
+          paddingRight: '40px',
+        }}
+      >
+        <option value="">Select a villa…</option>
+        {VILLAS.map(v => <option key={v} value={v}>{v}</option>)}
+      </select>
+    ) : (
+      <input
+        type={type}
+        value={form[name]}
+        onChange={e => setForm(f => ({ ...f, [name]: e.target.value }))}
+        placeholder={placeholder}
+        style={{ ...inputStyle, borderColor: errors[name] ? '#ef4444' : '#e5e7eb' }}
+        onFocus={e => e.target.style.borderColor = GOLD}
+        onBlur={e => e.target.style.borderColor = errors[name] ? '#ef4444' : '#e5e7eb'}
+      />
+    )}
+    {errors[name] && (
+      <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '4px', fontFamily: "'DM Sans', sans-serif" }}>
+        {errors[name]}
+      </p>
+    )}
+  </div>
+);
+
 const inputStyle = {
   width: '100%',
   padding: '14px 16px',
@@ -104,50 +149,7 @@ export default function Pricing() {
     }
   };
 
-  const Field = ({ name, label, type = 'text', placeholder, as }) => (
-    <div>
-      <label style={{
-        display: 'block', fontSize: '0.8rem', fontWeight: 700,
-        color: '#374151', marginBottom: '6px', fontFamily: "'DM Sans', sans-serif",
-        letterSpacing: '0.02em',
-      }}>
-        {label} <span style={{ color: GOLD }}>*</span>
-      </label>
-      {as === 'select' ? (
-        <select
-          value={form[name]}
-          onChange={e => setForm(f => ({ ...f, [name]: e.target.value }))}
-          style={{
-            ...inputStyle,
-            borderColor: errors[name] ? '#ef4444' : '#e5e7eb',
-            appearance: 'none',
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'right 14px center',
-            paddingRight: '40px',
-          }}
-        >
-          <option value="">Select a villa…</option>
-          {VILLAS.map(v => <option key={v} value={v}>{v}</option>)}
-        </select>
-      ) : (
-        <input
-          type={type}
-          value={form[name]}
-          onChange={e => setForm(f => ({ ...f, [name]: e.target.value }))}
-          placeholder={placeholder}
-          style={{ ...inputStyle, borderColor: errors[name] ? '#ef4444' : '#e5e7eb' }}
-          onFocus={e => e.target.style.borderColor = GOLD}
-          onBlur={e => e.target.style.borderColor = errors[name] ? '#ef4444' : '#e5e7eb'}
-        />
-      )}
-      {errors[name] && (
-        <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '4px', fontFamily: "'DM Sans', sans-serif" }}>
-          {errors[name]}
-        </p>
-      )}
-    </div>
-  );
+
 
   return (
     <div className="min-h-screen" style={{ background: '#fafaf8' }}>
@@ -345,12 +347,12 @@ export default function Pricing() {
                 <form onSubmit={handleSubmit} noValidate>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                      <Field name="firstName" label="First Name" placeholder="Jane" />
-                      <Field name="lastName" label="Last Name" placeholder="Smith" />
+                      <Field name="firstName" label="First Name" placeholder="Jane" form={form} setForm={setForm} errors={errors} />
+                      <Field name="lastName" label="Last Name" placeholder="Smith" form={form} setForm={setForm} errors={errors} />
                     </div>
-                    <Field name="email" label="Email" type="email" placeholder="jane@example.com" />
-                    <Field name="phone" label="Phone" type="tel" placeholder="+1 (555) 000-0000" />
-                    <Field name="villaInterest" label="Villa of Interest" as="select" />
+                    <Field name="email" label="Email" type="email" placeholder="jane@example.com" form={form} setForm={setForm} errors={errors} />
+                    <Field name="phone" label="Phone" type="tel" placeholder="+1 (555) 000-0000" form={form} setForm={setForm} errors={errors} />
+                    <Field name="villaInterest" label="Villa of Interest" as="select" form={form} setForm={setForm} errors={errors} />
 
                     {/* Checkbox */}
                     <div>
