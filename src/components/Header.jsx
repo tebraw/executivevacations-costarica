@@ -27,6 +27,15 @@ const Header = () => {
 
           {/* Right Menu */}
           <div className="flex items-center gap-4">
+            {/* Pricing Guide Button */}
+            <Link
+              to="/pricing"
+              className="btn btn-luxury"
+              style={{ fontSize: '0.8rem', padding: '8px 16px', whiteSpace: 'nowrap' }}
+            >
+              Pricing Guide
+            </Link>
+
             {/* User Menu */}
             <div className="relative">
               <button 

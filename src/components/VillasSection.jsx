@@ -10,6 +10,7 @@ const BASE_URL = import.meta.env.BASE_URL;
 const getImagePath = (path) => `${BASE_URL}${path.startsWith('/') ? path.slice(1) : path}`;
 
 const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
+  const navigate = useNavigate();
   return (
     <div className={`card group ${isSelected ? 'ring-2 ring-luxury-gold' : ''} ${villa.isComingSoon ? 'coming-soon-card' : ''}`}>
       {villa.isComingSoon && (
@@ -117,6 +118,13 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             {isSelected ? '✓ Selected' : 'Select Villa'}
           </button>
         </div>
+        <button
+          onClick={() => navigate(`/pricing?villa=${encodeURIComponent(villa.name)}`)}
+          className="btn btn-secondary w-full mt-2"
+          style={{ fontSize: '0.78rem', letterSpacing: '0.06em' }}
+        >
+          Pricing Guide
+        </button>
       </div>
     </div>
   );
