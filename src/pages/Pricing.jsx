@@ -13,6 +13,13 @@ const VILLAS = [
   'Multiple / Not sure yet',
 ];
 
+const VILLA_PDF_MAP = {
+  'Palacio Musical': '/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf',
+  'Palacio Tropical': '/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf',
+  'The View House': '/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
+  'The Palms Villa Estate': '/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf',
+};
+
 const inputStyle = {
   width: '100%',
   padding: '14px 16px',
@@ -81,11 +88,12 @@ export default function Pricing() {
     setSubmitting(false);
     setSubmitted(true);
 
-    // Trigger PDF download if URL configured
-    if (pdfUrl) {
+    // Trigger PDF download for selected villa
+    const villaPdf = VILLA_PDF_MAP[form.villaInterest] || pdfUrl;
+    if (villaPdf) {
       const a = document.createElement('a');
-      a.href = pdfUrl;
-      a.download = 'Executive-Vacations-Pricing-Guide.pdf';
+      a.href = villaPdf;
+      a.download = `Executive-Vacations-Pricing-Guide-${(form.villaInterest || 'General').replace(/[^a-zA-Z0-9]/g, '-')}.pdf`;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
       document.body.appendChild(a);
