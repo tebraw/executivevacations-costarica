@@ -27,6 +27,16 @@ const AdminDashboard = () => {
   const [blogEditMode, setBlogEditMode] = useState(false);
   const [blogDeleteConfirm, setBlogDeleteConfirm] = useState(null);
 
+  // Leads state
+  const [leads, setLeads] = useState([]);
+  const [leadsLoading, setLeadsLoading] = useState(false);
+  const [leadsDeleteConfirm, setLeadsDeleteConfirm] = useState(null);
+
+  // Settings state (PDF URL etc.)
+  const [pdfUrl, setPdfUrl] = useState('');
+  const [pdfUrlSaving, setPdfUrlSaving] = useState(false);
+  const [pdfUrlSaved, setPdfUrlSaved] = useState(false);
+
   useEffect(() => {
     loadBookings();
   }, []);
@@ -35,6 +45,7 @@ const AdminDashboard = () => {
     if (activeTab === 'reviews') loadAllReviews();
     if (activeTab === 'qr') loadQrStats();
     if (activeTab === 'blog') loadBlogPosts();
+    if (activeTab === 'leads') { loadLeads(); loadPdfUrl(); }
   }, [activeTab]);
 
   const loadQrStats = async () => {
@@ -58,6 +69,64 @@ const AdminDashboard = () => {
       if (res.ok) setBlogPosts(await res.json());
     } catch { setBlogPosts([]); }
     setBlogLoading(false);
+  };
+
+  const loadLeads = async () => {
+    setLeadsLoading(true);
+    try {
+      const res = await fetch('/.netlify/functions/get-leads');
+      if (res.ok) setLeads(await res.json());
+    } catch { setLeads([]); }
+    setLeadsLoading(false);
+  };
+
+  const handleDeleteLead = async (id) => {
+    try {
+      const res = await fetch('/.netlify/functions/delete-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) { setLeads(prev => prev.filter(l => l.id !== id)); setLeadsDeleteConfirm(null); }
+      else alert('Failed to delete lead.');
+    } catch { alert('Failed to delete lead.'); }
+  };
+
+  const loadPdfUrl = async () => {
+    try {
+      const res = await fetch('/.netlify/functions/get-settings');
+      if (res.ok) { const data = await res.json(); if (data.pricingPdfUrl) setPdfUrl(data.pricingPdfUrl); }
+    } catch (_) {}
+  };
+
+  const handleSavePdfUrl = async () => {
+    setPdfUrlSaving(true);
+    try {
+      await fetch('/.netlify/functions/save-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pricingPdfUrl: pdfUrl }),
+      });
+      setPdfUrlSaved(true);
+      setTimeout(() => setPdfUrlSaved(false), 2500);
+    } catch (_) {}
+    setPdfUrlSaving(false);
+  };
+
+  const exportLeadsCsv = () => {
+    if (!leads.length) return;
+    const headers = ['Date', 'First Name', 'Last Name', 'Email', 'Phone', 'Villa Interest'];
+    const rows = leads.map(l => [
+      new Date(l.createdAt).toLocaleDateString('en-US'),
+      l.firstName, l.lastName, l.email, l.phone, l.villaInterest,
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'leads.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const resetBlogForm = () => {
@@ -333,6 +402,17 @@ const AdminDashboard = () => {
             style={activeTab === 'blog' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
           >
             📝 Blog
+          </button>
+          <button
+            onClick={() => setActiveTab('leads')}
+            className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+              activeTab === 'leads'
+                ? 'text-white shadow-md'
+                : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-400'
+            }`}
+            style={activeTab === 'leads' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
+          >
+            📋 Leads
           </button>
         </div>
 
@@ -866,6 +946,140 @@ const AdminDashboard = () => {
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+        {activeTab === 'leads' && (
+          <div className="space-y-6 max-w-5xl mx-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Pricing Guide Leads</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Customers who requested the pricing brochure — {leads.length} total
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={exportLeadsCsv}
+                  disabled={!leads.length}
+                  className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-gray-400 transition-all flex items-center gap-2 disabled:opacity-40"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                  </svg>
+                  Export CSV
+                </button>
+                <button
+                  onClick={loadLeads}
+                  disabled={leadsLoading}
+                  className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-gray-400 transition-all flex items-center gap-2"
+                >
+                  <svg className={`w-3.5 h-3.5 ${leadsLoading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                  </svg>
+                  Refresh
+                </button>
+              </div>
+            </div>
+
+            {/* PDF URL Setting */}
+            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+              <h3 className="font-semibold text-blue-900 mb-1 flex items-center gap-2 text-sm">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Pricing Guide PDF URL
+              </h3>
+              <p className="text-xs text-blue-700 mb-3">Upload your PDF to any hosting (e.g. Google Drive, Dropbox) and paste the direct download link here.</p>
+              <div className="flex gap-2">
+                <input
+                  type="url"
+                  value={pdfUrl}
+                  onChange={e => setPdfUrl(e.target.value)}
+                  placeholder="https://..."
+                  className="flex-1 border border-blue-200 bg-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400"
+                />
+                <button
+                  onClick={handleSavePdfUrl}
+                  disabled={pdfUrlSaving}
+                  className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all"
+                  style={{ background: pdfUrlSaved ? '#10b981' : 'linear-gradient(135deg, #c9a96e, #a07040)' }}
+                >
+                  {pdfUrlSaved ? '✓ Saved' : pdfUrlSaving ? 'Saving…' : 'Save'}
+                </button>
+              </div>
+            </div>
+
+            {/* Leads table */}
+            {leadsLoading && <div className="text-center py-12 text-gray-400 text-sm">Loading…</div>}
+
+            {!leadsLoading && leads.length === 0 && (
+              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                <div className="text-4xl mb-3">📋</div>
+                <p className="text-gray-500 font-medium">No leads yet</p>
+                <p className="text-sm text-gray-400 mt-1">Submissions from the Pricing page will appear here</p>
+              </div>
+            )}
+
+            {!leadsLoading && leads.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+                <table className="w-full text-sm min-w-[640px]">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-100">
+                      <th className="text-left px-5 py-3 font-semibold text-gray-600">Date</th>
+                      <th className="text-left px-5 py-3 font-semibold text-gray-600">Name</th>
+                      <th className="text-left px-5 py-3 font-semibold text-gray-600">Email</th>
+                      <th className="text-left px-5 py-3 font-semibold text-gray-600">Phone</th>
+                      <th className="text-left px-5 py-3 font-semibold text-gray-600">Villa Interest</th>
+                      <th className="px-5 py-3"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {leads.map(lead => (
+                      <tr key={lead.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                        <td className="px-5 py-4 text-gray-500 whitespace-nowrap text-xs">
+                          {new Date(lead.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </td>
+                        <td className="px-5 py-4 font-semibold text-gray-900 whitespace-nowrap">
+                          {lead.firstName} {lead.lastName}
+                        </td>
+                        <td className="px-5 py-4">
+                          <a href={`mailto:${lead.email}`} className="text-blue-600 hover:underline">
+                            {lead.email}
+                          </a>
+                        </td>
+                        <td className="px-5 py-4 text-gray-700 whitespace-nowrap">
+                          <a href={`tel:${lead.phone}`} className="hover:text-blue-600">
+                            {lead.phone}
+                          </a>
+                        </td>
+                        <td className="px-5 py-4">
+                          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold" style={{ background: '#fef3c7', color: '#92400e' }}>
+                            {lead.villaInterest}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4">
+                          {leadsDeleteConfirm === lead.id ? (
+                            <div className="flex items-center gap-1">
+                              <button onClick={() => handleDeleteLead(lead.id)} className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-semibold hover:bg-red-700 transition-all">Delete</button>
+                              <button onClick={() => setLeadsDeleteConfirm(null)} className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-semibold text-gray-600 hover:border-gray-400 transition-all">Cancel</button>
+                            </div>
+                          ) : (
+                            <button onClick={() => setLeadsDeleteConfirm(lead.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete lead">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                              </svg>
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
       </div>

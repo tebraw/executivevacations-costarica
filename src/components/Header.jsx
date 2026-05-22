@@ -45,6 +45,9 @@ const Header = () => {
                   <Link to="/blog" className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
                     Blog
                   </Link>
+                  <Link to="/pricing" className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
+                    Pricing Guide
+                  </Link>
                 </div>
               )}
             </div>

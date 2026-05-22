@@ -6,6 +6,7 @@ import AdminDashboard from './pages/AdminDashboard'
 import VillaDetailPage from './pages/VillaDetailPage'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
+import Pricing from './pages/Pricing'
 
 // Fires once on load to record QR-code-sourced visits (?ref=...)
 function QRTracker() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/villa/:slug" element={<VillaDetailPage />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/pricing" element={<Pricing />} />
         <Route path="/admin12345" element={<AdminDashboard />} />
       </Routes>
     </Router>
