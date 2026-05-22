@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import twilio from 'twilio';
 
+
 /**
  * Replace template variables: {firstName}, {villaInterest}, {siteUrl}
  */
@@ -10,6 +11,40 @@ export function fillTemplate(template, vars) {
     .replace(/\{lastName\}/g, vars.lastName || '')
     .replace(/\{villaInterest\}/g, vars.villaInterest || '')
     .replace(/\{siteUrl\}/g, vars.siteUrl || 'https://executivevacations.cr');
+}
+
+/**
+ * Send a WhatsApp message via Meta Cloud API
+ * Business number → admin's personal number (notification)
+ */
+export async function sendWhatsAppToAdmin(message) {
+  const token = process.env.WHATSAPP_TOKEN;
+  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  const adminWa = process.env.ADMIN_WHATSAPP_NUMBER; // e.g. 491701234567 (no + sign)
+
+  if (!token || !phoneNumberId || !adminWa) {
+    console.warn('WhatsApp env vars not set — skipping WhatsApp notification');
+    return;
+  }
+
+  const res = await fetch(`https://graph.facebook.com/v19.0/${phoneNumberId}/messages`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      messaging_product: 'whatsapp',
+      to: adminWa,
+      type: 'text',
+      text: { body: message },
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`WhatsApp API error: ${err}`);
+  }
 }
 
 /**

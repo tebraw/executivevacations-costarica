@@ -1,5 +1,5 @@
 import { getStore } from '@netlify/blobs';
-import { fillTemplate, sendSms, sendEmail } from './messaging-helpers.js';
+import { fillTemplate, sendSms, sendEmail, sendWhatsAppToAdmin } from './messaging-helpers.js';
 
 export default async (req, context) => {
   try {
@@ -62,6 +62,21 @@ export default async (req, context) => {
         const body = fillTemplate(templates.welcomeEmail.body, vars);
         await sendEmail(newLead.email, subj, body);
       }
+
+      // WhatsApp notification to admin
+      const welcomeTemplate = templates?.welcomeSms
+        ? fillTemplate(templates.welcomeSms, vars)
+        : `Hi ${newLead.firstName}! Thanks for your interest in ${newLead.villaInterest}.`;
+
+      const adminMsg =
+        `🌴 *New Pricing Lead!*\n\n` +
+        `👤 ${newLead.firstName} ${newLead.lastName}\n` +
+        `📱 ${newLead.phone}\n` +
+        `✉️ ${newLead.email}\n` +
+        `🏡 ${newLead.villaInterest}\n\n` +
+        `--- Suggested welcome message ---\n${welcomeTemplate}`;
+
+      await sendWhatsAppToAdmin(adminMsg);
     } catch (msgErr) {
       console.error('Messaging error (non-fatal):', msgErr);
     }
