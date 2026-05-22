@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,6 +42,9 @@ const Header = () => {
                   <a href="#contact" className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={handleContact}>
                     Contact
                   </a>
+                  <Link to="/blog" className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
+                    Blog
+                  </Link>
                 </div>
               )}
             </div>

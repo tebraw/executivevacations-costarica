@@ -15,6 +15,17 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('bookings');
   const [reviews, setReviews] = useState([]);
   const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [qrStats, setQrStats] = useState({});
+  const [qrStatsLoading, setQrStatsLoading] = useState(false);
+  const [newQrRef, setNewQrRef] = useState('');
+
+  // Blog state
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [blogLoading, setBlogLoading] = useState(false);
+  const [blogSaving, setBlogSaving] = useState(false);
+  const [blogForm, setBlogForm] = useState({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0] });
+  const [blogEditMode, setBlogEditMode] = useState(false);
+  const [blogDeleteConfirm, setBlogDeleteConfirm] = useState(null);
 
   useEffect(() => {
     loadBookings();
@@ -22,7 +33,76 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (activeTab === 'reviews') loadAllReviews();
+    if (activeTab === 'qr') loadQrStats();
+    if (activeTab === 'blog') loadBlogPosts();
   }, [activeTab]);
+
+  const loadQrStats = async () => {
+    setQrStatsLoading(true);
+    try {
+      const res = await fetch('/.netlify/functions/get-qr-stats');
+      if (res.ok) {
+        const data = await res.json();
+        setQrStats(data);
+      }
+    } catch {
+      setQrStats({});
+    }
+    setQrStatsLoading(false);
+  };
+
+  const loadBlogPosts = async () => {
+    setBlogLoading(true);
+    try {
+      const res = await fetch('/.netlify/functions/get-blog-posts');
+      if (res.ok) setBlogPosts(await res.json());
+    } catch { setBlogPosts([]); }
+    setBlogLoading(false);
+  };
+
+  const resetBlogForm = () => {
+    setBlogForm({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0] });
+    setBlogEditMode(false);
+  };
+
+  const handleBlogSave = async () => {
+    if (!blogForm.title.trim() || !blogForm.text.trim()) return;
+    setBlogSaving(true);
+    try {
+      const res = await fetch('/.netlify/functions/save-blog-post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(blogForm),
+      });
+      if (res.ok) { await loadBlogPosts(); resetBlogForm(); }
+      else alert('Failed to save post.');
+    } catch { alert('Failed to save post.'); }
+    setBlogSaving(false);
+  };
+
+  const handleBlogDelete = async (id) => {
+    try {
+      const res = await fetch('/.netlify/functions/delete-blog-post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) { await loadBlogPosts(); setBlogDeleteConfirm(null); }
+      else alert('Failed to delete post.');
+    } catch { alert('Failed to delete post.'); }
+  };
+
+  const handleBlogEdit = (post) => {
+    setBlogForm({
+      id: post.id,
+      title: post.title,
+      text: post.text,
+      imageUrl: post.imageUrl || '',
+      date: post.date ? post.date.split('T')[0] : new Date().toISOString().split('T')[0],
+    });
+    setBlogEditMode(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const loadBookings = async () => {
     setLoading(true);
@@ -232,6 +312,28 @@ const AdminDashboard = () => {
           >
             ⭐ Reviews
           </button>
+          <button
+            onClick={() => setActiveTab('qr')}
+            className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+              activeTab === 'qr'
+                ? 'text-white shadow-md'
+                : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-400'
+            }`}
+            style={activeTab === 'qr' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
+          >
+            📱 QR Tracking
+          </button>
+          <button
+            onClick={() => setActiveTab('blog')}
+            className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+              activeTab === 'blog'
+                ? 'text-white shadow-md'
+                : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-400'
+            }`}
+            style={activeTab === 'blog' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
+          >
+            📝 Blog
+          </button>
         </div>
 
         {activeTab === 'bookings' && (
@@ -407,6 +509,363 @@ const AdminDashboard = () => {
                 </table>
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'qr' && (
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">QR Code Tracking</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Track how many visitors arrive via your printed QR codes
+                </p>
+              </div>
+              <button
+                onClick={loadQrStats}
+                disabled={qrStatsLoading}
+                className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:border-gray-400 transition-all duration-200 flex items-center gap-2"
+              >
+                <svg
+                  className={`w-4 h-4 ${qrStatsLoading ? 'animate-spin' : ''}`}
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                {qrStatsLoading ? 'Loading…' : 'Refresh'}
+              </button>
+            </div>
+
+            {/* How it works */}
+            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+              <h3 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                How it works
+              </h3>
+              <p className="text-sm text-blue-800 mb-3">
+                Point your QR code to a URL with a <code className="bg-blue-100 px-1 rounded">?ref=</code> parameter.
+                Every scan is automatically counted here in the admin.
+              </p>
+              <p className="text-sm text-blue-700 font-mono break-all">
+                {window.location.origin}/?ref=flyer
+              </p>
+              <p className="text-xs text-blue-600 mt-1">
+                You can use any name after <code>ref=</code> — e.g. <em>flyer-may</em>, <em>hotel-lobby</em>, <em>magazine</em>
+              </p>
+            </div>
+
+            {/* Generate new QR code */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h3 className="font-semibold text-gray-900 mb-4">Generate a QR Code</h3>
+              <div className="flex gap-3 items-end flex-wrap">
+                <div className="flex-1 min-w-48">
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+                    Reference name
+                  </label>
+                  <input
+                    type="text"
+                    value={newQrRef}
+                    onChange={e => setNewQrRef(e.target.value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 50))}
+                    placeholder="e.g. flyer, hotel-lobby"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                  />
+                </div>
+                <div className="text-sm text-gray-400 pb-2.5">→</div>
+                <div className="flex-1 min-w-48">
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+                    Tracking URL
+                  </label>
+                  <div className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-600 bg-gray-50 font-mono break-all">
+                    {newQrRef
+                      ? `${window.location.origin}/?ref=${newQrRef}`
+                      : <span className="text-gray-400 italic">Enter a name above</span>}
+                  </div>
+                </div>
+              </div>
+
+              {newQrRef && (
+                <div className="mt-6 flex flex-col sm:flex-row items-start gap-6">
+                  <div className="flex flex-col items-center gap-2">
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(window.location.origin + '/?ref=' + newQrRef)}&margin=10`}
+                      alt={`QR code for ref=${newQrRef}`}
+                      className="rounded-xl border border-gray-200 shadow"
+                      width={180}
+                      height={180}
+                    />
+                    <a
+                      href={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(window.location.origin + '/?ref=' + newQrRef)}&margin=10`}
+                      download={`qr-${newQrRef}.png`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-blue-600 hover:underline"
+                    >
+                      ↓ Download high-res PNG
+                    </a>
+                  </div>
+                  <div className="text-sm text-gray-600 space-y-2 pt-1">
+                    <p className="font-semibold text-gray-800">Ready to print!</p>
+                    <p>Scan the QR code or print it on your flyer.</p>
+                    <p>Every visit from this code will be counted under <strong>{newQrRef}</strong> in the table below.</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Stats table */}
+            {qrStatsLoading && (
+              <div className="text-center py-16 text-gray-400">Loading stats…</div>
+            )}
+
+            {!qrStatsLoading && Object.keys(qrStats).length === 0 && (
+              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                <div className="text-5xl mb-4">📱</div>
+                <p className="text-gray-500 font-medium">No QR visits tracked yet</p>
+                <p className="text-sm text-gray-400 mt-1">Scans will appear here automatically</p>
+              </div>
+            )}
+
+            {!qrStatsLoading && Object.keys(qrStats).length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-100">
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">QR / Ref</th>
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Total Scans</th>
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Today</th>
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Last 7 Days</th>
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Last Scan</th>
+                      <th className="text-left px-6 py-3 font-semibold text-gray-600">Tracking URL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(qrStats)
+                      .sort((a, b) => b[1].total - a[1].total)
+                      .map(([ref, data]) => {
+                        const today = new Date().toISOString().split('T')[0];
+                        const todayCount = data.daily?.[today] || 0;
+                        const last7 = Array.from({ length: 7 }, (_, i) => {
+                          const d = new Date();
+                          d.setDate(d.getDate() - i);
+                          return data.daily?.[d.toISOString().split('T')[0]] || 0;
+                        }).reduce((a, b) => a + b, 0);
+                        const trackingUrl = `${window.location.origin}/?ref=${ref}`;
+                        return (
+                          <tr key={ref} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                            <td className="px-6 py-4">
+                              <span
+                                className="inline-block px-3 py-1 rounded-full text-xs font-bold"
+                                style={{ background: '#fef3c7', color: '#92400e' }}
+                              >
+                                {ref}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-2xl font-bold text-gray-900">{data.total}</span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`font-semibold ${todayCount > 0 ? 'text-green-600' : 'text-gray-400'}`}>
+                                {todayCount}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="font-semibold text-gray-700">{last7}</span>
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
+                              {data.lastVisit
+                                ? new Date(data.lastVisit).toLocaleDateString('en-US', {
+                                    month: 'short', day: 'numeric', year: 'numeric',
+                                    hour: '2-digit', minute: '2-digit'
+                                  })
+                                : '—'}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="font-mono text-xs text-gray-500 break-all">{trackingUrl}</span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'blog' && (
+          <div className="space-y-8 max-w-3xl mx-auto">
+            {/* Form */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-5">
+                {blogEditMode ? '✏️ Edit Post' : '✍️ New Blog Post'}
+              </h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Title *</label>
+                  <input
+                    type="text"
+                    value={blogForm.title}
+                    onChange={e => setBlogForm(f => ({ ...f, title: e.target.value }))}
+                    placeholder="Enter post title"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Date</label>
+                    <input
+                      type="date"
+                      value={blogForm.date}
+                      onChange={e => setBlogForm(f => ({ ...f, date: e.target.value }))}
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Image URL (optional)</label>
+                    <input
+                      type="url"
+                      value={blogForm.imageUrl}
+                      onChange={e => setBlogForm(f => ({ ...f, imageUrl: e.target.value }))}
+                      placeholder="https://..."
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                    />
+                  </div>
+                </div>
+                {blogForm.imageUrl && (
+                  <div className="rounded-xl overflow-hidden border border-gray-100" style={{ maxHeight: '200px' }}>
+                    <img src={blogForm.imageUrl} alt="preview" className="w-full object-cover" style={{ maxHeight: '200px' }} />
+                  </div>
+                )}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Text *</label>
+                  <textarea
+                    value={blogForm.text}
+                    onChange={e => setBlogForm(f => ({ ...f, text: e.target.value }))}
+                    placeholder="Write your post here… Use blank lines to separate paragraphs."
+                    rows={10}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 resize-y"
+                  />
+                </div>
+                <div className="flex gap-3 justify-end pt-1">
+                  {blogEditMode && (
+                    <button
+                      onClick={resetBlogForm}
+                      className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:border-gray-400 transition-all"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                  <button
+                    onClick={handleBlogSave}
+                    disabled={blogSaving || !blogForm.title.trim() || !blogForm.text.trim()}
+                    className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-50"
+                    style={{ background: 'linear-gradient(135deg, #c9a96e, #a07040)' }}
+                  >
+                    {blogSaving ? 'Saving…' : blogEditMode ? 'Save Changes' : 'Publish Post'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Post list */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-gray-900">
+                  Published Posts ({blogPosts.length})
+                </h3>
+                <button
+                  onClick={loadBlogPosts}
+                  disabled={blogLoading}
+                  className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-gray-400 transition-all flex items-center gap-2"
+                >
+                  <svg className={`w-3.5 h-3.5 ${blogLoading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Refresh
+                </button>
+              </div>
+
+              {blogLoading && <div className="text-center py-10 text-gray-400 text-sm">Loading…</div>}
+
+              {!blogLoading && blogPosts.length === 0 && (
+                <div className="text-center py-14 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                  <div className="text-4xl mb-3">📝</div>
+                  <p className="text-gray-500 text-sm font-medium">No posts yet. Create your first one above!</p>
+                </div>
+              )}
+
+              {!blogLoading && blogPosts.length > 0 && (
+                <div className="space-y-3">
+                  {blogPosts.map(post => {
+                    const d = new Date(post.date);
+                    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    const excerpt = post.text.length > 120 ? post.text.slice(0, 120) + '…' : post.text;
+                    return (
+                      <div
+                        key={post.id}
+                        className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex gap-0"
+                        style={{ minHeight: '96px' }}
+                      >
+                        {post.imageUrl && (
+                          <div style={{ width: '100px', flexShrink: 0, overflow: 'hidden' }}>
+                            <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" style={{ height: '100%' }} />
+                          </div>
+                        )}
+                        <div className="flex-1 px-5 py-4 flex items-center gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#b8972e' }}>{dateStr}</div>
+                            <div className="font-bold text-gray-900 text-sm leading-snug mb-1">{post.title}</div>
+                            <div className="text-xs text-gray-500 leading-relaxed">{excerpt}</div>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <button
+                              onClick={() => handleBlogEdit(post)}
+                              className="p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-all"
+                              title="Edit post"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                            </button>
+                            {blogDeleteConfirm === post.id ? (
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => handleBlogDelete(post.id)}
+                                  className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-semibold hover:bg-red-700 transition-all"
+                                >
+                                  Delete
+                                </button>
+                                <button
+                                  onClick={() => setBlogDeleteConfirm(null)}
+                                  className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-semibold text-gray-600 hover:border-gray-400 transition-all"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() => setBlogDeleteConfirm(post.id)}
+                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                                title="Delete post"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <polyline points="3 6 5 6 21 6"/>
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
