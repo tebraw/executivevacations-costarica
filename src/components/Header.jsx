@@ -20,10 +20,10 @@ const Header = () => {
       <div className="container">
         <div className="flex items-center justify-between" style={{ height: '80px' }}>
           {/* Logo */}
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center" style={{ textDecoration: 'none' }}>
             <h1 className="heading-3 text-dark">Executive Vacations</h1>
             <span className="text-luxury ml-2">Costa Rica</span>
-          </div>
+          </Link>
 
           {/* Right Menu */}
           <div className="flex items-center gap-4">
