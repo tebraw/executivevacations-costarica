@@ -1,6 +1,8 @@
 {
   "type": "module",
   "dependencies": {
-    "@netlify/blobs": "^8.1.0"
+    "@netlify/blobs": "^8.1.0",
+    "resend": "^6.12.3",
+    "twilio": "^6.0.2"
   }
 }

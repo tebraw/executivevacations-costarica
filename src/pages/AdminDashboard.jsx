@@ -37,6 +37,12 @@ const AdminDashboard = () => {
   const [pdfUrlSaving, setPdfUrlSaving] = useState(false);
   const [pdfUrlSaved, setPdfUrlSaved] = useState(false);
 
+  // Messages / templates state
+  const [msgTemplates, setMsgTemplates] = useState(null);
+  const [msgLoading, setMsgLoading] = useState(false);
+  const [msgSaving, setMsgSaving] = useState(false);
+  const [msgSaved, setMsgSaved] = useState(false);
+
   useEffect(() => {
     loadBookings();
   }, []);
@@ -46,7 +52,31 @@ const AdminDashboard = () => {
     if (activeTab === 'qr') loadQrStats();
     if (activeTab === 'blog') loadBlogPosts();
     if (activeTab === 'leads') { loadLeads(); loadPdfUrl(); }
+    if (activeTab === 'messages') loadMsgTemplates();
   }, [activeTab]);
+
+  const loadMsgTemplates = async () => {
+    setMsgLoading(true);
+    try {
+      const res = await fetch('/.netlify/functions/get-message-templates');
+      if (res.ok) setMsgTemplates(await res.json());
+    } catch {}
+    setMsgLoading(false);
+  };
+
+  const saveMsgTemplates = async () => {
+    setMsgSaving(true);
+    setMsgSaved(false);
+    try {
+      const res = await fetch('/.netlify/functions/save-message-templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(msgTemplates),
+      });
+      if (res.ok) { setMsgSaved(true); setTimeout(() => setMsgSaved(false), 3000); }
+    } catch {}
+    setMsgSaving(false);
+  };
 
   const loadQrStats = async () => {
     setQrStatsLoading(true);
@@ -413,6 +443,17 @@ const AdminDashboard = () => {
             style={activeTab === 'leads' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
           >
             📋 Leads
+          </button>
+          <button
+            onClick={() => setActiveTab('messages')}
+            className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+              activeTab === 'messages'
+                ? 'text-white shadow-md'
+                : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-400'
+            }`}
+            style={activeTab === 'messages' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
+          >
+            ✉️ Messages
           </button>
         </div>
 
@@ -1229,6 +1270,136 @@ const AdminDashboard = () => {
             )}
           </div>
         )}
+
+        {activeTab === 'messages' && (
+          <div className="space-y-6 max-w-3xl mx-auto">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Message Templates</h2>
+              <p className="text-sm text-gray-500 mt-1">Customize the SMS and email messages sent to leads. Use <code className="bg-gray-100 px-1 rounded">{'{firstName}'}</code>, <code className="bg-gray-100 px-1 rounded">{'{villaInterest}'}</code>, <code className="bg-gray-100 px-1 rounded">{'{siteUrl}'}</code> as placeholders.</p>
+            </div>
+
+            {msgLoading && <div className="text-center py-12 text-gray-400 text-sm">Loading templates…</div>}
+
+            {!msgLoading && msgTemplates && (
+              <div className="space-y-5">
+                {/* Follow-up delay setting */}
+                <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+                  <label className="block text-xs font-semibold text-blue-800 mb-1 uppercase tracking-wide">Follow-up delay (days after sign-up)</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={30}
+                    value={msgTemplates.followUpDelayDays || 3}
+                    onChange={e => setMsgTemplates(t => ({ ...t, followUpDelayDays: parseInt(e.target.value) || 3 }))}
+                    className="w-20 border border-blue-200 bg-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400"
+                  />
+                </div>
+
+                {/* Welcome SMS */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xl">📱</span>
+                    <h3 className="font-bold text-gray-900">Welcome SMS</h3>
+                    <span className="ml-auto text-xs text-gray-400">Sent immediately after sign-up</span>
+                  </div>
+                  <textarea
+                    rows={4}
+                    value={msgTemplates.welcomeSms || ''}
+                    onChange={e => setMsgTemplates(t => ({ ...t, welcomeSms: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 resize-y"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">{(msgTemplates.welcomeSms || '').length} chars (keep under 160 for 1 SMS)</p>
+                </div>
+
+                {/* Welcome Email */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xl">✉️</span>
+                    <h3 className="font-bold text-gray-900">Welcome Email</h3>
+                    <span className="ml-auto text-xs text-gray-400">Sent immediately after sign-up</span>
+                  </div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Subject</label>
+                  <input
+                    type="text"
+                    value={msgTemplates.welcomeEmail?.subject || ''}
+                    onChange={e => setMsgTemplates(t => ({ ...t, welcomeEmail: { ...t.welcomeEmail, subject: e.target.value } }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 mb-3"
+                  />
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Body</label>
+                  <textarea
+                    rows={8}
+                    value={msgTemplates.welcomeEmail?.body || ''}
+                    onChange={e => setMsgTemplates(t => ({ ...t, welcomeEmail: { ...t.welcomeEmail, body: e.target.value } }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 resize-y"
+                  />
+                </div>
+
+                {/* Follow-up SMS */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xl">📱</span>
+                    <h3 className="font-bold text-gray-900">Follow-up SMS</h3>
+                    <span className="ml-auto text-xs text-gray-400">Sent after {msgTemplates.followUpDelayDays || 3} days</span>
+                  </div>
+                  <textarea
+                    rows={4}
+                    value={msgTemplates.followUpSms || ''}
+                    onChange={e => setMsgTemplates(t => ({ ...t, followUpSms: e.target.value }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 resize-y"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">{(msgTemplates.followUpSms || '').length} chars (keep under 160 for 1 SMS)</p>
+                </div>
+
+                {/* Follow-up Email */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xl">✉️</span>
+                    <h3 className="font-bold text-gray-900">Follow-up Email</h3>
+                    <span className="ml-auto text-xs text-gray-400">Sent after {msgTemplates.followUpDelayDays || 3} days</span>
+                  </div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Subject</label>
+                  <input
+                    type="text"
+                    value={msgTemplates.followUpEmail?.subject || ''}
+                    onChange={e => setMsgTemplates(t => ({ ...t, followUpEmail: { ...t.followUpEmail, subject: e.target.value } }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 mb-3"
+                  />
+                  <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Body</label>
+                  <textarea
+                    rows={8}
+                    value={msgTemplates.followUpEmail?.body || ''}
+                    onChange={e => setMsgTemplates(t => ({ ...t, followUpEmail: { ...t.followUpEmail, body: e.target.value } }))}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 resize-y"
+                  />
+                </div>
+
+                {/* Webhook info box */}
+                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5">
+                  <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2 text-sm">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    SMS Reply Webhook (Twilio setup)
+                  </h3>
+                  <p className="text-xs text-gray-600 mb-2">In your Twilio Console, set the Messaging webhook URL to:</p>
+                  <code className="block text-xs bg-white border border-gray-200 rounded-lg px-3 py-2 break-all">
+                    {window.location.origin}/.netlify/functions/sms-reply
+                  </code>
+                  <p className="text-xs text-gray-500 mt-2">When a lead replies to your SMS, you'll receive a notification email at your ADMIN_EMAIL address.</p>
+                </div>
+
+                <div className="flex justify-end pt-2">
+                  <button
+                    onClick={saveMsgTemplates}
+                    disabled={msgSaving}
+                    className="px-8 py-3 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-50"
+                    style={{ background: msgSaved ? '#10b981' : 'linear-gradient(135deg, #c9a96e, #a07040)' }}
+                  >
+                    {msgSaved ? '✓ Saved!' : msgSaving ? 'Saving…' : 'Save Templates'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <BookingModal
@@ -1866,6 +2037,7 @@ const AdminDashboard = () => {
           { id: 'qr', icon: '📱', label: 'QR' },
           { id: 'blog', icon: '📝', label: 'Blog' },
           { id: 'leads', icon: '📋', label: 'Leads' },
+          { id: 'messages', icon: '✉️', label: 'Messages' },
         ].map(tab => (
           <button
             key={tab.id}
