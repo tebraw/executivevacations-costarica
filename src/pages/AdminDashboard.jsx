@@ -306,11 +306,11 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
-        <div className="container py-6">
+        <div className="container py-3 md:py-6">
           <div className="flex items-center justify-between">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-luxury-gold rounded-xl flex items-center justify-center">
+              <div className="flex items-center gap-3 mb-0 md:mb-2">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-luxury-gold rounded-xl flex items-center justify-center">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                     <line x1="16" y1="2" x2="16" y2="6"/>
@@ -318,11 +318,11 @@ const AdminDashboard = () => {
                     <line x1="3" y1="10" x2="21" y2="10"/>
                   </svg>
                 </div>
-                <h1 className="heading-2 text-dark">Booking Calendar</h1>
+                <h1 className="text-base md:text-2xl font-bold text-dark">Admin Dashboard</h1>
               </div>
-              <p className="body-regular text-gray">Manage villa reservations and bookings</p>
+              <p className="body-regular text-gray hidden md:block">Manage villa reservations and bookings</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-3">
               <button
                 onClick={cleanupInvalidBookings}
                 className="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2 text-sm">
@@ -356,9 +356,9 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="container py-8">
+      <div className="container py-8 pb-24 md:pb-8">
         {/* Tab switcher */}
-        <div className="flex gap-2 mb-8">
+        <div className="hidden md:flex flex-wrap gap-2 mb-8">
           <button
             onClick={() => setActiveTab('bookings')}
             className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
@@ -418,6 +418,23 @@ const AdminDashboard = () => {
 
         {activeTab === 'bookings' && (
           <>
+            {/* Mobile-only action bar */}
+            <div className="md:hidden flex gap-2 mb-4">
+              <button
+                onClick={cleanupInvalidBookings}
+                className="flex-1 flex items-center justify-center gap-1 px-3 py-2.5 bg-red-50 text-red-600 border border-red-200 rounded-xl text-xs font-semibold active:scale-95 transition-all"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                Cleanup
+              </button>
+              <button
+                onClick={() => setShowICalModal(true)}
+                className="flex-1 flex items-center justify-center gap-1 px-3 py-2.5 bg-blue-50 text-blue-600 border border-blue-200 rounded-xl text-xs font-semibold active:scale-95 transition-all"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                iCal Link
+              </button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
               <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center gap-3">
@@ -500,7 +517,49 @@ const AdminDashboard = () => {
             )}
 
             {!reviewsLoading && reviews.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <>
+                {/* Mobile: Card list */}
+                <div className="md:hidden space-y-3">
+                  {reviews.map((review) => (
+                    <div
+                      key={`${review.villaName}-${review.id}-mob`}
+                      className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4"
+                      style={!review.approved ? { background: '#fffbeb', borderColor: '#fde68a' } : {}}
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {review.approved ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold" style={{ background: '#d1fae5', color: '#065f46' }}>✓ Live</span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold" style={{ background: '#fef3c7', color: '#92400e' }}>⏳ Pending</span>
+                          )}
+                          <span className="inline-block px-2 py-0.5 rounded-full text-xs font-bold" style={{ background: '#fef3c7', color: '#92400e' }}>{review.villaName}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          {!review.approved && (
+                            <button onClick={() => handleApproveReview(review.villaName, review.id)} className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all" title="Approve">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                            </button>
+                          )}
+                          <button onClick={() => handleDeleteReview(review.villaName, review.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="font-semibold text-gray-900 text-sm mb-1">{review.name}</div>
+                      <div className="mb-2">
+                        <span className="text-yellow-500">{'★'.repeat(review.rating)}</span>
+                        <span className="text-gray-300">{'★'.repeat(5 - review.rating)}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 leading-relaxed">{review.text}</p>
+                      {review.createdAt && (
+                        <p className="text-xs text-gray-400 mt-2">{new Date(review.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {/* Desktop: Table */}
+              <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
@@ -588,6 +647,7 @@ const AdminDashboard = () => {
                   </tbody>
                 </table>
               </div>
+              </>
             )}
           </div>
         )}
@@ -710,7 +770,52 @@ const AdminDashboard = () => {
             )}
 
             {!qrStatsLoading && Object.keys(qrStats).length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <>
+                {/* Mobile: QR Stats Cards */}
+                <div className="md:hidden space-y-3">
+                  {Object.entries(qrStats)
+                    .sort((a, b) => b[1].total - a[1].total)
+                    .map(([ref, data]) => {
+                      const today = new Date().toISOString().split('T')[0];
+                      const todayCount = data.daily?.[today] || 0;
+                      const last7 = Array.from({ length: 7 }, (_, i) => {
+                        const d = new Date();
+                        d.setDate(d.getDate() - i);
+                        return data.daily?.[d.toISOString().split('T')[0]] || 0;
+                      }).reduce((a, b) => a + b, 0);
+                      const trackingUrl = `${window.location.origin}/?ref=${ref}`;
+                      return (
+                        <div key={ref} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold" style={{ background: '#fef3c7', color: '#92400e' }}>{ref}</span>
+                            <span className="text-2xl font-bold text-gray-900">{data.total} <span className="text-sm font-normal text-gray-400">scans</span></span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 mb-3">
+                            <div className="bg-gray-50 rounded-xl p-3 text-center">
+                              <div className={`text-xl font-bold ${todayCount > 0 ? 'text-green-600' : 'text-gray-400'}`}>{todayCount}</div>
+                              <div className="text-xs text-gray-500">Today</div>
+                            </div>
+                            <div className="bg-gray-50 rounded-xl p-3 text-center">
+                              <div className="text-xl font-bold text-gray-700">{last7}</div>
+                              <div className="text-xs text-gray-500">Last 7 days</div>
+                            </div>
+                          </div>
+                          {data.lastVisit && (
+                            <p className="text-xs text-gray-400 mb-3">Last scan: {new Date(data.lastVisit).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                          )}
+                          <div className="flex items-center gap-2">
+                            <code className="text-xs text-gray-500 break-all flex-1">{trackingUrl}</code>
+                            <button
+                              onClick={() => navigator.clipboard.writeText(trackingUrl)}
+                              className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 flex-shrink-0"
+                            >Copy</button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+                {/* Desktop: QR Stats Table */}
+              <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
@@ -772,6 +877,7 @@ const AdminDashboard = () => {
                   </tbody>
                 </table>
               </div>
+              </>
             )}
           </div>
         )}
@@ -1023,7 +1129,47 @@ const AdminDashboard = () => {
             )}
 
             {!leadsLoading && leads.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+              <>
+                {/* Mobile: Leads Cards */}
+                <div className="md:hidden space-y-3">
+                  {leads.map(lead => (
+                    <div key={lead.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div>
+                          <div className="font-bold text-gray-900 text-sm">{lead.firstName} {lead.lastName}</div>
+                          <div className="text-xs text-gray-400 mt-0.5">{new Date(lead.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                        </div>
+                        <span className="inline-block px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0" style={{ background: '#fef3c7', color: '#92400e' }}>{lead.villaInterest}</span>
+                      </div>
+                      <div className="space-y-1.5 mb-3">
+                        <a href={`mailto:${lead.email}`} className="flex items-center gap-2 text-sm text-blue-600 hover:underline">
+                          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                          {lead.email}
+                        </a>
+                        {lead.phone && (
+                          <a href={`tel:${lead.phone}`} className="flex items-center gap-2 text-sm text-gray-700 hover:text-blue-600">
+                            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            {lead.phone}
+                          </a>
+                        )}
+                      </div>
+                      <div className="flex justify-end">
+                        {leadsDeleteConfirm === lead.id ? (
+                          <div className="flex items-center gap-1">
+                            <button onClick={() => handleDeleteLead(lead.id)} className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-semibold">Delete</button>
+                            <button onClick={() => setLeadsDeleteConfirm(null)} className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-semibold text-gray-600">Cancel</button>
+                          </div>
+                        ) : (
+                          <button onClick={() => setLeadsDeleteConfirm(lead.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete lead">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {/* Desktop: Leads Table */}
+              <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
                 <table className="w-full text-sm min-w-[640px]">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
@@ -1079,6 +1225,7 @@ const AdminDashboard = () => {
                   </tbody>
                 </table>
               </div>
+              </>
             )}
           </div>
         )}
@@ -1709,6 +1856,42 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Mobile Bottom Navigation Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex md:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        {[
+          { id: 'bookings', icon: '📅', label: 'Bookings' },
+          { id: 'reviews', icon: '⭐', label: 'Reviews' },
+          { id: 'qr', icon: '📱', label: 'QR' },
+          { id: 'blog', icon: '📝', label: 'Blog' },
+          { id: 'leads', icon: '📋', label: 'Leads' },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-all"
+            style={activeTab === tab.id ? { color: '#b8972e' } : { color: '#9ca3af' }}
+          >
+            <span className="text-xl leading-none">{tab.icon}</span>
+            <span className="text-[10px] font-semibold leading-none mt-0.5">{tab.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      {/* Mobile FAB — New Booking */}
+      {activeTab === 'bookings' && (
+        <button
+          className="fixed z-50 md:hidden flex items-center justify-center rounded-full shadow-xl"
+          style={{ bottom: '76px', right: '16px', width: '56px', height: '56px', background: 'linear-gradient(135deg, #c9a96e, #a07040)' }}
+          onClick={() => { setEditingBooking(null); setIsModalOpen(true); }}
+          aria-label="New Booking"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
       )}
     </div>
   );
