@@ -136,7 +136,7 @@ export default function Pricing() {
     // Also submit to Netlify Forms so email notifications fire automatically
     try {
       const firstName = form.firstName.trim();
-      const welcomeMessage = `Hi ${firstName}! 🌴 Thanks for your interest in Executive Vacations Costa Rica. We'll send you our exclusive pricing guide shortly. Questions? Reply anytime! — Executive Vacations CR`;
+      const welcomeMessage = `Hi ${firstName}! 🌴 Thank you for your interest in Executive Vacations Costa Rica!\n\nYour exclusive pricing guide is on its way. In the meantime, we'd love to jump on a quick 15-minute call to answer any questions and help you find the perfect villa for your trip.\n\n📞 Book your free call here: https://executivevacations.net/contact\n\nLooking forward to making your Costa Rica experience unforgettable!\n\n— The Executive Vacations CR Team`;
       const formData = new URLSearchParams();
       formData.append('form-name', 'pricing-lead');
       formData.append('firstName', firstName);
