@@ -17,7 +17,7 @@ const villas = [
     pricing: { low: 2400, high: 3200 },
     hasChristmasSpecial: true,
     images: [
-      "/images/villas/palacio-tropical/palaciotropical-469.exterior_1.webp",
+      "/images/villas/palacio-tropical/ChatGPT Image May 23, 2026, 07_17_57 PM.png",
       "/images/villas/palacio-tropical/palaciotropical.dronephoto-03.webp",
       "/images/villas/palacio-tropical/palaciotropical-518.exterior.webp"
     ],
