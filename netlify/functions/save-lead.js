@@ -77,6 +77,27 @@ export default async (req, context) => {
         `--- Suggested welcome message ---\n${welcomeTemplate}`;
 
       await sendWhatsAppToAdmin(adminMsg);
+
+      // Email notification to all admin addresses
+      const notificationEmails = [
+        'grujicic.filip17@gmail.com',
+        'propertieswithmeritt@yahoo.com',
+        ...(process.env.ADMIN_EMAIL ? [process.env.ADMIN_EMAIL] : []),
+      ].filter((v, i, a) => v && a.indexOf(v) === i); // deduplicate
+
+      const notifSubject = `🌴 New Pricing Lead — ${newLead.firstName} ${newLead.lastName}`;
+      const notifBody =
+        `New pricing guide request received!\n\n` +
+        `Name: ${newLead.firstName} ${newLead.lastName}\n` +
+        `Email: ${newLead.email}\n` +
+        `Phone: ${newLead.phone}\n` +
+        `Villa Interest: ${newLead.villaInterest}\n` +
+        `Submitted: ${new Date(newLead.createdAt).toLocaleString('en-US')}\n\n` +
+        `--- Suggested welcome message ---\n${welcomeTemplate}`;
+
+      for (const recipient of notificationEmails) {
+        await sendEmail(recipient, notifSubject, notifBody, newLead.email);
+      }
     } catch (msgErr) {
       console.error('Messaging error (non-fatal):', msgErr);
     }
