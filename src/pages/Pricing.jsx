@@ -7,14 +7,15 @@ const GOLD = '#b8972e';
 const GOLD_LIGHT = '#c9a96e';
 
 const VILLAS = [
+  'All Villas',
   'Palacio Musical',
   'Palacio Tropical',
   'The View House',
   'The Palms Villa Estate',
-  'Multiple / Not sure yet',
 ];
 
 const VILLA_PDF_MAP = {
+  'All Villas': '/pdfs/All Villas — Pricing Guide _ Executive Vacations.pdf',
   'Palacio Musical': '/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf',
   'Palacio Tropical': '/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf',
   'The View House': '/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
@@ -87,7 +88,7 @@ export default function Pricing() {
     lastName: '',
     email: '',
     phone: '',
-    villaInterest: searchParams.get('villa') || '',
+    villaInterest: searchParams.get('villa') || 'All Villas',
     agreed: false,
   });
   const [errors, setErrors] = useState({});
@@ -321,9 +322,7 @@ export default function Pricing() {
                   fontFamily: "'DM Sans', sans-serif", color: '#6b7280',
                   fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '28px',
                 }}>
-                  {pdfUrl
-                    ? 'Your pricing guide is downloading now. Our team will be in touch shortly.'
-                    : 'Your request has been received. Our team will send you the pricing guide and be in touch shortly.'}
+                  {'Your pricing guide has been downloaded. Our team will be in touch with you soon!'}
                 </p>
                 {pdfUrl && (
                   <a
