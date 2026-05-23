@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing Guide Cover</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .card {
+      width: 320px;
+      background: linear-gradient(160deg, #0f172a 0%, #1a2744 60%, #0f172a 100%);
+      border: 2px solid #c9a96e;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.6);
+      position: relative;
+    }
+
+    /* Decorative circles */
+    .card::before {
+      content: '';
+      position: absolute;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.12);
+      top: -80px; left: -80px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.08);
+      bottom: -50px; right: -50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card-image {
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+    }
+    .card-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(15,23,42,0.75) 100%);
+    }
+
+    .card-body {
+      padding: 32px 28px 40px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .divider {
+      width: 44px;
+      height: 2px;
+      background: linear-gradient(to right, #b8972e, #c9a96e);
+      margin: 0 auto 20px;
+    }
+
+    .title {
+      font-weight: 800;
+      font-size: 2rem;
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-image">
+      <img src="public/images/villas/palacio-musical/ChatGPT Image May 23, 2026, 07_14_19 PM.png" alt="Luxury Villa" 
+           onerror="this.style.background='#1a2744';this.style.height='220px';" />
+      <div class="card-image-overlay"></div>
+    </div>
+    <div class="card-body">
+      <p class="label">Executive Vacations</p>
+      <div class="divider"></div>
+      <p class="title">Pricing<br>Guide</p>
+      <p class="subtitle">Luxury Villas · Costa Rica</p>
+    </div>
+  </div>
+</body>
+</html>

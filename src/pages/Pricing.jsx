@@ -248,7 +248,7 @@ export default function Pricing() {
               {/* Villa image */}
               <div style={{ height: '200px', overflow: 'hidden', position: 'relative' }}>
                 <img
-                  src="/images/villas/palacio-musical/1. ChatGPT Image Feb 27, 2026, 03_39_10 PM.webp"
+                  src="/images/villas/palacio-musical/ChatGPT Image May 23, 2026, 07_14_19 PM.png"
                   alt="Executive Vacations Pricing Guide"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                   onError={e => { e.target.style.display = 'none'; }}
