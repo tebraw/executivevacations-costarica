@@ -1,6 +1,6 @@
 [build]
   # Build Command
-  command = "npm run build"
+  command = "npm install && cd netlify/functions && npm install && cd ../.. && npm run build"
   
   # Publish Directory (the built output)
   publish = "dist"
