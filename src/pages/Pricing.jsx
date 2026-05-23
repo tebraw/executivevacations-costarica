@@ -132,6 +132,22 @@ export default function Pricing() {
         }),
       });
     } catch (_) {}
+
+    // Also submit to Netlify Forms so email notifications fire automatically
+    try {
+      const formData = new URLSearchParams();
+      formData.append('form-name', 'pricing-lead');
+      formData.append('firstName', form.firstName.trim());
+      formData.append('lastName', form.lastName.trim());
+      formData.append('email', form.email.trim());
+      formData.append('phone', form.phone.trim());
+      formData.append('villaInterest', form.villaInterest || 'Not specified');
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString(),
+      });
+    } catch (_) {}
     setSubmitting(false);
     setSubmitted(true);
 
