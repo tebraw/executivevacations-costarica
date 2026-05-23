@@ -135,13 +135,16 @@ export default function Pricing() {
 
     // Also submit to Netlify Forms so email notifications fire automatically
     try {
+      const firstName = form.firstName.trim();
+      const welcomeMessage = `Hi ${firstName}! 🌴 Thanks for your interest in Executive Vacations Costa Rica. We'll send you our exclusive pricing guide shortly. Questions? Reply anytime! — Executive Vacations CR`;
       const formData = new URLSearchParams();
       formData.append('form-name', 'pricing-lead');
-      formData.append('firstName', form.firstName.trim());
+      formData.append('firstName', firstName);
       formData.append('lastName', form.lastName.trim());
       formData.append('email', form.email.trim());
       formData.append('phone', form.phone.trim());
       formData.append('villaInterest', form.villaInterest || 'Not specified');
+      formData.append('welcomeMessage', welcomeMessage);
       await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
