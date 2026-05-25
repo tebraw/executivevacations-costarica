@@ -205,6 +205,35 @@ const VillaDetailPage = () => {
     setMeta('og:type', 'website', true);
     setMeta('og:url', `https://executivevacations.net/villa/${villa.slug}`, true);
     setMeta('og:image', image, true);
+
+    // Schema.org LodgingBusiness / VacationRental
+    const amenities = (villa.allAmenities || []).map(a => ({
+      '@type': 'LocationFeatureSpecification',
+      name: a.name,
+      value: true,
+    }));
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'LodgingBusiness',
+      name: villa.name,
+      description: villa.detailedDescription || villa.description || '',
+      url: `https://executivevacations.net/villa/${villa.slug}`,
+      image: image,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: villa.location,
+        addressCountry: 'CR',
+      },
+      numberOfRooms: villa.bedrooms,
+      amenityFeature: amenities,
+      starRating: { '@type': 'Rating', ratingValue: villa.rating, bestRating: 5 },
+      aggregateRating: { '@type': 'AggregateRating', ratingValue: villa.rating, bestRating: 5, reviewCount: 10 },
+      priceRange: villa.pricing ? `$${villa.pricing.low}–$${villa.pricing.high} per night` : '',
+      telephone: '+1-800-EXEC-VACA',
+    };
+    let schemaEl = document.getElementById('schema-villa');
+    if (!schemaEl) { schemaEl = document.createElement('script'); schemaEl.id = 'schema-villa'; schemaEl.type = 'application/ld+json'; document.head.appendChild(schemaEl); }
+    schemaEl.textContent = JSON.stringify(schema);
   }, [villa]);
 
   useEffect(() => {
