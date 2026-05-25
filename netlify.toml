@@ -9,6 +9,14 @@
 [functions]
   directory = "netlify/functions"
 
+# Edge Functions Directory
+[edge_functions]
+  directory = "netlify/edge-functions"
+
+[[edge_functions]]
+  path = "/blog/*"
+  function = "blog-og"
+
 # Scheduled function — daily follow-up emails/SMS at 10:00 AM UTC
 [functions."follow-up"]
   schedule = "0 10 * * *"
