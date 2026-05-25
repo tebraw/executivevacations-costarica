@@ -28,6 +28,30 @@ export default function BlogPost() {
       .catch(() => { setNotFound(true); setLoading(false); });
   }, [postId]);
 
+  // SEO meta injection — must be before early returns (Rules of Hooks)
+  useEffect(() => {
+    if (!post) return;
+    const metaTitle = post.metaTitle || post.title + ' | Executive Vacations Costa Rica';
+    const metaDesc = post.metaDesc || 'Executive Vacations Costa Rica — luxury private villa rentals. ' + post.title;
+    const canonicalUrl = `https://executivevacations.net/blog/${post.slug}-${post.id}`;
+    document.title = metaTitle;
+    const setMeta = (name, content, prop = false) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel);
+      if (!el) { el = document.createElement('meta'); prop ? el.setAttribute('property', name) : el.setAttribute('name', name); document.head.appendChild(el); }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', metaDesc);
+    setMeta('og:title', metaTitle, true);
+    setMeta('og:description', metaDesc, true);
+    setMeta('og:url', canonicalUrl, true);
+    if (post.imageUrl) setMeta('og:image', post.imageUrl, true);
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
+    canonical.setAttribute('href', canonicalUrl);
+    return () => { document.title = 'Executive Vacations Costa Rica - Luxury Villa Rentals'; };
+  }, [post]);
+
   if (loading) {
     return (
       <div className="min-h-screen" style={{ background: '#fafaf8' }}>
@@ -58,7 +82,7 @@ export default function BlogPost() {
   // Render paragraphs from double-newlines
   const paragraphs = post.text.split(/\n\n+/).filter(Boolean);
 
-  // SEO
+  // SEO values for render
   const metaTitle = post.metaTitle || post.title + ' | Executive Vacations Costa Rica';
   const metaDesc = post.metaDesc || 'Executive Vacations Costa Rica — luxury private villa rentals. ' + post.title;
   const wordCount = post.text.split(/\s+/).length;
@@ -78,26 +102,6 @@ export default function BlogPost() {
     keywords: post.focusKeyword || 'luxury villa Costa Rica, private villa rental Costa Rica',
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
   });
-
-  // Inject meta tags into document head
-  useEffect(() => {
-    document.title = metaTitle;
-    const setMeta = (name, content, prop = false) => {
-      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
-      let el = document.querySelector(sel);
-      if (!el) { el = document.createElement('meta'); prop ? el.setAttribute('property', name) : el.setAttribute('name', name); document.head.appendChild(el); }
-      el.setAttribute('content', content);
-    };
-    setMeta('description', metaDesc);
-    setMeta('og:title', metaTitle, true);
-    setMeta('og:description', metaDesc, true);
-    setMeta('og:url', canonicalUrl, true);
-    if (post.imageUrl) setMeta('og:image', post.imageUrl, true);
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
-    canonical.setAttribute('href', canonicalUrl);
-    return () => { document.title = 'Executive Vacations Costa Rica - Luxury Villa Rentals'; };
-  }, [post]);
 
   return (
     <div className="min-h-screen" style={{ background: '#fafaf8' }}>
