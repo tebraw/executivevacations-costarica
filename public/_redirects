@@ -1,3 +1,4 @@
 # SPA fallback - Functions are automatically excluded by Netlify
+/sitemap.xml  /.netlify/functions/sitemap-xml  200
 /pricing-guide-view-house.html  /pricing-guide-view-house.html  200
 /*  /index.html  200

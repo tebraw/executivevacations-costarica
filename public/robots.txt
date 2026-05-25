@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Block admin panel from indexing
+Disallow: /admin12345
+Disallow: /.netlify/
+
+Sitemap: https://executivevacations.net/sitemap.xml
