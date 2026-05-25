@@ -29,7 +29,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
       <div className="relative overflow-hidden rounded-lg">
         <img 
           src={getImagePath(villa.images[0])} 
-          alt={villa.name}
+          alt={`${villa.name} - ${villa.type} in ${villa.location}, Costa Rica`}
           className="card-image" loading="lazy"
         />
 

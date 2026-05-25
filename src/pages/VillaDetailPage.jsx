@@ -305,7 +305,7 @@ const VillaDetailPage = () => {
                 style={{ gridRow:'span 2 / span 2', position:'relative', cursor:'pointer', overflow:'hidden' }}
                 onMouseEnter={e => e.currentTarget.querySelector('img').style.transform='scale(1.03)'}
                 onMouseLeave={e => e.currentTarget.querySelector('img').style.transform='scale(1)'}>
-                <img src={getImagePath(images[0])} alt={villa.name}
+                <img src={getImagePath(images[0])} alt={`${villa.name} luxury villa exterior in ${villa.location}, Costa Rica`}
                   style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.7s ease', display:'block' }} />
               </div>
               {/* Top-right */}
@@ -314,7 +314,7 @@ const VillaDetailPage = () => {
                   style={{ position:'relative', cursor:'pointer', overflow:'hidden' }}
                   onMouseEnter={e => e.currentTarget.querySelector('img').style.transform='scale(1.03)'}
                   onMouseLeave={e => e.currentTarget.querySelector('img').style.transform='scale(1)'}>
-                  <img src={getImagePath(images[1])} alt=""
+                  <img src={getImagePath(images[1])} alt={`${villa.name} villa interior view - luxury accommodation Costa Rica`}
                     style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.7s ease', display:'block' }} />
                 </div>
               )}
@@ -324,7 +324,7 @@ const VillaDetailPage = () => {
                   style={{ position:'relative', cursor:'pointer', overflow:'hidden' }}
                   onMouseEnter={e => e.currentTarget.querySelector('img').style.transform='scale(1.03)'}
                   onMouseLeave={e => e.currentTarget.querySelector('img').style.transform='scale(1)'}>
-                  <img src={getImagePath(images[2])} alt=""
+                  <img src={getImagePath(images[2])} alt={`${villa.name} pool and outdoor area - private villa ${villa.location}`}
                     style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.7s ease', display:'block' }} />
                 </div>
               )}
@@ -351,7 +351,7 @@ const VillaDetailPage = () => {
               style={{ aspectRatio:'4/3' }}
               onClick={() => openLightbox(currentImageIndex)}
               onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-              <img src={getImagePath(images[currentImageIndex])} alt={villa.name}
+              <img src={getImagePath(images[currentImageIndex])} alt={`${villa.name} - photo ${currentImageIndex + 1} - luxury villa in ${villa.location}, Costa Rica`}
                 style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover' }}
                 loading="eager" draggable={false} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
@@ -794,7 +794,7 @@ const VillaDetailPage = () => {
             {lightboxImageIndex + 1} / {images.length}
           </div>
 
-          <img src={getImagePath(images[lightboxImageIndex])} alt={`${villa.name} ${lightboxImageIndex + 1}`}
+          <img src={getImagePath(images[lightboxImageIndex])} alt={`${villa.name} luxury villa photo ${lightboxImageIndex + 1} of ${images.length} - ${villa.location}, Costa Rica`}
             onClick={(e) => e.stopPropagation()}
             style={{ display:'block', maxWidth:'95vw', maxHeight:'90vh', width:'auto', height:'auto', borderRadius:'8px', cursor:'default' }}
             draggable={false} />
