@@ -12,7 +12,7 @@ function toSlug(title) {
 export default async (req, context) => {
   try {
     const body = await req.json();
-    const { id, title, text, imageUrl, date } = body;
+    const { id, title, text, imageUrl, date, metaTitle, metaDesc, focusKeyword } = body;
 
     if (!title || !title.trim() || !text || !text.trim()) {
       return new Response(JSON.stringify({ error: 'Title and text are required' }), {
@@ -26,6 +26,9 @@ export default async (req, context) => {
     const safeText = text.trim().slice(0, 20000);
     const safeImageUrl = imageUrl && imageUrl.trim().startsWith('http') ? imageUrl.trim().slice(0, 2000) : '';
     const safeDate = date && !isNaN(Date.parse(date)) ? new Date(date).toISOString() : new Date().toISOString();
+    const safeMetaTitle = (metaTitle || '').trim().slice(0, 60);
+    const safeMetaDesc = (metaDesc || '').trim().slice(0, 155);
+    const safeFocusKeyword = (focusKeyword || '').trim().slice(0, 100);
 
     const store = getStore('blog-posts');
     const existing = await store.get('all-posts');
@@ -47,6 +50,9 @@ export default async (req, context) => {
         text: safeText,
         imageUrl: safeImageUrl,
         date: safeDate,
+        metaTitle: safeMetaTitle,
+        metaDesc: safeMetaDesc,
+        focusKeyword: safeFocusKeyword,
         updatedAt: new Date().toISOString(),
       };
     } else {
@@ -58,6 +64,9 @@ export default async (req, context) => {
         text: safeText,
         imageUrl: safeImageUrl,
         date: safeDate,
+        metaTitle: safeMetaTitle,
+        metaDesc: safeMetaDesc,
+        focusKeyword: safeFocusKeyword,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };

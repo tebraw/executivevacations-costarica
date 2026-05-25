@@ -23,7 +23,61 @@ const AdminDashboard = () => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [blogLoading, setBlogLoading] = useState(false);
   const [blogSaving, setBlogSaving] = useState(false);
-  const [blogForm, setBlogForm] = useState({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0] });
+  const [blogForm, setBlogForm] = useState({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0], metaTitle: '', metaDesc: '', focusKeyword: '' });
+
+  const BLOG_TEMPLATES = [
+    { label: '— Load a template —', value: '' },
+    {
+      label: 'How much does a luxury villa in Costa Rica cost?',
+      value: {
+        title: 'How Much Does a Luxury Villa in Costa Rica Cost? (2026 Guide)',
+        metaTitle: 'Luxury Villa Cost in Costa Rica 2026 | Executive Vacations',
+        metaDesc: 'Wondering what a luxury villa in Costa Rica costs? Discover exact rates for private villas with pools, ocean views & concierge service. Get your free pricing guide.',
+        focusKeyword: 'luxury villa Costa Rica cost',
+        text: `How Much Does a Luxury Villa in Costa Rica Cost? (2026 Guide)\n\nCosta Rica has become one of the world\'s most sought-after luxury travel destinations — and private villa rentals are at the heart of that experience. But what does it actually cost to stay in a luxury villa in Costa Rica? In this guide, we break down everything you need to know.\n\nWhat Affects the Price of a Luxury Villa in Costa Rica?\n\nSeveral factors influence the nightly or weekly rate of a private villa:\n\n• Size and number of bedrooms (our villas range from 5 to 7+ bedrooms)\n• Location — beachfront properties like Palacio Tropical command a premium\n• Season — peak season (December–April) rates are higher than low season\n• Included services — full staff, concierge, private chef, and security\n• Amenities — infinity pools, home theatres, gym, and ocean views\n\nOur Villa Rates at Executive Vacations Costa Rica\n\nWe manage four exclusive luxury villas in Costa Rica, each offering a unique experience:\n\nPalacio Tropical — Our flagship beachfront villa in Tambor, Puntarenas. With 7 bedrooms, a private beach, and full staff, this is the ultimate Costa Rica escape. Rates from $2,400/night in low season.\n\nPalacio Musical — A stunning private estate with panoramic views and a resort-style pool. Perfect for groups and families. Rates from $1,500/night.\n\nThe View House — Perched above the jungle with breathtaking ocean views. An intimate luxury retreat for smaller groups. Rates from $1,200/night.\n\nThe Palms Villa Estate — A spacious villa surrounded by lush tropical gardens with a large private pool. Rates from $1,100/night.\n\nIs a Luxury Villa in Costa Rica Worth It?\n\nAbsolutely. When you divide the cost among your group, a private villa often works out cheaper than booking multiple hotel rooms — and offers an infinitely better experience. You get complete privacy, your own pool, a full kitchen, and personalized service that no hotel can match.\n\nHow to Get Our Exact Pricing\n\nOur rates vary by season, villa, and group size. The best way to get accurate pricing is to download our free Pricing Guide — it includes exact rates, availability calendars, and everything you need to plan your trip.\n\nDownload your free Pricing Guide at executivevacations.net/pricing and let our team help you plan the perfect Costa Rica getaway.`,
+      },
+    },
+    {
+      label: 'Best time to visit Costa Rica for a villa vacation',
+      value: {
+        title: 'Best Time to Visit Costa Rica for a Luxury Villa Vacation',
+        metaTitle: 'Best Time to Visit Costa Rica for a Villa Vacation | Executive Vacations',
+        metaDesc: 'Planning a luxury villa vacation in Costa Rica? Discover the best months to visit, weather patterns, and how to get the best rates at private villas.',
+        focusKeyword: 'best time to visit Costa Rica luxury villa',
+        text: `Best Time to Visit Costa Rica for a Luxury Villa Vacation\n\nCosta Rica is a year-round destination — but the timing of your trip can make a big difference in your experience and your budget. Here\'s everything you need to know about the best time to visit Costa Rica for a luxury villa vacation.\n\nDry Season (December – April): Peak Luxury Travel\n\nThe dry season is the most popular time to visit Costa Rica, and for good reason. You can expect:\n\n• Sunny skies and low humidity\n• Perfect beach conditions\n• Vibrant wildlife activity\n• Ideal conditions for outdoor dining and pool time\n\nThis is peak season, so villa rates are at their highest and availability is limited. We recommend booking at least 3–4 months in advance for December and January stays.\n\nGreen Season (May – November): The Hidden Gem\n\nCosta Rica\'s green season is one of the best-kept secrets in luxury travel. While there is more rainfall, it typically comes in afternoon showers that leave mornings bright and evenings dramatic. The benefits are compelling:\n\n• Lower villa rates (up to 25% savings)\n• Lush, vibrant landscapes at their most beautiful\n• Fewer tourists — complete privacy and tranquility\n• Excellent surf conditions\n• Spectacular sunsets\n\nFor travellers who value privacy and value, the green season offers the ultimate luxury villa experience.\n\nOur Villa Availability\n\nAt Executive Vacations Costa Rica, our four luxury villas — Palacio Tropical, Palacio Musical, The View House, and The Palms Villa Estate — are available year-round. Each villa includes a private pool, concierge service, and full amenities regardless of season.\n\nReady to Plan Your Trip?\n\nDownload our free Pricing Guide at executivevacations.net/pricing to see exact rates by season and check availability for your preferred dates.`,
+      },
+    },
+    {
+      label: '7 reasons to choose a private villa over a hotel in Costa Rica',
+      value: {
+        title: '7 Reasons to Choose a Private Villa Over a Hotel in Costa Rica',
+        metaTitle: 'Private Villa vs Hotel in Costa Rica | Executive Vacations',
+        metaDesc: '7 compelling reasons why a private luxury villa in Costa Rica beats any hotel. Privacy, value, service, and an unforgettable experience await.',
+        focusKeyword: 'private villa vs hotel Costa Rica',
+        text: `7 Reasons to Choose a Private Villa Over a Hotel in Costa Rica\n\nWhen planning a luxury trip to Costa Rica, the choice between a hotel and a private villa can define your entire experience. Here are seven compelling reasons why discerning travellers choose a private villa every time.\n\n1. Complete Privacy\n\nA private villa is yours — entirely. No crowded lobbies, no shared pools, no strangers at the next table. Just you, your group, and paradise.\n\n2. Your Own Private Pool\n\nEvery villa in our collection features a private infinity pool or resort-style pool. Swim at midnight, have breakfast poolside, or host a sunset cocktail hour — on your schedule.\n\n3. Better Value for Groups\n\nWhen you divide a villa rate among 8–18 guests, the per-person cost is often less than a luxury hotel room — with a dramatically better experience included.\n\n4. Personalized Concierge Service\n\nOur team handles everything: airport transfers, chef bookings, activity arrangements, grocery stocking, and more. It\'s five-star service tailored entirely to you.\n\n5. Space to Breathe\n\nOur villas range from 5,000 to 10,500 sq ft. Multiple living areas, dining spaces, and outdoor terraces mean everyone has room to relax, gather, or find their own corner of paradise.\n\n6. Immersive Local Experience\n\nStaying in a private villa means living like a local — in a stunning home, in a real neighbourhood, with access to the Costa Rica that most tourists never see.\n\n7. Unforgettable Memories\n\nHotels are forgettable. A private villa in Costa Rica is a story you\'ll tell for the rest of your life. The sunsets, the wildlife, the laughter by the pool — it\'s irreplaceable.\n\nExplore Our Villas\n\nExecutive Vacations Costa Rica manages four exclusive private villas — Palacio Tropical, Palacio Musical, The View House, and The Palms Villa Estate. Download our free Pricing Guide at executivevacations.net/pricing to discover rates and availability.`,
+      },
+    },
+    {
+      label: 'What to do in Tambor, Costa Rica',
+      value: {
+        title: 'What to Do in Tambor, Costa Rica: The Ultimate Luxury Travel Guide',
+        metaTitle: 'What to Do in Tambor Costa Rica | Executive Vacations',
+        metaDesc: 'Discover the best activities and experiences in Tambor, Costa Rica. From beach adventures to wildlife tours — the ultimate guide for luxury villa guests.',
+        focusKeyword: 'what to do in Tambor Costa Rica',
+        text: `What to Do in Tambor, Costa Rica: The Ultimate Luxury Travel Guide\n\nTambor is one of Costa Rica\'s most beautiful and unspoiled destinations — a tranquil bay on the Nicoya Peninsula with pristine beaches, abundant wildlife, and world-class luxury. If you\'re staying at Palacio Tropical or exploring the area, here\'s your ultimate guide to Tambor.\n\nBeach & Water Activities\n\nTambor Bay is famous for its calm, warm waters and long stretches of sand. Popular activities include:\n\n• Swimming and snorkelling in the bay\n• Sport fishing for marlin, dorado, and tuna\n• Kayaking and paddleboarding\n• Sunset sailing tours\n• Whale watching (humpback whales visit from August to October)\n\nAdventure & Nature\n\nCosta Rica\'s famous biodiversity is on full display in and around Tambor:\n\n• ATV tours through jungle trails and to hidden beaches\n• Zip-lining through the rainforest canopy\n• Horseback riding on the beach\n• Wildlife watching — scarlet macaws, howler monkeys, and sea turtles\n• Curu National Wildlife Refuge — one of Costa Rica\'s most pristine protected areas\n\nGolf & Wellness\n\nThe Tango Mar resort neighbouring Palacio Tropical offers access to a 9-hole golf course and spa facilities for our villa guests.\n\nDay Trips\n\n• Montezuma — a bohemian beach town with a famous waterfall, 45 minutes away\n• Cabo Blanco Nature Reserve — Costa Rica\'s first protected area\n• Isla Tortuga — a stunning island reached by boat with white sand beaches\n\nStay at Palacio Tropical\n\nPalacio Tropical is our flagship beachfront villa in Tambor — a 7-bedroom luxury estate with a private beach, infinity pool, and full staff. It\'s the perfect base for exploring everything Tambor has to offer.\n\nDownload our free Pricing Guide at executivevacations.net/pricing to discover availability and rates.`,
+      },
+    },
+    {
+      label: 'Palacio Tropical — Costa Rica\'s finest beachfront villa',
+      value: {
+        title: 'Palacio Tropical: Costa Rica\'s Most Exclusive Beachfront Villa',
+        metaTitle: 'Palacio Tropical Beachfront Villa Costa Rica | Executive Vacations',
+        metaDesc: 'Discover Palacio Tropical — Costa Rica\'s most exclusive 7-bedroom beachfront villa in Tambor. Private beach, full staff, infinity pool & concierge service.',
+        focusKeyword: 'Palacio Tropical beachfront villa Costa Rica',
+        text: `Palacio Tropical: Costa Rica\'s Most Exclusive Beachfront Villa\n\nNestled on the shores of Tambor Bay on the Nicoya Peninsula, Palacio Tropical is the crown jewel of Executive Vacations Costa Rica — a 7-bedroom, 9.5-bathroom beachfront estate that redefines luxury in Central America.\n\nThe Villa\n\nSpanning 10,500 square feet, Palacio Tropical was designed to be a destination in itself. Every detail — from the hand-crafted furnishings to the panoramic ocean views — reflects an uncompromising commitment to luxury.\n\n• 7 bedrooms, each with its own en-suite bathroom\n• Private beachfront access on Tambor Bay\n• Resort-style infinity pool overlooking the Pacific\n• Fully equipped gourmet kitchen\n• Multiple indoor and outdoor living areas\n• Home theatre, gym, and game room\n• Lush tropical gardens\n\nThe Staff\n\nPalacio Tropical comes with a full complement of professional staff:\n\n• Private chef\n• Butler service\n• Housekeeping\n• Security\n• Concierge\n\nEverything is taken care of so you can simply enjoy your stay.\n\nThe Location\n\nTambor is one of Costa Rica\'s most beautiful and peaceful bays — sheltered, calm, and surrounded by jungle. Yet it\'s remarkably accessible: just a 25-minute flight from San José or a scenic 3-hour drive via ferry from the capital.\n\nPerfect For\n\nPalacio Tropical accommodates up to 18 guests and is ideal for:\n\n• Multi-family vacations\n• Corporate retreats and incentive trips\n• Milestone celebrations (birthdays, anniversaries, weddings)\n• Executive getaways\n\nBook Palacio Tropical\n\nAvailability for Palacio Tropical is limited, especially during peak season (December–April). Download our free Pricing Guide at executivevacations.net/pricing to check availability and get exact rates.`,
+      },
+    },
+  ];
   const [blogEditMode, setBlogEditMode] = useState(false);
   const [blogDeleteConfirm, setBlogDeleteConfirm] = useState(null);
 
@@ -160,7 +214,7 @@ const AdminDashboard = () => {
   };
 
   const resetBlogForm = () => {
-    setBlogForm({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0] });
+    setBlogForm({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0], metaTitle: '', metaDesc: '', focusKeyword: '' });
     setBlogEditMode(false);
   };
 
@@ -198,6 +252,9 @@ const AdminDashboard = () => {
       text: post.text,
       imageUrl: post.imageUrl || '',
       date: post.date ? post.date.split('T')[0] : new Date().toISOString().split('T')[0],
+      metaTitle: post.metaTitle || '',
+      metaDesc: post.metaDesc || '',
+      focusKeyword: post.focusKeyword || '',
     });
     setBlogEditMode(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -931,6 +988,22 @@ const AdminDashboard = () => {
                 {blogEditMode ? '✏️ Edit Post' : '✍️ New Blog Post'}
               </h2>
               <div className="space-y-4">
+                {/* Template loader */}
+                {!blogEditMode && (
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">📋 Load SEO Template</label>
+                    <select
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 bg-white"
+                      onChange={e => {
+                        const tpl = BLOG_TEMPLATES.find(t => t.label === e.target.value);
+                        if (tpl && tpl.value) setBlogForm(f => ({ ...f, ...tpl.value }));
+                      }}
+                    >
+                      {BLOG_TEMPLATES.map(t => <option key={t.label} value={t.label}>{t.label}</option>)}
+                    </select>
+                    <p className="text-xs text-gray-400 mt-1">Templates are pre-written and SEO-optimized — you can edit before publishing.</p>
+                  </div>
+                )}
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Title *</label>
                   <input
@@ -977,6 +1050,50 @@ const AdminDashboard = () => {
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 resize-y"
                   />
                 </div>
+
+                {/* SEO Fields */}
+                <div className="border-t border-gray-100 pt-4 space-y-3">
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">🔍 SEO Settings</p>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Focus Keyword</label>
+                    <input
+                      type="text"
+                      value={blogForm.focusKeyword}
+                      onChange={e => setBlogForm(f => ({ ...f, focusKeyword: e.target.value }))}
+                      placeholder="e.g. luxury villa Costa Rica cost"
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+                      Meta Title <span className="text-gray-400 font-normal">(shown in Google — max 60 chars)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={blogForm.metaTitle}
+                      onChange={e => setBlogForm(f => ({ ...f, metaTitle: e.target.value }))}
+                      placeholder="Leave empty to use post title"
+                      maxLength={60}
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100"
+                    />
+                    <p className="text-xs text-gray-400 mt-1">{blogForm.metaTitle.length}/60 characters</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+                      Meta Description <span className="text-gray-400 font-normal">(shown in Google — max 155 chars)</span>
+                    </label>
+                    <textarea
+                      value={blogForm.metaDesc}
+                      onChange={e => setBlogForm(f => ({ ...f, metaDesc: e.target.value }))}
+                      placeholder="A short description that appears in Google search results…"
+                      rows={3}
+                      maxLength={155}
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 resize-none"
+                    />
+                    <p className={`text-xs mt-1 ${blogForm.metaDesc.length > 140 ? 'text-orange-500' : 'text-gray-400'}`}>{blogForm.metaDesc.length}/155 characters</p>
+                  </div>
+                </div>
+
                 <div className="flex gap-3 justify-end pt-1">
                   {blogEditMode && (
                     <button

@@ -58,8 +58,51 @@ export default function BlogPost() {
   // Render paragraphs from double-newlines
   const paragraphs = post.text.split(/\n\n+/).filter(Boolean);
 
+  // SEO
+  const metaTitle = post.metaTitle || post.title + ' | Executive Vacations Costa Rica';
+  const metaDesc = post.metaDesc || 'Executive Vacations Costa Rica — luxury private villa rentals. ' + post.title;
+  const wordCount = post.text.split(/\s+/).length;
+  const readingTime = Math.max(1, Math.round(wordCount / 200));
+  const canonicalUrl = `https://executivevacations.net/blog/${post.slug}-${post.id}`;
+  const schemaJson = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: metaDesc,
+    datePublished: post.date,
+    dateModified: post.updatedAt || post.date,
+    author: { '@type': 'Organization', name: 'Executive Vacations Costa Rica', url: 'https://executivevacations.net' },
+    publisher: { '@type': 'Organization', name: 'Executive Vacations Costa Rica', url: 'https://executivevacations.net' },
+    url: canonicalUrl,
+    ...(post.imageUrl ? { image: post.imageUrl } : {}),
+    keywords: post.focusKeyword || 'luxury villa Costa Rica, private villa rental Costa Rica',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+  });
+
+  // Inject meta tags into document head
+  useEffect(() => {
+    document.title = metaTitle;
+    const setMeta = (name, content, prop = false) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel);
+      if (!el) { el = document.createElement('meta'); prop ? el.setAttribute('property', name) : el.setAttribute('name', name); document.head.appendChild(el); }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', metaDesc);
+    setMeta('og:title', metaTitle, true);
+    setMeta('og:description', metaDesc, true);
+    setMeta('og:url', canonicalUrl, true);
+    if (post.imageUrl) setMeta('og:image', post.imageUrl, true);
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
+    canonical.setAttribute('href', canonicalUrl);
+    return () => { document.title = 'Executive Vacations Costa Rica - Luxury Villa Rentals'; };
+  }, [post]);
+
   return (
     <div className="min-h-screen" style={{ background: '#fafaf8' }}>
+      {/* Schema.org structured data */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />
       <Header />
 
       {/* Hero */}
@@ -109,7 +152,7 @@ export default function BlogPost() {
             letterSpacing: '0.1em', textTransform: 'uppercase',
             color: GOLD, marginBottom: '10px', fontWeight: 600,
           }}>
-            {formatted}
+            {formatted} &nbsp;·&nbsp; {readingTime} min read
           </p>
           <h1 style={{
             fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
@@ -137,8 +180,38 @@ export default function BlogPost() {
           ))}
         </article>
 
+        {/* CTA */}
+        <div style={{
+          marginTop: '56px', padding: '40px 36px',
+          background: 'linear-gradient(135deg, #0f172a 0%, #1a2744 100%)',
+          borderRadius: '20px', textAlign: 'center',
+          border: '1px solid rgba(201,169,110,0.3)',
+        }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.75rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#c9a96e', fontWeight: 600, marginBottom: '10px' }}>
+            Executive Vacations Costa Rica
+          </p>
+          <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: '1.5rem', color: '#fff', marginBottom: '12px', lineHeight: 1.2 }}>
+            Ready to Plan Your Costa Rica Escape?
+          </h3>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", color: 'rgba(255,255,255,0.65)', fontSize: '0.95rem', marginBottom: '24px', lineHeight: 1.6 }}>
+            Download our free Pricing Guide and discover exact rates, availability, and everything you need to book your perfect villa.
+          </p>
+          <a
+            href="/pricing"
+            style={{
+              display: 'inline-block', padding: '14px 32px',
+              background: 'linear-gradient(135deg, #c9a96e, #a07040)',
+              borderRadius: '12px', color: '#fff',
+              fontFamily: "'DM Sans', sans-serif", fontWeight: 700,
+              fontSize: '0.9rem', textDecoration: 'none',
+            }}
+          >
+            Get Your Free Pricing Guide →
+          </a>
+        </div>
+
         {/* Back link */}
-        <div style={{ marginTop: '56px', paddingTop: '32px', borderTop: '1px solid #f0ece4' }}>
+        <div style={{ marginTop: '40px', paddingTop: '32px', borderTop: '1px solid #f0ece4' }}>
           <Link
             to="/blog"
             style={{
