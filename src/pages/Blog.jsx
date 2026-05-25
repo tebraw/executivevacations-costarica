@@ -106,6 +106,19 @@ export default function Blog() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    const title = 'Luxury Travel Blog — Costa Rica Villa Vacation Tips | Executive Vacations';
+    const desc = 'Explore travel tips, destination guides, and insider advice for planning your luxury villa vacation in Costa Rica.';
+    document.title = title;
+    const setMeta = (name, content, prop) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel);
+      if (!el) { el = document.createElement('meta'); prop ? el.setAttribute('property', name) : el.setAttribute('name', name); document.head.appendChild(el); }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', desc);
+    setMeta('og:title', title, true);
+    setMeta('og:description', desc, true);
+    setMeta('og:url', 'https://executivevacations.net/blog', true);
     fetch('/.netlify/functions/get-blog-posts')
       .then(r => r.ok ? r.json() : [])
       .then(data => { setPosts(Array.isArray(data) ? data : []); setLoading(false); })

@@ -16,6 +16,25 @@ function Home() {
   const [showInstructionModal, setShowInstructionModal] = useState(false);
   const [hasSeenModal, setHasSeenModal] = useState(false);
 
+  // SEO meta tags
+  useEffect(() => {
+    const title = 'Executive Vacations Costa Rica — Luxury Villa Rentals';
+    const desc = 'Discover 4 exclusive luxury villas in Costa Rica. Beachfront estates with private pools, stunning ocean views, and personalized concierge service. Book your dream vacation today.';
+    document.title = title;
+    const setMeta = (name, content, prop) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel);
+      if (!el) { el = document.createElement('meta'); prop ? el.setAttribute('property', name) : el.setAttribute('name', name); document.head.appendChild(el); }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', desc);
+    setMeta('og:title', title, true);
+    setMeta('og:description', desc, true);
+    setMeta('og:type', 'website', true);
+    setMeta('og:url', 'https://executivevacations.net/', true);
+    setMeta('og:image', 'https://executivevacations.net/images/hero-bg.webp', true);
+  }, []);
+
   // Scroll to contact section when navigated with #contact hash
   useEffect(() => {
     if (location.hash === '#contact') {

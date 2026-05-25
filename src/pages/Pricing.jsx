@@ -98,6 +98,19 @@ export default function Pricing() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    const title = 'Free Pricing Guide — Luxury Villas Costa Rica | Executive Vacations';
+    const desc = 'Download your free pricing guide for luxury villa rentals in Costa Rica. Get rates for Palacio Tropical, Palacio Musical, The View House, and The Palms Villa Estate.';
+    document.title = title;
+    const setMeta = (name, content, prop) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel);
+      if (!el) { el = document.createElement('meta'); prop ? el.setAttribute('property', name) : el.setAttribute('name', name); document.head.appendChild(el); }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', desc);
+    setMeta('og:title', title, true);
+    setMeta('og:description', desc, true);
+    setMeta('og:url', 'https://executivevacations.net/pricing', true);
     fetch('/.netlify/functions/get-settings')
       .then(r => r.ok ? r.json() : {})
       .then(data => { if (data.pricingPdfUrl) setPdfUrl(data.pricingPdfUrl); })

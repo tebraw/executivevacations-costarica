@@ -184,6 +184,29 @@ const VillaDetailPage = () => {
   };
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+
+  // SEO meta tags per villa
+  useEffect(() => {
+    if (!villa) return;
+    const title = `${villa.name} — Luxury Villa in Costa Rica | Executive Vacations`;
+    const rawDesc = villa.detailedDescription || villa.description || '';
+    const desc = rawDesc.length > 155 ? rawDesc.slice(0, 152) + '…' : rawDesc;
+    const image = villa.images && villa.images[0] ? `https://executivevacations.net${villa.images[0]}` : 'https://executivevacations.net/images/hero-bg.webp';
+    document.title = title;
+    const setMeta = (name, content, prop) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel);
+      if (!el) { el = document.createElement('meta'); prop ? el.setAttribute('property', name) : el.setAttribute('name', name); document.head.appendChild(el); }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', desc);
+    setMeta('og:title', title, true);
+    setMeta('og:description', desc, true);
+    setMeta('og:type', 'website', true);
+    setMeta('og:url', `https://executivevacations.net/villa/${villa.slug}`, true);
+    setMeta('og:image', image, true);
+  }, [villa]);
+
   useEffect(() => {
     if (!villa) return;
     getBookings().then(all => {
