@@ -18,7 +18,7 @@ function Home() {
 
   // SEO meta tags
   useEffect(() => {
-    const title = 'Executive Vacations Costa Rica — Luxury Villa Rentals';
+    const title = 'Private Luxury Villas in Costa Rica — Beachfront, Pool & Concierge | Executive Vacations';
     const desc = 'Discover 4 exclusive luxury villas in Costa Rica. Beachfront estates with private pools, stunning ocean views, and personalized concierge service. Book your dream vacation today.';
     document.title = title;
     const setMeta = (name, content, prop) => {
