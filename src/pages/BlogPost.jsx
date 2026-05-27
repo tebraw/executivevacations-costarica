@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { getSiteBrand } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 
@@ -10,6 +11,7 @@ export default function BlogPost() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const brand = getSiteBrand();
 
   // slug format: "title-slug-id" — the id is the last segment after the last dash chain
   // We stored slug as "toSlug(title)-id" so we split on "-" and the last part is numeric id
@@ -201,7 +203,7 @@ export default function BlogPost() {
             Download our free Pricing Guide and discover exact rates, availability, and everything you need to book your perfect villa.
           </p>
           <a
-            href="/pricing"
+            href={brand.pricingHref}
             style={{
               display: 'inline-block', padding: '14px 32px',
               background: 'linear-gradient(135deg, #c9a96e, #a07040)',

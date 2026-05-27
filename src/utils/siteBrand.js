@@ -3,6 +3,19 @@ const WEDDING_HOSTS = new Set([
   'www.paradiseweddingscostarica.com',
 ]);
 
+const EXECUTIVE_DOMAIN = 'https://executivevacations.net';
+const WEDDING_DOMAIN = 'https://paradiseweddingscostarica.com';
+
+function isLocalHost() {
+  const hostname = getHostname();
+  return hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
+function localUrl(pathname, brand) {
+  const query = `brand=${brand}`;
+  return pathname.includes('?') ? `${pathname}&${query}` : `${pathname}?${query}`;
+}
+
 function getHostname() {
   if (typeof window === 'undefined') return '';
   return window.location.hostname.toLowerCase();
@@ -27,6 +40,7 @@ export function isWeddingDomain() {
 
 export function getSiteBrand() {
   if (isWeddingDomain()) {
+    const homeHref = isLocalHost() ? localUrl('/', 'paradise') : `${WEDDING_DOMAIN}/`;
     return {
       key: 'wedding',
       name: 'Paradise Weddings',
@@ -34,10 +48,14 @@ export function getSiteBrand() {
       shortName: 'Paradise Weddings',
       tagline: 'Destination Weddings in Costa Rica',
       pricingLabel: 'Wedding Pricing Guide',
-      pricingPath: '/wedding-packages',
+      homeHref,
+      weddingsHref: homeHref,
+      pricingHref: isLocalHost() ? localUrl('/wedding-packages', 'paradise') : `${WEDDING_DOMAIN}/wedding-packages`,
       footerText: 'Your exclusive wedding partner in Costa Rica. We create unforgettable destination weddings in the country\'s most beautiful villas.',
     };
   }
+
+  const homeHref = isLocalHost() ? localUrl('/', 'executive') : `${EXECUTIVE_DOMAIN}/`;
 
   return {
     key: 'executive',
@@ -46,7 +64,9 @@ export function getSiteBrand() {
     shortName: 'Executive Vacations',
     tagline: 'Luxury Villas in Costa Rica',
     pricingLabel: 'Pricing Guide',
-    pricingPath: '/pricing',
+    homeHref,
+    weddingsHref: isLocalHost() ? localUrl('/', 'paradise') : `${WEDDING_DOMAIN}/`,
+    pricingHref: isLocalHost() ? localUrl('/pricing', 'executive') : `${EXECUTIVE_DOMAIN}/pricing`,
     footerText: 'Your exclusive partner for luxury vacations in Costa Rica. We provide unforgettable experiences in the country\'s most beautiful villas.',
   };
 }
