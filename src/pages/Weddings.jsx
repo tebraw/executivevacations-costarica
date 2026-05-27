@@ -5,6 +5,8 @@ import Footer from '../components/Footer';
 
 const GOLD = '#b8972e';
 const GOLD_LIGHT = '#c9a96e';
+const BRAND_BLUE = '#12203a';
+const HERO_BAR_WIDTH = 'clamp(360px, 46vw, 680px)';
 
 // Image paths - just drop files in public/images/weddings/ with these names
 const IMG = {
@@ -187,6 +189,8 @@ export default function Weddings() {
           display: 'flex',
           alignItems: 'flex-end',
           justifyContent: 'center',
+          backgroundPosition: '-260px center',
+          backgroundSize: 'cover',
         }}
       >
         {/* dark overlay */}
@@ -194,22 +198,45 @@ export default function Weddings() {
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.75) 100%)',
         }} />
-        <div style={{ position: 'relative', zIndex: 1, padding: '0 24px 100px', maxWidth: '1200px', width: '100%', margin: '0 auto' }}>
-          <div style={{ maxWidth: '580px', marginLeft: 'auto', textAlign: 'left' }}>
+        {/* full-height right brand bar */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: HERO_BAR_WIDTH,
+          background: BRAND_BLUE,
+          zIndex: 1,
+        }} />
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: HERO_BAR_WIDTH,
+          zIndex: 2,
+          display: 'flex',
+          alignItems: 'flex-end',
+        }}>
+          <div style={{
+            width: '100%',
+            textAlign: 'left',
+            padding: '0 clamp(24px, 3vw, 44px) clamp(100px, 10vh, 140px) clamp(22px, 2.8vw, 36px)',
+            borderLeft: `4px solid ${GOLD_LIGHT}`,
+          }}>
             <p style={{ fontSize: '0.72rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: GOLD_LIGHT, fontWeight: 700, marginBottom: '18px' }}>
               Executive Vacations &mdash; Costa Rica
             </p>
-            <h1 style={{ fontWeight: 900, fontSize: 'clamp(2.3rem, 5.2vw, 5.2rem)', color: '#fff', lineHeight: 1.0, marginBottom: '24px', textShadow: '0 2px 20px rgba(0,0,0,0.5)' }}>
+            <h1 style={{ fontWeight: 900, fontSize: 'clamp(2.2rem, 4.4vw, 5.1rem)', color: '#fff', lineHeight: 1.0, marginBottom: '24px', textShadow: '0 2px 20px rgba(0,0,0,0.5)' }}>
               Your Wedding.<br />
               <span style={{ color: GOLD_LIGHT, fontStyle: 'italic' }}>Your Way.</span><br />
               On the Pacific.
             </h1>
-          </div>
-          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'rgba(255,255,255,0.8)', lineHeight: 1.75, marginBottom: '44px', maxWidth: '580px', margin: '0 0 44px auto', textShadow: '0 1px 6px rgba(0,0,0,0.5)', textAlign: 'left' }}>
-            Private beachfront estates. Ceremony on the sand.
-            Full staff, private chefs &mdash; everything your planner needs in one place.
-          </p>
-          <div style={{ display: 'flex', gap: '14px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+            <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'rgba(255,255,255,0.84)', lineHeight: 1.75, margin: '0 0 34px 0', textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
+              Private beachfront estates. Ceremony on the sand.
+              Full staff, private chefs &mdash; everything your planner needs in one place.
+            </p>
+            <div style={{ display: 'flex', gap: '14px', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
             <a href="#venue" style={{
               display: 'inline-block', padding: '16px 38px',
               background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`,
@@ -230,6 +257,7 @@ export default function Weddings() {
             }}>
               Get Pricing Guide
             </Link>
+            </div>
           </div>
         </div>
       </BgImage>
