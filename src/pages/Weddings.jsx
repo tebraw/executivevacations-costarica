@@ -36,6 +36,8 @@ const IMG = {
     '/images/weddings/gallery-9.jpg',
     '/images/weddings/gallery-10.jpg',
     '/images/weddings/gallery-11.jpg',
+    '/images/weddings/gallery-12.jpg',
+    '/images/weddings/gallery-13.jpg',
   ],
 };
 
