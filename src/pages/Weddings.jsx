@@ -194,37 +194,22 @@ export default function Weddings() {
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.75) 100%)',
         }} />
-        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 24px 100px', maxWidth: '900px', width: '100%', margin: '0 auto' }}>
-          <p style={{ fontSize: '0.72rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: GOLD_LIGHT, fontWeight: 700, marginBottom: '18px' }}>
-            Executive Vacations &mdash; Costa Rica
-          </p>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            gap: '24px',
-            flexWrap: 'wrap',
-            marginBottom: '24px',
-          }}>
-            <div style={{ flex: 1, minWidth: '220px', textAlign: 'left' }}>
-              <h1 style={{ fontWeight: 900, fontSize: 'clamp(2.2rem, 5vw, 4.5rem)', color: '#fff', lineHeight: 1.0, marginBottom: 0, textShadow: '0 2px 20px rgba(0,0,0,0.5)' }}>
-                Your Wedding.<br />
-                <span style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', color: GOLD_LIGHT, fontStyle: 'italic', display: 'inline-block', marginTop: '12px' }}>&nbsp;</span>
-              </h1>
-            </div>
-            <div style={{ flex: 1, minWidth: '220px', textAlign: 'right', alignSelf: 'flex-end' }}>
-              <h1 style={{ fontWeight: 900, fontSize: 'clamp(2.2rem, 5vw, 4.5rem)', color: '#fff', lineHeight: 1.0, marginBottom: 0, textShadow: '0 2px 20px rgba(0,0,0,0.5)' }}>
-                <span style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', color: GOLD_LIGHT, fontStyle: 'italic', display: 'inline-block', marginBottom: '12px' }}>Your Way.</span><br />
-                On the Pacific.
-              </h1>
-            </div>
+        <div style={{ position: 'relative', zIndex: 1, padding: '0 24px 100px', maxWidth: '1200px', width: '100%', margin: '0 auto' }}>
+          <div style={{ maxWidth: '580px', marginLeft: 'auto', textAlign: 'left' }}>
+            <p style={{ fontSize: '0.72rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: GOLD_LIGHT, fontWeight: 700, marginBottom: '18px' }}>
+              Executive Vacations &mdash; Costa Rica
+            </p>
+            <h1 style={{ fontWeight: 900, fontSize: 'clamp(2.3rem, 5.2vw, 5.2rem)', color: '#fff', lineHeight: 1.0, marginBottom: '24px', textShadow: '0 2px 20px rgba(0,0,0,0.5)' }}>
+              Your Wedding.<br />
+              <span style={{ color: GOLD_LIGHT, fontStyle: 'italic' }}>Your Way.</span><br />
+              On the Pacific.
+            </h1>
           </div>
-          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'rgba(255,255,255,0.8)', lineHeight: 1.75, marginBottom: '44px', maxWidth: '600px', margin: '0 auto 44px', textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
+          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'rgba(255,255,255,0.8)', lineHeight: 1.75, marginBottom: '44px', maxWidth: '580px', margin: '0 0 44px auto', textShadow: '0 1px 6px rgba(0,0,0,0.5)', textAlign: 'left' }}>
             Private beachfront estates. Ceremony on the sand.
             Full staff, private chefs &mdash; everything your planner needs in one place.
           </p>
-          <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '14px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
             <a href="#venue" style={{
               display: 'inline-block', padding: '16px 38px',
               background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`,
