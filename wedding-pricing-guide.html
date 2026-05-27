@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wedding Packages & Pricing Guide — Executive Vacations Costa Rica</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #b8972e;
+      --gold-light: #c9a96e;
+      --gold-pale: #e8d5a3;
+      --dark: #0b0f18;
+      --dark2: #111827;
+      --dark3: #1e293b;
+      --text: #1a1a2e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Force browsers to print backgrounds & images */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f5f3ef;
+      color: var(--text);
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .page {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media screen {
+      .page {
+        margin: 20px auto;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      }
+      body { padding: 20px 0 60px; background: #e8e5e0; }
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .no-print { display: none !important; }
+      @page { size: A4; margin: 0; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; }
+      .page:last-child { page-break-after: avoid; }
+
+      /* Force all backgrounds & images to print */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+    }
+
+    /* ── COVER PAGE ── */
+    .cover {
+      width: 100%;
+      height: 297mm;
+      background: linear-gradient(160deg, #0b1120 0%, #12203a 50%, #1a2e1a 100%);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('public/images/weddings/hero.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      opacity: 0.35;
+    }
+
+    .cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(11,15,24,0.3) 0%,
+        rgba(11,15,24,0.1) 30%,
+        rgba(11,15,24,0.7) 70%,
+        rgba(11,15,24,0.95) 100%
+      );
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 14mm 16mm;
+    }
+
+    .cover-top-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8mm 14mm;
+    }
+
+    .cover-logo {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      font-weight: 700;
+    }
+
+    .cover-year {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.35);
+      font-weight: 500;
+    }
+
+    .cover-gold-line {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), var(--gold-light));
+      margin-bottom: 14px;
+    }
+
+    .cover-eyebrow {
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .cover-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.4rem;
+      color: #fff;
+      line-height: 1.05;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .cover-h1 em {
+      font-style: italic;
+      color: var(--gold-pale);
+    }
+
+    .cover-sub {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+      max-width: 110mm;
+      margin-bottom: 20px;
+    }
+
+    .cover-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .cover-pill {
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 5px 12px;
+    }
+
+    .cover-bottom-strip {
+      background: linear-gradient(135deg, var(--gold) 0%, #a07040 100%);
+      padding: 5mm 14mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+    }
+
+    .cover-bottom-text {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.06em;
+    }
+
+    .cover-bottom-url {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── INNER PAGES ── */
+    .inner {
+      padding: 14mm 14mm 12mm;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 6mm;
+      border-bottom: 1px solid #ede8df;
+      margin-bottom: 8mm;
+    }
+
+    .page-header-logo {
+      font-size: 0.55rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .page-header-title {
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #9ca3af;
+    }
+
+    /* ── SECTION HEADINGS ── */
+    .section-eyebrow {
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .section-h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--dark);
+      line-height: 1.15;
+      margin-bottom: 4mm;
+    }
+
+    .section-intro {
+      font-size: 0.82rem;
+      color: #4b5563;
+      line-height: 1.75;
+      max-width: 155mm;
+      margin-bottom: 8mm;
+    }
+
+    /* ── INTRO DISCLAIMER ── */
+    .disclaimer-box {
+      background: #fffbf0;
+      border: 1.5px solid #e8d5a3;
+      border-radius: 10px;
+      padding: 5mm 6mm;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 8mm;
+    }
+
+    .disclaimer-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), #a07040);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .disclaimer-text {
+      font-size: 0.75rem;
+      color: #78600a;
+      line-height: 1.65;
+    }
+
+    .disclaimer-text strong {
+      color: #5c4800;
+    }
+
+    /* ── PACKAGE CARD ── */
+    .pkg-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 6mm;
+      break-inside: avoid;
+    }
+
+    .pkg-card.featured {
+      border-color: var(--gold-light);
+      border-width: 2px;
+    }
+
+    .pkg-header {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      padding: 5mm 6mm 4mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .pkg-header.gold-header {
+      background: linear-gradient(135deg, #1a2200, #2a3600);
+    }
+
+    .pkg-tier-badge {
+      font-size: 0.52rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--gold-light);
+      background: rgba(201,169,110,0.15);
+      border: 1px solid rgba(201,169,110,0.25);
+      border-radius: 20px;
+      padding: 3px 9px;
+      margin-bottom: 5px;
+      display: inline-block;
+    }
+
+    .pkg-tier-badge.diamond {
+      color: #a8d8ea;
+      background: rgba(168,216,234,0.12);
+      border-color: rgba(168,216,234,0.25);
+    }
+
+    .pkg-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .pkg-tagline {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .pkg-price-block {
+      text-align: right;
+    }
+
+    .pkg-from {
+      font-size: 0.55rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .pkg-price {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .pkg-price-note {
+      font-size: 0.55rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .pkg-body {
+      padding: 5mm 6mm;
+      background: #fafaf8;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 8mm;
+    }
+
+    .pkg-col-label {
+      font-size: 0.52rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .pkg-stats {
+      display: flex;
+      gap: 4mm;
+      margin-bottom: 4mm;
+      flex-wrap: wrap;
+    }
+
+    .pkg-stat {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 3mm 4mm;
+      min-width: 18mm;
+    }
+
+    .pkg-stat-val {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--dark);
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .pkg-stat-lbl {
+      font-size: 0.52rem;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pkg-incl-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .pkg-incl-list li {
+      font-size: 0.73rem;
+      color: #374151;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.4;
+    }
+
+    .check {
+      color: var(--gold);
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .pkg-catamaran-note {
+      font-size: 0.62rem;
+      color: #9ca3af;
+      font-style: italic;
+      margin-top: 4px;
+      padding-left: 16px;
+    }
+
+    .free-badge {
+      font-size: 0.48rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(184,151,46,0.1);
+      border: 1px solid rgba(184,151,46,0.25);
+      border-radius: 4px;
+      padding: 1px 5px;
+      flex-shrink: 0;
+    }
+
+    .featured-ribbon {
+      background: linear-gradient(135deg, var(--gold), #a07040);
+      color: #fff;
+      font-size: 0.48rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 3px 12px;
+      text-align: center;
+    }
+
+    /* ── SEASON TABLE ── */
+    .season-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 8mm;
+      font-size: 0.78rem;
+    }
+
+    .season-table th {
+      background: var(--dark2);
+      color: rgba(255,255,255,0.7);
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 3mm 4mm;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .season-table th:not(:first-child) {
+      text-align: center;
+    }
+
+    .season-table td {
+      padding: 3mm 4mm;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: middle;
+    }
+
+    .season-table td:not(:first-child) {
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .season-table tr:nth-child(even) td {
+      background: #fafaf8;
+    }
+
+    .season-table .pkg-label {
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .season-table .pkg-label small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.62rem;
+      color: #9ca3af;
+      margin-top: 1px;
+    }
+
+    .price-cell {
+      color: var(--dark);
+    }
+
+    .price-cell .from {
+      font-size: 0.5rem;
+      color: #9ca3af;
+      font-weight: 400;
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    /* ── ADD-ONS TABLE ── */
+    .addons-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      margin-bottom: 6mm;
+    }
+
+    .addons-table th {
+      background: #f5f3ef;
+      color: #374151;
+      font-size: 0.52rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 3mm 4mm;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .addons-table td {
+      padding: 3mm 4mm;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: top;
+    }
+
+    .addons-table td:last-child {
+      text-align: right;
+      font-weight: 700;
+      color: var(--dark);
+      white-space: nowrap;
+    }
+
+    .addon-name {
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+
+    .addon-note {
+      font-size: 0.62rem;
+      color: #9ca3af;
+    }
+
+    /* ── CHRISTMAS SECTION ── */
+    .xmas-box {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      border-radius: 14px;
+      padding: 6mm 7mm;
+      margin-bottom: 6mm;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .xmas-box::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.1);
+    }
+
+    .xmas-box::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.08);
+    }
+
+    .xmas-eyebrow {
+      font-size: 0.52rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .xmas-h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .xmas-text {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      margin-bottom: 5mm;
+      max-width: 120mm;
+    }
+
+    .xmas-rules {
+      display: flex;
+      gap: 4mm;
+      flex-wrap: wrap;
+    }
+
+    .xmas-rule {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 3mm 4mm;
+    }
+
+    .xmas-rule-val {
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: var(--gold-light);
+      margin-bottom: 2px;
+    }
+
+    .xmas-rule-lbl {
+      font-size: 0.58rem;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .xmas-img-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3mm;
+      margin-top: 5mm;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .xmas-img-row img {
+      width: 100%;
+      height: 35mm;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── NOT INCLUDED ── */
+    .not-incl-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 6mm;
+    }
+
+    .not-incl-pill {
+      font-size: 0.65rem;
+      color: #6b7280;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 4px 12px;
+    }
+
+    /* ── IMAGE STRIPS ── */
+    .img-strip-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2mm;
+      margin-bottom: 6mm;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .img-strip-3 img {
+      width: 100%;
+      height: 28mm;
+      object-fit: cover;
+      display: block;
+    }
+
+    .img-strip-2 {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 2mm;
+      margin-bottom: 6mm;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .img-strip-2 img {
+      width: 100%;
+      height: 36mm;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── FULL IMAGE DIVIDER ── */
+    .full-img-divider {
+      width: 100%;
+      height: 50mm;
+      object-fit: cover;
+      display: block;
+      margin: 0 0 6mm;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      margin-top: 6mm;
+      padding-top: 4mm;
+      border-top: 1px solid #ede8df;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .page-footer-left {
+      font-size: 0.55rem;
+      color: #9ca3af;
+    }
+
+    .page-footer-right {
+      font-size: 0.55rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── CONTACT SECTION ── */
+    .contact-box {
+      background: linear-gradient(135deg, var(--gold) 0%, #a07040 100%);
+      border-radius: 14px;
+      padding: 6mm 7mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6mm;
+    }
+
+    .contact-left h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .contact-left p {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.6;
+    }
+
+    .contact-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .contact-url {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .contact-note {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ── PRINT BUTTON ── */
+    .print-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, var(--gold-light), #a07040);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 28px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 28px rgba(184,151,46,0.5);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .print-btn:hover {
+      opacity: 0.92;
+    }
+
+    /* ── COMPACT SPACING (keeps screen = print) ─────────────── */
+    .inner { padding: 9mm 12mm 6mm; }
+    .page-header { padding-bottom: 4mm; margin-bottom: 4mm; }
+    .section-h2 { margin-bottom: 2mm; font-size: 1.6rem; }
+    .section-intro { margin-bottom: 4mm; line-height: 1.6; }
+    .disclaimer-box { padding: 3mm 5mm; margin-bottom: 4mm; }
+    .pkg-card { margin-bottom: 3mm; }
+    .pkg-header { padding: 3.5mm 5mm 3mm; }
+    .pkg-body { padding: 3mm 5mm; }
+    .pkg-stats { gap: 2mm; margin-bottom: 2mm; }
+    .pkg-stat { padding: 2mm 3mm; }
+    .pkg-incl-list { gap: 3px; }
+    .pkg-incl-list li { font-size: 0.7rem; }
+    .pkg-col-label { margin-bottom: 2px; }
+    .page-footer { margin-top: 2mm; padding-top: 2.5mm; }
+    .season-table { margin-bottom: 4mm; }
+    .season-table th, .season-table td { padding: 2mm 3mm; }
+    .addons-table { margin-bottom: 3mm; }
+    .addons-table th { padding: 2mm 3mm; }
+    .addons-table td { padding: 2mm 3mm; }
+    .not-incl-grid { margin-bottom: 3mm; }
+    .xmas-box { padding: 4mm 6mm; margin-bottom: 4mm; }
+    .xmas-text { margin-bottom: 3mm; line-height: 1.6; }
+    .xmas-rules { gap: 2mm; }
+    .xmas-rule { padding: 2mm 3mm; }
+    .xmas-img-row { margin-top: 3mm; }
+    .xmas-img-row img { height: 22mm; }
+    .img-strip-2 { margin-bottom: 3mm; }
+    .img-strip-2 img { height: 24mm; }
+    .contact-box { padding: 4mm 6mm; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     PAGE 1: COVER
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-bg"></div>
+    <div class="cover-overlay"></div>
+
+    <div class="cover-top-bar">
+      <span class="cover-logo">Executive Vacations · Costa Rica</span>
+      <span class="cover-year">2026 – 2027</span>
+    </div>
+
+    <div class="cover-content">
+      <div class="cover-gold-line"></div>
+      <p class="cover-eyebrow">Destination Weddings · Private Estates</p>
+      <h1 class="cover-h1">
+        Wedding<br>
+        Packages<br>
+        &amp; <em>Pricing</em>
+      </h1>
+      <p class="cover-sub">
+        Exclusive beachfront estates on Costa Rica's Pacific coast.
+        Everything included — venue, chefs, staff, catering, and décor.
+        Your wedding, exactly as you imagined it.
+      </p>
+      <div class="cover-pills">
+        <span class="cover-pill">Palacio Musical</span>
+        <span class="cover-pill">Palacio Tropical</span>
+        <span class="cover-pill">The View House</span>
+        <span class="cover-pill">Up to 150 ceremony guests</span>
+        <span class="cover-pill">Up to 150 overnight guests</span>
+      </div>
+    </div>
+
+    <div class="cover-bottom-strip">
+      <span class="cover-bottom-text">All prices in USD &nbsp;·&nbsp; Prices shown are starting rates &nbsp;·&nbsp; Final quote provided after consultation</span>
+      <span class="cover-bottom-url">executivevacations.net</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════
+     PAGE 2: OVERVIEW & SILVER / GOLD
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="page-header">
+      <span class="page-header-logo">Executive Vacations · Costa Rica</span>
+      <span class="page-header-title">Wedding Packages &amp; Pricing Guide</span>
+    </div>
+
+    <p class="section-eyebrow">Overview</p>
+    <h2 class="section-h2">Four Packages. One Perfect Wedding.</h2>
+    <p class="section-intro">
+      Every package includes private venue access, our professional culinary team, daily housekeeping,
+      on-site security, and personal concierge service. You bring your priest, photographer, and planner —
+      we handle everything else.
+    </p>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer-box">
+      <div class="disclaimer-icon">i</div>
+      <p class="disclaimer-text">
+        <strong>All prices are starting rates.</strong> Your final total depends on your exact dates,
+        guest count, and any add-ons. We will put together a precise, personalised quote during your
+        free consultation call — at no obligation.
+      </p>
+    </div>
+
+    <!-- SILVER -->
+    <div class="pkg-card">
+      <div class="pkg-header">
+        <div>
+          <span class="pkg-tier-badge">Silver</span>
+          <div class="pkg-name">Intimate Pacific Wedding</div>
+          <div class="pkg-tagline">Palacio Musical &nbsp;·&nbsp; 2 nights</div>
+        </div>
+        <div class="pkg-price-block">
+          <div class="pkg-from">Starting at</div>
+          <div class="pkg-price">$17,900</div>
+          <div class="pkg-price-note">Low season · from $20,900 high season</div>
+        </div>
+      </div>
+      <div class="pkg-body">
+        <div>
+          <div class="pkg-col-label">Key Facts</div>
+          <div class="pkg-stats">
+            <div class="pkg-stat"><div class="pkg-stat-val">2</div><div class="pkg-stat-lbl">Nights</div></div>
+            <div class="pkg-stat"><div class="pkg-stat-val">16</div><div class="pkg-stat-lbl">Overnight Pers.</div></div>
+            <div class="pkg-stat"><div class="pkg-stat-val">30</div><div class="pkg-stat-lbl">Ceremony Pers.</div></div>
+          </div>
+          <div class="pkg-col-label">Included</div>
+          <ul class="pkg-incl-list">
+            <li><span class="check">✓</span> 2 nights · Palacio Musical (up to 16 guests)</li>
+            <li><span class="check">✓</span> Brunch + dinner both days</li>
+            <li><span class="check">✓</span> Wine, beer &amp; soft drinks</li>
+            <li><span class="check">✓</span> Cocktail hour on ceremony day</li>
+          </ul>
+        </div>
+        <div>
+          <div class="pkg-col-label">&nbsp;</div>
+          <ul class="pkg-incl-list" style="margin-top:5mm">
+            <li><span class="check">✓</span> Basic decoration (setup &amp; teardown)</li>
+            <li><span class="check">✓</span> Private chefs &amp; catering team</li>
+            <li><span class="check">✓</span> Daily housekeeping</li>
+            <li><span class="check">✓</span> Concierge &amp; on-site security</li>
+            <li><span class="check">✓</span> Beach ceremony setup</li>
+          </ul>
+          <p class="pkg-catamaran-note">Catamaran cruise available as add-on from +$2,300</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOLD -->
+    <div class="pkg-card">
+      <div class="pkg-header">
+        <div>
+          <span class="pkg-tier-badge">Gold</span>
+          <div class="pkg-name">Pacific Celebration</div>
+          <div class="pkg-tagline">Palacio Musical &nbsp;·&nbsp; 3 nights</div>
+        </div>
+        <div class="pkg-price-block">
+          <div class="pkg-from">Starting at</div>
+          <div class="pkg-price">$26,900</div>
+          <div class="pkg-price-note">Low season · from $30,900 high season</div>
+        </div>
+      </div>
+      <div class="pkg-body">
+        <div>
+          <div class="pkg-col-label">Key Facts</div>
+          <div class="pkg-stats">
+            <div class="pkg-stat"><div class="pkg-stat-val">3</div><div class="pkg-stat-lbl">Nights</div></div>
+            <div class="pkg-stat"><div class="pkg-stat-val">16</div><div class="pkg-stat-lbl">Overnight Pers.</div></div>
+            <div class="pkg-stat"><div class="pkg-stat-val">50</div><div class="pkg-stat-lbl">Ceremony Pers.</div></div>
+          </div>
+          <div class="pkg-col-label">Included</div>
+          <ul class="pkg-incl-list">
+            <li><span class="check">✓</span> 3 nights · Palacio Musical (up to 16 guests)</li>
+            <li><span class="check">✓</span> Brunch + dinner all 3 days</li>
+            <li><span class="check">✓</span> Wine, beer &amp; soft drinks</li>
+            <li><span class="check">✓</span> Cocktail hour on ceremony day</li>
+          </ul>
+        </div>
+        <div>
+          <div class="pkg-col-label">&nbsp;</div>
+          <ul class="pkg-incl-list" style="margin-top:5mm">
+            <li><span class="check">✓</span> Basic decoration (setup &amp; teardown)</li>
+            <li><span class="check">✓</span> Private chefs &amp; catering team</li>
+            <li><span class="check">✓</span> Daily housekeeping</li>
+            <li><span class="check">✓</span> Concierge &amp; on-site security</li>
+            <li><span class="check">✓</span> Beach ceremony setup</li>
+          </ul>
+          <p class="pkg-catamaran-note">Catamaran cruise available as add-on from +$2,300</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span class="page-footer-left">© 2026 Executive Vacations Costa Rica &nbsp;·&nbsp; All prices in USD &nbsp;·&nbsp; Starting rates only</span>
+      <span class="page-footer-right">executivevacations.net/weddings</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════
+     PAGE 3: PLATINUM / DIAMOND
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="page-header">
+      <span class="page-header-logo">Executive Vacations · Costa Rica</span>
+      <span class="page-header-title">Wedding Packages &amp; Pricing Guide</span>
+    </div>
+
+    <!-- PLATINUM -->
+    <div class="pkg-card featured">
+      <div class="featured-ribbon">&#9733; &nbsp; Most Popular &nbsp; &#9733;</div>
+      <div class="pkg-header">
+        <div>
+          <span class="pkg-tier-badge">Platinum</span>
+          <div class="pkg-name">Full Estate Wedding</div>
+          <div class="pkg-tagline">Palacio Musical + Palacio Tropical &nbsp;·&nbsp; 5 nights</div>
+        </div>
+        <div class="pkg-price-block">
+          <div class="pkg-from">Starting at</div>
+          <div class="pkg-price">$63,900</div>
+          <div class="pkg-price-note">Low season · from $76,900 high season</div>
+        </div>
+      </div>
+      <div class="pkg-body">
+        <div>
+          <div class="pkg-col-label">Key Facts</div>
+          <div class="pkg-stats">
+            <div class="pkg-stat"><div class="pkg-stat-val">5</div><div class="pkg-stat-lbl">Nights</div></div>
+            <div class="pkg-stat"><div class="pkg-stat-val">32</div><div class="pkg-stat-lbl">Overnight Pers.</div></div>
+            <div class="pkg-stat"><div class="pkg-stat-val">75</div><div class="pkg-stat-lbl">Ceremony Pers.</div></div>
+          </div>
+          <div class="pkg-col-label">Included</div>
+          <ul class="pkg-incl-list">
+            <li><span class="check">✓</span> 5 nights · Palacio Musical (16 guests)</li>
+            <li><span class="check">✓</span> 5 nights · Palacio Tropical (16 guests)</li>
+            <li><span class="check">✓</span> Brunch + dinner all 5 days</li>
+            <li><span class="check">✓</span> Wine, beer &amp; soft drinks</li>
+            <li><span class="check">✓</span> Cocktail hour on ceremony day</li>
+          </ul>
+        </div>
+        <div>
+          <div class="pkg-col-label">&nbsp;</div>
+          <ul class="pkg-incl-list" style="margin-top:5mm">
+            <li><span class="check">✓</span> Basic decoration (setup &amp; teardown)</li>
+            <li><span class="check">✓</span> Private chefs &amp; catering team</li>
+            <li><span class="check">✓</span> Daily housekeeping both estates</li>
+            <li><span class="check">✓</span> Concierge &amp; on-site security</li>
+            <li><span class="check">✓</span> Beach ceremony setup</li>
+          </ul>
+          <p class="pkg-catamaran-note">Catamaran cruise available as add-on from +$2,300</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="img-strip-2">
+      <img src="public/images/weddings/venue-2.jpg" alt="Palacio Musical" />
+      <img src="public/images/weddings/dinner.jpg" alt="Dinner on the decks" />
+    </div>
+
+    <!-- DIAMOND -->
+    <div class="pkg-card" style="border-color: rgba(168,216,234,0.4);">
+      <div class="pkg-header" style="background: linear-gradient(135deg, #0a1620, #0d2030);">
+        <div>
+          <span class="pkg-tier-badge diamond">Diamond</span>
+          <div class="pkg-name">The Complete Experience</div>
+          <div class="pkg-tagline">All 3 Estates + Free Catamaran &nbsp;·&nbsp; 7 nights</div>
+        </div>
+        <div class="pkg-price-block">
+          <div class="pkg-from">Starting at</div>
+          <div class="pkg-price">$101,900</div>
+          <div class="pkg-price-note">Low season · from $121,900 high season</div>
+        </div>
+      </div>
+      <div class="pkg-body">
+        <div>
+          <div class="pkg-col-label">Key Facts</div>
+          <div class="pkg-stats">
+            <div class="pkg-stat"><div class="pkg-stat-val">7</div><div class="pkg-stat-lbl">Nights</div></div>
+            <div class="pkg-stat"><div class="pkg-stat-val">36</div><div class="pkg-stat-lbl">Overnight Pers.</div></div>
+            <div class="pkg-stat"><div class="pkg-stat-val">100</div><div class="pkg-stat-lbl">Ceremony Pers.</div></div>
+          </div>
+          <div class="pkg-col-label">Included</div>
+          <ul class="pkg-incl-list">
+            <li><span class="check">✓</span> 7 nights · Palacio Musical (16 guests)</li>
+            <li><span class="check">✓</span> 7 nights · Palacio Tropical (16 guests)</li>
+            <li><span class="check">✓</span> 7 nights · The View House (4 guests)</li>
+            <li><span class="check">✓</span> Brunch + dinner all 7 days</li>
+            <li><span class="check">✓</span> Wine, beer &amp; soft drinks</li>
+          </ul>
+        </div>
+        <div>
+          <div class="pkg-col-label">&nbsp;</div>
+          <ul class="pkg-incl-list" style="margin-top:5mm">
+            <li><span class="check">✓</span> Basic decoration (setup &amp; teardown)</li>
+            <li><span class="check">✓</span> Private chefs &amp; catering team</li>
+            <li><span class="check">✓</span> Daily housekeeping all estates</li>
+            <li><span class="check">✓</span> Concierge &amp; on-site security</li>
+            <li><span class="check">✓</span> Beach ceremony setup</li>
+            <li>
+              <span class="check">✓</span>
+              <span>Private catamaran — 4h sunset cruise, 45 guests, open bar</span>
+              <span class="free-badge">FREE</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span class="page-footer-left">© 2026 Executive Vacations Costa Rica &nbsp;·&nbsp; All prices in USD &nbsp;·&nbsp; Starting rates only</span>
+      <span class="page-footer-right">executivevacations.net/weddings</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════
+     PAGE 4: PRICING TABLE + ADD-ONS + NOT INCLUDED
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="page-header">
+      <span class="page-header-logo">Executive Vacations · Costa Rica</span>
+      <span class="page-header-title">Wedding Packages &amp; Pricing Guide</span>
+    </div>
+
+    <p class="section-eyebrow">At a Glance</p>
+    <h2 class="section-h2">Season Pricing Overview</h2>
+    <p class="section-intro">
+      Package prices vary by season due to villa rental rates. All catering, staffing, and service costs remain identical year-round.
+    </p>
+
+    <table class="season-table">
+      <thead>
+        <tr>
+          <th>Package</th>
+          <th>Nights</th>
+          <th>Overnight Guests</th>
+          <th>Ceremony Guests</th>
+          <th>Low Season<br><span style="font-weight:400;letter-spacing:0">May – Nov</span></th>
+          <th>High Season<br><span style="font-weight:400;letter-spacing:0">Jan – Apr, Nov – Dec</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="pkg-label">Silver<small>Palacio Musical</small></td>
+          <td>2</td><td>up to 16</td><td>up to 30</td>
+          <td class="price-cell"><span class="from">from</span>$17,900</td>
+          <td class="price-cell"><span class="from">from</span>$20,900</td>
+        </tr>
+        <tr>
+          <td class="pkg-label">Gold<small>Palacio Musical</small></td>
+          <td>3</td><td>up to 16</td><td>up to 50</td>
+          <td class="price-cell"><span class="from">from</span>$26,900</td>
+          <td class="price-cell"><span class="from">from</span>$30,900</td>
+        </tr>
+        <tr>
+          <td class="pkg-label">Platinum<small>Palacio Musical + Palacio Tropical</small></td>
+          <td>5</td><td>up to 32</td><td>up to 75</td>
+          <td class="price-cell"><span class="from">from</span>$63,900</td>
+          <td class="price-cell"><span class="from">from</span>$76,900</td>
+        </tr>
+        <tr>
+          <td class="pkg-label">Diamond<small>All 3 Estates + Catamaran</small></td>
+          <td>7</td><td>up to 36</td><td>up to 100</td>
+          <td class="price-cell"><span class="from">from</span>$101,900</td>
+          <td class="price-cell"><span class="from">from</span>$121,900</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="img-strip-3" style="margin-bottom:4mm">
+      <img src="public/images/weddings/gallery-1.jpg" alt="" />
+      <img src="public/images/weddings/catamaran.jpg" alt="" />
+      <img src="public/images/weddings/gallery-4.jpg" alt="" />
+    </div>
+
+    <p class="section-eyebrow">Customize Your Package</p>
+    <h2 class="section-h2" style="font-size:1.4rem; margin-bottom:3mm">Add-Ons &amp; Extras</h2>
+
+    <table class="addons-table">
+      <thead>
+        <tr>
+          <th style="width:60%">Item</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="addon-name">Extra ceremony guest</div><div class="addon-note">Dinner + drinks, ceremony day only · over package inclusions</div></td>
+          <td>+$61 / person</td>
+        </tr>
+        <tr>
+          <td><div class="addon-name">Extra overnight guest</div><div class="addon-note">Brunch, dinner &amp; drinks per person per day</div></td>
+          <td>+$76 / person / day</td>
+        </tr>
+        <tr>
+          <td><div class="addon-name">Extra night — Palacio Musical</div><div class="addon-note">Per additional night, subject to availability</div></td>
+          <td>+$3,200 / $4,200</td>
+        </tr>
+        <tr>
+          <td><div class="addon-name">Private catamaran cruise — 6h</div><div class="addon-note">Up to 25 guests · food &amp; drinks included · Silver, Gold, Platinum</div></td>
+          <td>+$2,300</td>
+        </tr>
+        <tr>
+          <td><div class="addon-name">Extra catamaran guest</div><div class="addon-note">Per person over 25 guest limit</div></td>
+          <td>+$92 / person</td>
+        </tr>
+        <tr>
+          <td><div class="addon-name">Themed decoration upgrade</div><div class="addon-note">Custom theme, colours, florals — price depends on scope</div></td>
+          <td>On request</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="section-eyebrow" style="margin-top:2mm">Not Included in Any Package</p>
+    <div class="not-incl-grid">
+      <span class="not-incl-pill">Officiant / Priest</span>
+      <span class="not-incl-pill">Photographer</span>
+      <span class="not-incl-pill">Videographer</span>
+      <span class="not-incl-pill">Wedding Planner</span>
+      <span class="not-incl-pill">DJ / Live Music</span>
+      <span class="not-incl-pill">Florals beyond basic</span>
+      <span class="not-incl-pill">Flights &amp; transfers</span>
+    </div>
+    <p style="font-size:0.68rem; color:#9ca3af; line-height:1.65; margin-bottom:4mm;">
+      Our concierge can recommend trusted local vendors for any of the above and assist with bookings at no extra charge.
+    </p>
+
+    <div class="page-footer">
+      <span class="page-footer-left">© 2026 Executive Vacations Costa Rica &nbsp;·&nbsp; All prices in USD &nbsp;·&nbsp; Starting rates only</span>
+      <span class="page-footer-right">executivevacations.net/weddings</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════
+     PAGE 5: CHRISTMAS / NEW YEAR + CONTACT
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="page-header">
+      <span class="page-header-logo">Executive Vacations · Costa Rica</span>
+      <span class="page-header-title">Wedding Packages &amp; Pricing Guide</span>
+    </div>
+
+    <p class="section-eyebrow">Special Period</p>
+    <h2 class="section-h2">Christmas &amp; New Year Weddings</h2>
+    <p class="section-intro">
+      Getting married over the holidays? Our estates are among the most stunning places in Central America
+      to celebrate. Due to peak demand and elevated operational costs, the Christmas and New Year period
+      requires a dedicated custom quote.
+    </p>
+
+    <div class="xmas-box">
+      <div class="xmas-eyebrow">Holiday Season · Dec 20 – Jan 4</div>
+      <h3 class="xmas-h3">Custom Pricing on Request</h3>
+      <p class="xmas-text">
+        Christmas and New Year weddings are subject to special holiday rates for both villa rentals and
+        catering. Pricing cannot be calculated from the standard packages above and must be confirmed
+        directly with our team. A premium surcharge applies and availability is extremely limited.
+      </p>
+      <div class="xmas-rules">
+        <div class="xmas-rule">
+          <div class="xmas-rule-val">7 nights</div>
+          <div class="xmas-rule-lbl">Minimum stay</div>
+        </div>
+        <div class="xmas-rule">
+          <div class="xmas-rule-val">Custom</div>
+          <div class="xmas-rule-lbl">Pricing only</div>
+        </div>
+        <div class="xmas-rule">
+          <div class="xmas-rule-val">Limited</div>
+          <div class="xmas-rule-lbl">Availability</div>
+        </div>
+        <div class="xmas-rule">
+          <div class="xmas-rule-val">Early booking</div>
+          <div class="xmas-rule-lbl">Strongly advised</div>
+        </div>
+      </div>
+      <div class="xmas-img-row">
+        <img src="public/images/weddings/gallery-2.jpg" alt="" />
+        <img src="public/images/weddings/venue-5.jpg" alt="" />
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <p class="section-eyebrow" style="margin-bottom:5px">Process</p>
+    <h2 class="section-h2" style="font-size:1.4rem; margin-bottom:4mm">How Your Quote Works</h2>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3mm; margin-bottom:7mm;">
+      <div style="background:#fafaf8; border:1px solid #e5e7eb; border-radius:10px; padding:4mm 5mm;">
+        <div style="font-size:0.6rem; font-weight:800; color:var(--gold); letter-spacing:0.1em; margin-bottom:5px;">01 · REACH OUT</div>
+        <div style="font-size:0.75rem; color:#374151; line-height:1.65;">Share your date, approximate guest count, and which package interests you. We confirm availability within 24 hours.</div>
+      </div>
+      <div style="background:#fafaf8; border:1px solid #e5e7eb; border-radius:10px; padding:4mm 5mm;">
+        <div style="font-size:0.6rem; font-weight:800; color:var(--gold); letter-spacing:0.1em; margin-bottom:5px;">02 · CONSULTATION CALL</div>
+        <div style="font-size:0.75rem; color:#374151; line-height:1.65;">We walk through every detail together — catering, décor, timeline, and add-ons. Your definitive total price is confirmed on this call.</div>
+      </div>
+      <div style="background:#fafaf8; border:1px solid #e5e7eb; border-radius:10px; padding:4mm 5mm;">
+        <div style="font-size:0.6rem; font-weight:800; color:var(--gold); letter-spacing:0.1em; margin-bottom:5px;">03 · CUSTOM PROPOSAL</div>
+        <div style="font-size:0.75rem; color:#374151; line-height:1.65;">We send a written proposal with your final price, exact inclusions, payment schedule, and cancellation terms. No surprises.</div>
+      </div>
+      <div style="background:#fafaf8; border:1px solid #e5e7eb; border-radius:10px; padding:4mm 5mm;">
+        <div style="font-size:0.6rem; font-weight:800; color:var(--gold); letter-spacing:0.1em; margin-bottom:5px;">04 · CONFIRM &amp; CELEBRATE</div>
+        <div style="font-size:0.75rem; color:#374151; line-height:1.65;">Secure your dates with a deposit. From there, our team handles everything — you just show up and celebrate.</div>
+      </div>
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="contact-box">
+      <div class="contact-left">
+        <h3>Ready to Start Planning?</h3>
+        <p>Reach out with your date and vision. We'll get back to you within 24 hours with availability and next steps.</p>
+      </div>
+      <div class="contact-right">
+        <span class="contact-url">executivevacations.net/weddings</span>
+        <span class="contact-note">Free consultation · No commitment</span>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span class="page-footer-left">© 2026 Executive Vacations Costa Rica &nbsp;·&nbsp; All prices in USD &nbsp;·&nbsp; Starting rates only &nbsp;·&nbsp; Subject to availability</span>
+      <span class="page-footer-right">executivevacations.net</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRINT BUTTON ── -->
+<button class="print-btn no-print" onclick="window.print()">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
+  </svg>
+  Download as PDF
+</button>
+
+</body>
+</html>

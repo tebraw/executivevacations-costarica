@@ -256,7 +256,7 @@ export default function Weddings() {
               Exchange your vows directly on the beach with the Pacific stretching to the horizon. Completely open-air, completely private, completely unforgettable. No ballroom. No restrictions. Just you, your guests, and the ocean.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {['Up to 100 ceremony guests', 'Open-air beach setting', 'Fully private & secure'].map((f, i) => (
+              {['Up to 150 ceremony guests', 'Open-air beach setting', 'Fully private & secure'].map((f, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: GOLD_LIGHT, flexShrink: 0 }} />
                   <span style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.92rem' }}>{f}</span>
@@ -278,10 +278,10 @@ export default function Weddings() {
               Dinner on the Decks.<br />Under the Stars.
             </h2>
             <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '1rem', lineHeight: 1.85, marginBottom: '28px' }}>
-              After the ceremony, move straight onto the ocean-view decks of Palacio Musical. Our private chefs serve a multi-course dinner while the sun sets over the Pacific. Up to 100 seated guests. Every detail is handled by our team.
+              After the ceremony, move straight onto the ocean-view decks of Palacio Musical. Our private chefs serve a multi-course dinner while the sun sets over the Pacific. Up to 150 seated guests. Every detail is handled by our team.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {['Up to 100 seated dinner guests', 'Private chefs & full catering', 'Three ocean-view decks'].map((f, i) => (
+              {['Up to 150 seated dinner guests', 'Private chefs & full catering', 'Three ocean-view decks'].map((f, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: GOLD_LIGHT, flexShrink: 0 }} />
                   <span style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.92rem' }}>{f}</span>
@@ -386,7 +386,7 @@ export default function Weddings() {
                 { name: 'Palacio Tropical', detail: '7 en-suites &bull; 18 overnight guests', primary: false },
                 { name: 'Casa Oceano',      detail: 'Oceanfront villa &bull; additional guests', primary: false },
                 { name: 'The View House',   detail: '1 en-suite, 3 bedrooms &bull; 4 guests',  primary: false },
-                { name: '+ Partner Villas', detail: 'Extended network &bull; up to 80 total overnight guests', partner: true },
+                { name: '+ Partner Villas', detail: 'Extended network &bull; up to 150 total overnight guests', partner: true },
               ].map(({ name, detail, primary, partner }, i) => (
                 <div key={i} style={{
                   background: primary ? 'linear-gradient(135deg, rgba(184,151,46,0.12), rgba(184,151,46,0.06))'
@@ -415,7 +415,7 @@ export default function Weddings() {
                 </div>
               ))}
               <div style={{ marginTop: '8px', padding: '16px 20px', background: `linear-gradient(135deg, ${GOLD}, #a07040)`, borderRadius: '14px', textAlign: 'center' }}>
-                <p style={{ color: '#fff', fontWeight: 800, fontSize: '1.1rem', margin: '0 0 4px' }}>Up to 80 Overnight Guests</p>
+                <p style={{ color: '#fff', fontWeight: 800, fontSize: '1.1rem', margin: '0 0 4px' }}>Up to 150 Overnight Guests</p>
                 <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.82rem', margin: 0 }}>Across all estates &amp; partner villas combined</p>
               </div>
             </div>
@@ -428,9 +428,9 @@ export default function Weddings() {
       <div style={{ background: `linear-gradient(135deg, ${GOLD} 0%, #a07040 100%)`, padding: '48px 24px' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '32px', textAlign: 'center' }}>
           {[
-            { num: '100', label: 'Ceremony guests' },
-            { num: '100', label: 'Dinner guests' },
-            { num: '80',  label: 'Overnight guests' },
+            { num: '150', label: 'Ceremony guests' },
+            { num: '150', label: 'Dinner guests' },
+            { num: '150', label: 'Overnight guests' },
             { num: '1',   label: 'Free catamaran' },
           ].map(({ num, label }, i) => (
             <div key={i}>
@@ -479,7 +479,7 @@ export default function Weddings() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
             {[
-              { icon: SVGHome,     title: 'Venue + Overnight Stays',     desc: 'Your guests stay at the venue. Up to 80 overnight guests across our estates and partner villas. No hotel shuttles. No separation.' },
+              { icon: SVGHome,     title: 'Venue + Overnight Stays',     desc: 'Your guests stay at the venue. Up to 150 overnight guests across our estates and partner villas. No hotel shuttles. No separation.' },
               { icon: SVGBeach,    title: 'Beach Ceremony',               desc: "Exchange vows on the sand with the Pacific in front of you. Open-air, no restrictions, completely private." },
               { icon: SVGChef,     title: 'Private Chefs & Full Staff',   desc: 'Private chefs, concierge, housekeeping, and security -- all included. Every meal, every day handled.' },
               { icon: SVGPlanner,  title: 'Any Planner, Any Vision',      desc: 'Bring your own planner or use ours. We work with any vendor, any setup. Tell us what you need -- we make it happen.' },
