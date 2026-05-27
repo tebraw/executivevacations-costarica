@@ -1,0 +1,24 @@
+WEDDING PAGE IMAGES
+===================
+
+Place your wedding photos in this folder.
+Recommended filenames (rename your photos to match):
+
+  hero.jpg              -- Main hero background (wide landscape, beach/villa)
+  ceremony.jpg          -- Ceremony on the beach or rock
+  dinner.jpg            -- Wedding dinner on the decks
+  catamaran.jpg         -- Catamaran / Playa Muertos
+  estate-aerial.jpg     -- Aerial or wide shot of the estates
+
+  gallery-1.jpg         -- Gallery photo 1
+  gallery-2.jpg         -- Gallery photo 2
+  gallery-3.jpg         -- Gallery photo 3
+  gallery-4.jpg         -- Gallery photo 4
+  gallery-5.jpg         -- Gallery photo 5
+  gallery-6.jpg         -- Gallery photo 6
+
+Supported formats: .jpg, .jpeg, .webp, .png, .avif
+Best size: 1920x1080px or larger for hero, 800x600px for gallery tiles.
+
+  venue-left.jpg        -- Venue showcase left image (Palacio Musical exterior/decks)
+  venue-right.jpg       -- Venue showcase right image (beach/aerial/interior)
