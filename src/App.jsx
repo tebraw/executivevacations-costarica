@@ -8,6 +8,7 @@ import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Pricing from './pages/Pricing'
 import Weddings from './pages/Weddings'
+import WeddingPackages from './pages/WeddingPackages'
 
 // Fires once on load to record QR-code-sourced visits (?ref=...)
 function QRTracker() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/weddings" element={<Weddings />} />
+        <Route path="/wedding-packages" element={<WeddingPackages />} />
         <Route path="/admin12345" element={<AdminDashboard />} />
       </Routes>
     </Router>

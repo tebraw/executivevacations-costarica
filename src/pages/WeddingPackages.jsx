@@ -1,393 +1,400 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const GOLD = '#b8972e';
 const GOLD_LIGHT = '#c9a96e';
+const WEDDING_GUIDE_URL = '/pdfs/Wedding Packages & Pricing Guide — Executive Vacations Costa Rica.pdf';
 
-const PACKAGES = [
-  {
-    tier: 'Silver',
-    tagline: 'Intimate Pacific Wedding',
-    nights: 2,
-    villas: ['Palacio Musical'],
-    overnight: 16,
-    ceremony: 30,
-    priceLow: 17900,
-    priceHigh: 20900,
-    highlight: false,
-    catamaran: false,
-    inclusions: [
-      '2 nights · Palacio Musical (up to 16 guests)',
-      'Brunch + Dinner all 2 days',
-      'Wine, beer & soft drinks included',
-      'Cocktail hour on ceremony day',
-      'Basic decoration (setup & teardown)',
-      'Private chefs & full catering team',
-      'Housekeeping daily',
-      'Concierge & security on-site',
-      'Beach ceremony setup',
-    ],
-  },
-  {
-    tier: 'Gold',
-    tagline: 'Pacific Celebration',
-    nights: 3,
-    villas: ['Palacio Musical'],
-    overnight: 16,
-    ceremony: 50,
-    priceLow: 26900,
-    priceHigh: 30900,
-    highlight: false,
-    catamaran: false,
-    inclusions: [
-      '3 nights · Palacio Musical (up to 16 guests)',
-      'Brunch + Dinner all 3 days',
-      'Wine, beer & soft drinks included',
-      'Cocktail hour on ceremony day',
-      'Basic decoration (setup & teardown)',
-      'Private chefs & full catering team',
-      'Housekeeping daily',
-      'Concierge & security on-site',
-      'Beach ceremony setup',
-    ],
-  },
-  {
-    tier: 'Platinum',
-    tagline: 'Full Estate Wedding',
-    nights: 5,
-    villas: ['Palacio Musical', 'Palacio Tropical'],
-    overnight: 32,
-    ceremony: 75,
-    priceLow: 63900,
-    priceHigh: 76900,
-    highlight: true,
-    catamaran: false,
-    inclusions: [
-      '5 nights · Palacio Musical + Palacio Tropical',
-      'Up to 32 overnight guests across both estates',
-      'Brunch + Dinner all 5 days',
-      'Wine, beer & soft drinks included',
-      'Cocktail hour on ceremony day',
-      'Basic decoration (setup & teardown)',
-      'Private chefs & full catering team',
-      'Housekeeping daily',
-      'Concierge & security on-site',
-      'Beach ceremony setup',
-    ],
-  },
-  {
-    tier: 'Diamond',
-    tagline: 'The Complete Experience',
-    nights: 7,
-    villas: ['Palacio Musical', 'Palacio Tropical', 'The View House'],
-    overnight: 36,
-    ceremony: 100,
-    priceLow: 101900,
-    priceHigh: 121900,
-    highlight: false,
-    catamaran: true,
-    inclusions: [
-      '7 nights · Palacio Musical + Palacio Tropical + The View House',
-      'Up to 36 overnight guests across all 3 estates',
-      'Brunch + Dinner all 7 days',
-      'Wine, beer & soft drinks included',
-      'Cocktail hour on ceremony day',
-      'Basic decoration (setup & teardown)',
-      'Private chefs & full catering team',
-      'Housekeeping daily',
-      'Concierge & security on-site',
-      'Beach ceremony setup',
-      'Private catamaran sunset cruise — 4h · 45 guests · open bar',
-    ],
-  },
-];
+const inputStyle = {
+  width: '100%',
+  padding: '14px 16px',
+  borderRadius: '10px',
+  border: '1.5px solid #e5e7eb',
+  fontSize: '0.95rem',
+  fontFamily: "'DM Sans', sans-serif",
+  color: '#111',
+  outline: 'none',
+  boxSizing: 'border-box',
+  background: '#fff',
+  transition: 'border-color 0.15s',
+};
 
-const ADDONS = [
-  { label: 'Extra ceremony guest', value: '+$61 / person', note: 'Dinner + drinks, ceremony day only' },
-  { label: 'Extra overnight guest', value: '+$76 / person / day', note: 'Brunch, dinner & drinks' },
-  { label: 'Extra night (Palacio Musical)', value: '+$3,200 / $4,200', note: 'Low / High season' },
-  { label: 'Catamaran — 6h cruise', value: '+$2,300', note: 'Up to 25 guests · food & drinks · Silver, Gold, Platinum' },
-  { label: 'Extra catamaran guest', value: '+$92 / person', note: 'Over 25 guests' },
-  { label: 'Themed decoration upgrade', value: 'On request', note: 'Custom theme, colours, florals' },
-];
-
-function fmt(n) {
-  return '$' + n.toLocaleString('en-US');
-}
+const Field = ({ name, label, type = 'text', placeholder, form, setForm, errors }) => (
+  <div>
+    <label style={{
+      display: 'block', fontSize: '0.8rem', fontWeight: 700,
+      color: '#374151', marginBottom: '6px', fontFamily: "'DM Sans', sans-serif",
+      letterSpacing: '0.02em',
+    }}>
+      {label} <span style={{ color: GOLD }}>*</span>
+    </label>
+    <input
+      type={type}
+      value={form[name]}
+      onChange={e => setForm(f => ({ ...f, [name]: e.target.value }))}
+      placeholder={placeholder}
+      style={{ ...inputStyle, borderColor: errors[name] ? '#ef4444' : '#e5e7eb' }}
+      onFocus={e => { e.target.style.borderColor = GOLD; }}
+      onBlur={e => { e.target.style.borderColor = errors[name] ? '#ef4444' : '#e5e7eb'; }}
+    />
+    {errors[name] && (
+      <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '4px', fontFamily: "'DM Sans', sans-serif" }}>
+        {errors[name]}
+      </p>
+    )}
+  </div>
+);
 
 export default function WeddingPackages() {
-  const [season, setSeason] = useState('low');
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    agreed: false,
+  });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Wedding Packages & Pricing | Executive Vacations Costa Rica';
+    const title = 'Wedding Pricing Guide | Executive Vacations Costa Rica';
+    const desc = 'Access our wedding pricing guide for destination weddings in Costa Rica. Explore package pricing, inclusions, and next steps.';
+    document.title = title;
+
+    const setMeta = (name, content, prop) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel);
+      if (!el) {
+        el = document.createElement('meta');
+        prop ? el.setAttribute('property', name) : el.setAttribute('name', name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+
+    setMeta('description', desc);
+    setMeta('og:title', title, true);
+    setMeta('og:description', desc, true);
+    setMeta('og:url', 'https://executivevacations.net/wedding-packages', true);
   }, []);
 
+  const validate = () => {
+    const e = {};
+    if (!form.firstName.trim()) e.firstName = 'Required';
+    if (!form.lastName.trim()) e.lastName = 'Required';
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Valid email required';
+    if (!form.phone.trim()) e.phone = 'Required';
+    if (!form.agreed) e.agreed = 'Please agree to continue';
+    return e;
+  };
+
+  const openGuide = () => {
+    const a = document.createElement('a');
+    a.href = WEDDING_GUIDE_URL;
+    a.download = 'Executive-Vacations-Wedding-Pricing-Guide.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
+
+    setErrors({});
+    setSubmitting(true);
+
+    try {
+      await fetch('/.netlify/functions/save-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          villaInterest: 'Wedding Request',
+        }),
+      });
+    } catch (_) {}
+
+    // Keep Netlify form flow consistent with the regular pricing form
+    try {
+      const formData = new URLSearchParams();
+      formData.append('form-name', 'pricing-lead');
+      formData.append('firstName', form.firstName.trim());
+      formData.append('lastName', form.lastName.trim());
+      formData.append('email', form.email.trim());
+      formData.append('phone', form.phone.trim());
+      formData.append('villaInterest', 'Wedding Request');
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString(),
+      });
+    } catch (_) {}
+
+    setSubmitting(false);
+    setSubmitted(true);
+    openGuide();
+  };
+
   return (
-    <div style={{ background: '#0b0f18', fontFamily: "'DM Sans', sans-serif", overflowX: 'hidden' }}>
+    <div className="min-h-screen" style={{ background: '#fafaf8' }}>
       <Header />
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
       <div style={{
-        background: 'linear-gradient(160deg, #0b1120 0%, #12203a 55%, #1a2e1a 100%)',
-        padding: 'clamp(100px, 14vw, 160px) 24px clamp(64px, 8vw, 96px)',
-        textAlign: 'center',
+        paddingTop: '80px',
+        background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)',
+        paddingBottom: '0',
       }}>
-        <p style={{ fontSize: '0.72rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: GOLD_LIGHT, fontWeight: 700, marginBottom: '18px' }}>
-          Executive Vacations &mdash; Costa Rica
-        </p>
-        <h1 style={{ fontWeight: 900, fontSize: 'clamp(2.2rem, 5.5vw, 4rem)', color: '#fff', lineHeight: 1.05, marginBottom: '20px' }}>
-          Wedding Packages &amp; Pricing
-        </h1>
-        <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 'clamp(1rem, 2vw, 1.15rem)', lineHeight: 1.75, maxWidth: '560px', margin: '0 auto 40px' }}>
-          Everything included. One price. No surprises.
-          Your venue, your team, your catering — all in the package.
-        </p>
-
-        {/* Season toggle */}
-        <div style={{ display: 'inline-flex', background: 'rgba(255,255,255,0.07)', borderRadius: '50px', padding: '4px', border: '1px solid rgba(255,255,255,0.1)' }}>
-          {[['low', 'Low Season', 'May – Nov'], ['high', 'High Season', 'Jan – Apr · Nov – Dec']].map(([val, label, dates]) => (
-            <button
-              key={val}
-              onClick={() => setSeason(val)}
-              style={{
-                padding: '10px 28px',
-                borderRadius: '50px',
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: 700,
-                fontSize: '0.88rem',
-                transition: 'all 0.2s ease',
-                background: season === val ? `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)` : 'transparent',
-                color: season === val ? '#fff' : 'rgba(255,255,255,0.45)',
-              }}
-            >
-              {label}
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 400, opacity: 0.75, marginTop: '1px' }}>{dates}</span>
-            </button>
-          ))}
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '56px 24px 0' }}>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: '0.78rem',
+            letterSpacing: '0.18em', textTransform: 'uppercase',
+            color: GOLD, marginBottom: '10px', fontWeight: 600, textAlign: 'center',
+          }}>
+            Executive Vacations · Costa Rica
+          </p>
+          <h1 style={{
+            fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
+            fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#fff',
+            lineHeight: 1.15, marginBottom: '12px', textAlign: 'center',
+          }}>
+            Access Our Wedding Pricing Guide
+          </h1>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: '1rem',
+            color: 'rgba(255,255,255,0.55)', maxWidth: '560px',
+            margin: '0 auto 48px', lineHeight: 1.7, textAlign: 'center',
+          }}>
+            Enter your details to open the Wedding Pricing Guide with package rates,
+            inclusions, and planning details.
+          </p>
         </div>
       </div>
 
-      {/* ── PACKAGES ─────────────────────────────────────────── */}
-      <div style={{ background: '#0d1117', padding: 'clamp(48px,6vw,80px) 24px' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{
+      <div style={{ maxWidth: '1000px', margin: '-2px auto 80px', padding: '0 24px' }}>
+        <div
+          style={{
+            background: '#fff',
+            borderRadius: '24px',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.12)',
+            overflow: 'hidden',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '20px',
-            alignItems: 'start',
+            gridTemplateColumns: 'minmax(0,1fr) minmax(0,1.1fr)',
+          }}
+          className="wedding-pricing-grid"
+        >
+          <div style={{
+            background: 'linear-gradient(160deg, #0f172a 0%, #1a2744 60%, #0f172a 100%)',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            padding: '56px 40px', position: 'relative', overflow: 'hidden',
           }}>
-            {PACKAGES.map((pkg) => {
-              const price = season === 'low' ? pkg.priceLow : pkg.priceHigh;
-              return (
-                <div key={pkg.tier} style={{
-                  borderRadius: '24px',
-                  overflow: 'hidden',
-                  border: pkg.highlight
-                    ? `2px solid rgba(201,169,110,0.5)`
-                    : '1px solid rgba(255,255,255,0.08)',
-                  background: pkg.highlight
-                    ? 'linear-gradient(180deg, #16222e 0%, #0f1923 100%)'
-                    : '#111827',
-                  position: 'relative',
-                }}>
-                  {pkg.highlight && (
-                    <div style={{
-                      position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-                      background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`,
-                      color: '#fff', fontSize: '0.6rem', fontWeight: 800,
-                      letterSpacing: '0.18em', textTransform: 'uppercase',
-                      padding: '5px 18px', borderRadius: '0 0 12px 12px',
-                    }}>Most Popular</div>
-                  )}
+            <div style={{
+              position: 'absolute', width: '300px', height: '300px', borderRadius: '50%',
+              border: `1px solid rgba(201,169,110,0.15)`, top: '-60px', left: '-60px',
+            }} />
+            <div style={{
+              position: 'absolute', width: '200px', height: '200px', borderRadius: '50%',
+              border: `1px solid rgba(201,169,110,0.1)`, bottom: '-40px', right: '-40px',
+            }} />
 
-                  {/* Card header */}
-                  <div style={{ padding: '32px 28px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                    <p style={{ fontSize: '0.65rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: GOLD_LIGHT, fontWeight: 700, marginBottom: '8px' }}>
-                      {pkg.tier}
-                    </p>
-                    <h2 style={{ fontWeight: 800, fontSize: '1.35rem', color: '#fff', marginBottom: '6px' }}>
-                      {pkg.tagline}
-                    </h2>
-                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem', margin: '0 0 20px' }}>
-                      {pkg.villas.join(' + ')}
-                    </p>
-
-                    <div style={{ marginBottom: '4px' }}>
-                      <span style={{ fontWeight: 900, fontSize: 'clamp(2rem, 4vw, 2.8rem)', color: '#fff', lineHeight: 1 }}>
-                        {fmt(price)}
-                      </span>
-                    </div>
-                    <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.78rem', marginBottom: '20px' }}>
-                      {season === 'low' ? 'Low season · May – Nov' : 'High season · Jan – Apr, Nov – Dec'}
-                    </p>
-
-                    {/* Key stats */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                      {[
-                        [`${pkg.nights} nights`, 'Duration'],
-                        [`Up to ${pkg.overnight}`, 'Overnight guests'],
-                        [`Up to ${pkg.ceremony}`, 'Ceremony guests'],
-                        [pkg.catamaran ? 'Included' : 'Add-on', 'Catamaran'],
-                      ].map(([val, lbl]) => (
-                        <div key={lbl} style={{
-                          background: 'rgba(255,255,255,0.04)',
-                          borderRadius: '12px',
-                          padding: '10px 12px',
-                          border: '1px solid rgba(255,255,255,0.06)',
-                        }}>
-                          <p style={{ color: '#fff', fontWeight: 700, fontSize: '0.88rem', margin: '0 0 2px' }}>{val}</p>
-                          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.68rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{lbl}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Inclusions */}
-                  <div style={{ padding: '20px 28px 28px' }}>
-                    <p style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontWeight: 700, marginBottom: '14px' }}>
-                      What's included
-                    </p>
-                    <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: '9px' }}>
-                      {pkg.inclusions.map((item, i) => (
-                        <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.83rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>
-                          <svg style={{ flexShrink: 0, marginTop: '2px' }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GOLD_LIGHT} strokeWidth="2.5">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                          {item}
-                          {item.includes('catamaran') && (
-                            <span style={{ marginLeft: 'auto', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.1em', color: GOLD_LIGHT, textTransform: 'uppercase', background: 'rgba(184,151,46,0.12)', border: `1px solid rgba(201,169,110,0.25)`, borderRadius: '6px', padding: '2px 7px', flexShrink: 0 }}>Free</span>
-                          )}
-                        </li>
-                      ))}
-
-                      {/* Catamaran add-on note for non-Diamond */}
-                      {!pkg.catamaran && (
-                        <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.83rem', color: 'rgba(255,255,255,0.35)', lineHeight: 1.5, paddingTop: '4px', borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: '4px' }}>
-                          <svg style={{ flexShrink: 0, marginTop: '2px' }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="2">
-                            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                          </svg>
-                          Catamaran cruise bookable from +$2,300
-                        </li>
-                      )}
-                    </ul>
-
-                    <a href="/#contact" style={{
-                      display: 'block', textAlign: 'center',
-                      padding: '14px 20px',
-                      background: pkg.highlight
-                        ? `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`
-                        : 'rgba(255,255,255,0.07)',
-                      border: pkg.highlight ? 'none' : '1px solid rgba(255,255,255,0.12)',
-                      borderRadius: '50px',
-                      color: '#fff', fontWeight: 700, fontSize: '0.88rem',
-                      textDecoration: 'none',
-                      transition: 'opacity 0.2s',
-                    }}>
-                      Inquire about {pkg.tier}
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* ── ADD-ONS ───────────────────────────────────────────── */}
-      <div style={{ background: '#0b0f18', padding: 'clamp(64px,8vw,96px) 24px' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <p style={{ fontSize: '0.72rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: GOLD_LIGHT, fontWeight: 700, marginBottom: '14px' }}>
-              Flexible
-            </p>
-            <h2 style={{ fontWeight: 800, fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', color: '#fff', lineHeight: 1.1 }}>
-              Add-Ons &amp; Extras
-            </h2>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {ADDONS.map((a, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                flexWrap: 'wrap', gap: '12px',
-                background: '#111827', borderRadius: '16px', padding: '18px 24px',
-                border: '1px solid rgba(255,255,255,0.07)',
-              }}>
-                <div>
-                  <p style={{ color: '#fff', fontWeight: 600, fontSize: '0.95rem', margin: '0 0 3px' }}>{a.label}</p>
-                  <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.78rem', margin: 0 }}>{a.note}</p>
-                </div>
-                <span style={{
-                  color: GOLD_LIGHT, fontWeight: 800, fontSize: '0.95rem',
-                  background: 'rgba(184,151,46,0.1)', border: `1px solid rgba(201,169,110,0.2)`,
-                  borderRadius: '10px', padding: '6px 16px', whiteSpace: 'nowrap',
-                }}>{a.value}</span>
+            <div style={{
+              width: '100%', maxWidth: '260px',
+              background: 'rgba(255,255,255,0.04)',
+              border: `2px solid ${GOLD_LIGHT}`,
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow: '0 24px 48px rgba(0,0,0,0.4)',
+              position: 'relative', zIndex: 1,
+            }}>
+              <div style={{ height: '200px', overflow: 'hidden', position: 'relative' }}>
+                <img
+                  src="/images/weddings/hero.jpg"
+                  alt="Wedding Pricing Guide"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  onError={e => { e.currentTarget.style.display = 'none'; }}
+                />
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: 'linear-gradient(to bottom, transparent 40%, rgba(15,23,42,0.7) 100%)',
+                }} />
               </div>
-            ))}
+              <div style={{ padding: '28px 24px 32px', textAlign: 'center' }}>
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif", fontSize: '0.65rem',
+                  letterSpacing: '0.2em', textTransform: 'uppercase',
+                  color: GOLD_LIGHT, marginBottom: '8px', fontWeight: 600,
+                }}>
+                  Executive Weddings
+                </p>
+                <div style={{
+                  width: '40px', height: '2px',
+                  background: `linear-gradient(to right, ${GOLD}, ${GOLD_LIGHT})`,
+                  margin: '0 auto 16px',
+                }} />
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
+                  fontSize: '1.4rem', color: '#fff', lineHeight: 1.15,
+                }}>
+                  WEDDING<br />PRICING GUIDE
+                </p>
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif", fontSize: '0.72rem',
+                  color: 'rgba(255,255,255,0.5)', marginTop: '12px',
+                  letterSpacing: '0.1em', textTransform: 'uppercase',
+                }}>
+                  Costa Rica Destination Weddings
+                </p>
+              </div>
+            </div>
+
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem',
+              color: 'rgba(255,255,255,0.4)', marginTop: '28px',
+              textAlign: 'center', lineHeight: 1.6,
+              position: 'relative', zIndex: 1, maxWidth: '250px',
+            }}>
+              Package rates, inclusions, guest upgrades, and seasonal pricing in one guide.
+            </p>
+          </div>
+
+          <div style={{ padding: '48px 44px' }}>
+            {submitted ? (
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <div style={{
+                  width: '72px', height: '72px', borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #d1fae5, #a7f3d0)',
+                  margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <h2 style={{
+                  fontFamily: "'DM Sans', sans-serif", fontSize: '1.5rem', fontWeight: 800,
+                  color: '#111827', marginBottom: '8px',
+                }}>
+                  Guide Opened Successfully
+                </h2>
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif", color: '#6b7280', lineHeight: 1.65,
+                  maxWidth: '380px', margin: '0 auto 22px',
+                }}>
+                  The Wedding Pricing Guide download should start automatically. If not, click below.
+                </p>
+                <a
+                  href={WEDDING_GUIDE_URL}
+                  download="Executive-Vacations-Wedding-Pricing-Guide.pdf"
+                  style={{
+                    display: 'inline-block',
+                    background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`,
+                    color: '#fff',
+                    padding: '12px 24px',
+                    borderRadius: '999px',
+                    textDecoration: 'none',
+                    fontWeight: 700,
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                >
+                  Open Guide Again
+                </a>
+              </div>
+            ) : (
+              <>
+                <div style={{ marginBottom: '26px' }}>
+                  <h2 style={{
+                    fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: '1.7rem',
+                    color: '#111827', lineHeight: 1.15, marginBottom: '8px',
+                  }}>
+                    Get Wedding Pricing Instantly
+                  </h2>
+                  <p style={{
+                    fontFamily: "'DM Sans', sans-serif", color: '#6b7280',
+                    fontSize: '0.95rem', lineHeight: 1.7, margin: 0,
+                  }}>
+                    Share your details and access the complete Wedding Pricing Guide immediately.
+                  </p>
+                </div>
+
+                <form onSubmit={handleSubmit} name="pricing-lead" data-netlify="true">
+                  <input type="hidden" name="form-name" value="pricing-lead" />
+                  <input type="hidden" name="villaInterest" value="Wedding Request" />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+                    <Field name="firstName" label="First Name" placeholder="Jane" form={form} setForm={setForm} errors={errors} />
+                    <Field name="lastName" label="Last Name" placeholder="Smith" form={form} setForm={setForm} errors={errors} />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+                    <Field name="email" label="Email" type="email" placeholder="you@example.com" form={form} setForm={setForm} errors={errors} />
+                    <Field name="phone" label="Phone" placeholder="+1 234 567 890" form={form} setForm={setForm} errors={errors} />
+                  </div>
+
+                  <div style={{ marginBottom: '18px' }}>
+                    <label style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={form.agreed}
+                        onChange={e => setForm(f => ({ ...f, agreed: e.target.checked }))}
+                        style={{ marginTop: '2px' }}
+                      />
+                      <span style={{ fontFamily: "'DM Sans', sans-serif", color: '#6b7280', fontSize: '0.85rem', lineHeight: 1.55 }}>
+                        I agree to be contacted by Executive Vacations regarding wedding availability and pricing.
+                      </span>
+                    </label>
+                    {errors.agreed && (
+                      <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '4px', fontFamily: "'DM Sans', sans-serif" }}>
+                        {errors.agreed}
+                      </p>
+                    )}
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    style={{
+                      width: '100%',
+                      padding: '16px',
+                      borderRadius: '12px',
+                      border: 'none',
+                      cursor: submitting ? 'not-allowed' : 'pointer',
+                      background: submitting ? '#d1d5db' : `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`,
+                      color: '#fff',
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 700,
+                      fontSize: '0.95rem',
+                      transition: 'opacity 0.15s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '10px',
+                    }}
+                  >
+                    {submitting ? 'Sending…' : 'Open Wedding Pricing Guide'}
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* ── NOT INCLUDED ─────────────────────────────────────── */}
-      <div style={{ background: '#111827', padding: 'clamp(48px,6vw,72px) 24px' }}>
-        <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ fontSize: '0.72rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', fontWeight: 700, marginBottom: '20px' }}>
-            Not included in any package
-          </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px' }}>
-            {['Officiant / Priest', 'Photographer', 'Videographer', 'Wedding Planner', 'DJ / Live Music', 'Florals beyond basic'].map((item, i) => (
-              <span key={i} style={{
-                color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem',
-                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: '50px', padding: '7px 18px',
-              }}>{item}</span>
-            ))}
-          </div>
-          <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.8rem', marginTop: '20px', lineHeight: 1.7 }}>
-            Our concierge can recommend trusted local vendors for any of the above.
-          </p>
-        </div>
-      </div>
-
-      {/* ── CTA ──────────────────────────────────────────────── */}
-      <div style={{
-        background: `linear-gradient(135deg, ${GOLD} 0%, #a07040 100%)`,
-        padding: 'clamp(64px,8vw,96px) 24px',
-        textAlign: 'center',
-      }}>
-        <p style={{ fontSize: '0.72rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)', fontWeight: 700, marginBottom: '18px' }}>
-          Ready to Start?
-        </p>
-        <h2 style={{ fontWeight: 900, fontSize: 'clamp(2rem, 5vw, 3.2rem)', color: '#fff', lineHeight: 1.1, marginBottom: '16px' }}>
-          Tell Us Your Date &amp; Vision
-        </h2>
-        <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '1.05rem', lineHeight: 1.75, maxWidth: '500px', margin: '0 auto 40px' }}>
-          We'll confirm availability, answer every question, and put together a custom quote within 24 hours.
-        </p>
-        <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="/#contact" style={{
-            display: 'inline-block', padding: '18px 44px',
-            background: '#fff', borderRadius: '50px',
-            color: GOLD, fontWeight: 800, fontSize: '1rem', textDecoration: 'none',
-            boxShadow: '0 6px 28px rgba(0,0,0,0.2)',
-          }}>
-            Contact Us
-          </a>
-          <Link to="/weddings" style={{
-            display: 'inline-block', padding: '18px 44px',
-            background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)',
-            border: '1.5px solid rgba(255,255,255,0.4)',
-            borderRadius: '50px', color: '#fff', fontWeight: 600,
-            fontSize: '1rem', textDecoration: 'none',
-          }}>
-            Back to Weddings
-          </Link>
-        </div>
-      </div>
+      <style>{`
+        @media (max-width: 700px) {
+          .wedding-pricing-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
 
       <Footer />
     </div>
