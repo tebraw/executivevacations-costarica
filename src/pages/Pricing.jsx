@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { getSiteBrand } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 const GOLD_LIGHT = '#c9a96e';
@@ -82,6 +83,7 @@ const inputStyle = {
 };
 
 export default function Pricing() {
+  const brand = getSiteBrand();
   const [searchParams] = useSearchParams();
   const [form, setForm] = useState({
     firstName: '',
@@ -98,7 +100,7 @@ export default function Pricing() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const title = 'Free Pricing Guide — Luxury Villas Costa Rica | Executive Vacations';
+    const title = `Free Pricing Guide — Luxury Villas Costa Rica | ${brand.fullName}`;
     const desc = 'Download your free pricing guide for luxury villa rentals in Costa Rica. Get rates for Palacio Tropical, Palacio Musical, The View House, and The Palms Villa Estate.';
     document.title = title;
     const setMeta = (name, content, prop) => {

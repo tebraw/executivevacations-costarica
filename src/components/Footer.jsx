@@ -1,6 +1,9 @@
 import React from 'react';
+import { getSiteBrand } from '../utils/siteBrand';
 
 const Footer = () => {
+  const brand = getSiteBrand();
+
   return (
     <footer style={{ backgroundColor: '#0F172A' }} className="text-white py-16">
       <div className="container">
@@ -8,12 +11,11 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="md:col-span-2">
             <div className="mb-6">
-              <h3 className="heading-3 mb-2" style={{ color: '#D4AF37' }}>Executive Vacations</h3>
+              <h3 className="heading-3 mb-2" style={{ color: '#D4AF37' }}>{brand.name}</h3>
               <span className="text-luxury">Costa Rica</span>
             </div>
             <p className="body-regular text-white/80 mb-6 leading-relaxed max-w-md">
-              Your exclusive partner for luxury vacations in Costa Rica. We provide unforgettable 
-              experiences in the country's most beautiful villas.
+              {brand.footerText}
             </p>
             
             {/* Social Media */}
@@ -32,7 +34,7 @@ const Footer = () => {
               <li><a href="#experiences" className="body-regular text-white/80 hover:text-white transition-colors">Experiences</a></li>
               <li><a href="#contact" className="body-regular text-white/80 hover:text-white transition-colors">Contact</a></li>
               <li><a href="/blog" className="body-regular text-white/80 hover:text-white transition-colors">Blog</a></li>
-              <li><a href="/pricing" className="body-regular text-white/80 hover:text-white transition-colors">Pricing Guide</a></li>
+              <li><a href={brand.pricingPath} className="body-regular text-white/80 hover:text-white transition-colors">{brand.pricingLabel}</a></li>
             </ul>
           </div>
           
@@ -54,7 +56,7 @@ const Footer = () => {
         <div className="border-t border-white/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="body-small text-white/60">
-              &copy; 2024 Executive Vacations. All rights reserved.
+              &copy; 2024 {brand.name}. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a href="#" className="body-small text-white/60 hover:text-white transition-colors">Privacy Policy</a>

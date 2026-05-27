@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { getSiteBrand } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 const GOLD_LIGHT = '#c9a96e';
@@ -47,6 +48,7 @@ const Field = ({ name, label, type = 'text', placeholder, form, setForm, errors 
 );
 
 export default function WeddingPackages() {
+  const brand = getSiteBrand();
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -60,7 +62,7 @@ export default function WeddingPackages() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const title = 'Wedding Pricing Guide | Executive Vacations Costa Rica';
+    const title = `Wedding Pricing Guide | ${brand.fullName}`;
     const desc = 'Access our wedding pricing guide for destination weddings in Costa Rica. Explore package pricing, inclusions, and next steps.';
     document.title = title;
 
@@ -161,7 +163,7 @@ export default function WeddingPackages() {
             letterSpacing: '0.18em', textTransform: 'uppercase',
             color: GOLD, marginBottom: '10px', fontWeight: 600, textAlign: 'center',
           }}>
-            Executive Vacations · Costa Rica
+            {brand.fullName}
           </p>
           <h1 style={{
             fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
@@ -348,7 +350,7 @@ export default function WeddingPackages() {
                         style={{ marginTop: '2px' }}
                       />
                       <span style={{ fontFamily: "'DM Sans', sans-serif", color: '#6b7280', fontSize: '0.85rem', lineHeight: 1.55 }}>
-                        I agree to be contacted by Executive Vacations regarding wedding availability and pricing.
+                        I agree to be contacted by {brand.name} regarding wedding availability and pricing.
                       </span>
                     </label>
                     {errors.agreed && (

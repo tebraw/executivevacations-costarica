@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { getSiteBrand } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 const GOLD_LIGHT = '#c9a96e';
@@ -145,12 +146,13 @@ function GalleryTile({ src, index, onClick }) {
 }
 
 export default function Weddings() {
+  const brand = getSiteBrand();
   const [lightboxIdx, setLightboxIdx] = useState(null);
   const touchStartX = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Destination Weddings in Costa Rica | Executive Vacations';
+    document.title = `${brand.tagline} | ${brand.fullName}`;
     const setMeta = (name, content, prop) => {
       const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
       let el = document.querySelector(sel);
@@ -162,7 +164,7 @@ export default function Weddings() {
       el.setAttribute('content', content);
     };
     setMeta('description', 'Host your dream destination wedding in Costa Rica. Private beachfront estates, ceremony on the sand, private chefs, full staff, and a free catamaran tour included.');
-    setMeta('og:title', 'Destination Weddings in Costa Rica | Executive Vacations', true);
+    setMeta('og:title', `${brand.tagline} | ${brand.fullName}`, true);
     setMeta('og:url', 'https://executivevacations.net/weddings', true);
   }, []);
 
@@ -227,7 +229,7 @@ export default function Weddings() {
             borderLeft: `4px solid ${GOLD_LIGHT}`,
           }}>
             <p style={{ fontSize: '0.72rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: GOLD_LIGHT, fontWeight: 700, marginBottom: '18px' }}>
-              Executive Vacations &mdash; Costa Rica
+              {brand.fullName}
             </p>
             <h1 style={{ fontWeight: 900, fontSize: 'clamp(2.2rem, 4.4vw, 5.1rem)', color: '#fff', lineHeight: 1.0, marginBottom: '24px', textShadow: '0 2px 20px rgba(0,0,0,0.5)' }}>
               Your Wedding.<br />
@@ -249,7 +251,7 @@ export default function Weddings() {
             }}>
               Explore the Venue
             </a>
-            <Link to="/wedding-packages" style={{
+            <Link to={brand.pricingPath} style={{
               display: 'inline-block', padding: '16px 38px',
               background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)',
               border: '1.5px solid rgba(255,255,255,0.3)',
@@ -257,7 +259,7 @@ export default function Weddings() {
               fontSize: '0.95rem', textDecoration: 'none',
               letterSpacing: '0.02em',
             }}>
-              Get Pricing Guide
+              {brand.pricingLabel}
             </Link>
             </div>
           </div>
@@ -647,14 +649,14 @@ export default function Weddings() {
             Reach out with your dates and we'll take it from there.
           </p>
           <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/wedding-packages" style={{
+            <Link to={brand.pricingPath} style={{
               display: 'inline-block', padding: '18px 42px',
               background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`,
               borderRadius: '50px', color: '#fff', fontWeight: 700,
               fontSize: '1rem', textDecoration: 'none',
               boxShadow: '0 6px 28px rgba(184,151,46,0.5)',
             }}>
-              Get Pricing Guide
+              {brand.pricingLabel}
             </Link>
             <a href="/#contact" style={{
               display: 'inline-block', padding: '18px 42px',

@@ -9,6 +9,7 @@ import BlogPost from './pages/BlogPost'
 import Pricing from './pages/Pricing'
 import Weddings from './pages/Weddings'
 import WeddingPackages from './pages/WeddingPackages'
+import { isWeddingDomain } from './utils/siteBrand'
 
 // Fires once on load to record QR-code-sourced visits (?ref=...)
 function QRTracker() {
@@ -24,11 +25,13 @@ function QRTracker() {
 }
 
 function App() {
+  const weddingDomain = isWeddingDomain();
+
   return (
     <Router>
       <QRTracker />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={weddingDomain ? <Weddings /> : <Home />} />
         <Route path="/villa/:slug" element={<VillaDetailPage />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />

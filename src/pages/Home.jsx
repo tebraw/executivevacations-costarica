@@ -8,9 +8,11 @@ import ContactFormSection from '../components/ContactFormSection'
 import InstructionModal from '../components/InstructionModal'
 import Footer from '../components/Footer'
 import villas from '../data/villas'
+import { getSiteBrand } from '../utils/siteBrand'
 
 function Home() {
   const location = useLocation();
+  const brand = getSiteBrand();
   const [selectedVilla, setSelectedVilla] = useState(null);
   const [selectedActivities, setSelectedActivities] = useState([]);
   const [showInstructionModal, setShowInstructionModal] = useState(false);
@@ -18,7 +20,7 @@ function Home() {
 
   // SEO meta tags
   useEffect(() => {
-    const title = 'Private Luxury Villas in Costa Rica — Beachfront, Pool & Concierge | Executive Vacations';
+    const title = `Private Luxury Villas in Costa Rica — Beachfront, Pool & Concierge | ${brand.fullName}`;
     const desc = 'Discover 4 exclusive luxury villas in Costa Rica. Beachfront estates with private pools, stunning ocean views, and personalized concierge service. Book your dream vacation today.';
     document.title = title;
     const setMeta = (name, content, prop) => {

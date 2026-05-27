@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { getSiteBrand } from '../utils/siteBrand';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const brand = getSiteBrand();
 
   const handleContact = () => {
     setIsMenuOpen(false);
@@ -21,7 +23,7 @@ const Header = () => {
         <div className="flex items-center justify-between" style={{ height: '80px' }}>
           {/* Logo */}
           <Link to="/" className="flex items-center" style={{ textDecoration: 'none' }}>
-            <h1 className="heading-3 text-dark">Executive Vacations</h1>
+            <h1 className="heading-3 text-dark">{brand.name}</h1>
             <span className="text-luxury ml-2">Costa Rica</span>
           </Link>
 
@@ -29,11 +31,11 @@ const Header = () => {
           <div className="flex items-center gap-4">
             {/* Pricing Guide Button */}
             <Link
-              to="/pricing"
+              to={brand.pricingPath}
               className="btn btn-luxury"
               style={{ fontSize: '0.8rem', padding: '8px 16px', whiteSpace: 'nowrap' }}
             >
-              Pricing Guide
+              {brand.pricingLabel}
             </Link>
 
             {/* User Menu */}
@@ -57,8 +59,8 @@ const Header = () => {
                   <Link to="/weddings" className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
                     Weddings
                   </Link>
-                  <Link to="/pricing" className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
-                    Pricing Guide
+                  <Link to={brand.pricingPath} className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
+                    {brand.pricingLabel}
                   </Link>
                 </div>
               )}
