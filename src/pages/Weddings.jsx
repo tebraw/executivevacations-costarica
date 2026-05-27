@@ -251,7 +251,7 @@ export default function Weddings() {
             }}>
               Explore the Venue
             </a>
-            <Link to={brand.pricingPath} style={{
+            <a href={brand.pricingHref} style={{
               display: 'inline-block', padding: '16px 38px',
               background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)',
               border: '1.5px solid rgba(255,255,255,0.3)',
@@ -260,7 +260,7 @@ export default function Weddings() {
               letterSpacing: '0.02em',
             }}>
               {brand.pricingLabel}
-            </Link>
+            </a>
             </div>
           </div>
         </div>
@@ -649,7 +649,7 @@ export default function Weddings() {
             Reach out with your dates and we'll take it from there.
           </p>
           <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to={brand.pricingPath} style={{
+            <a href={brand.pricingHref} style={{
               display: 'inline-block', padding: '18px 42px',
               background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`,
               borderRadius: '50px', color: '#fff', fontWeight: 700,
@@ -657,7 +657,7 @@ export default function Weddings() {
               boxShadow: '0 6px 28px rgba(184,151,46,0.5)',
             }}>
               {brand.pricingLabel}
-            </Link>
+            </a>
             <a href="/#contact" style={{
               display: 'inline-block', padding: '18px 42px',
               background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(12px)',

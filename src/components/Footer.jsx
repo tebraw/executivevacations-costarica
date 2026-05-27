@@ -34,7 +34,7 @@ const Footer = () => {
               <li><a href="#experiences" className="body-regular text-white/80 hover:text-white transition-colors">Experiences</a></li>
               <li><a href="#contact" className="body-regular text-white/80 hover:text-white transition-colors">Contact</a></li>
               <li><a href="/blog" className="body-regular text-white/80 hover:text-white transition-colors">Blog</a></li>
-              <li><a href={brand.pricingPath} className="body-regular text-white/80 hover:text-white transition-colors">{brand.pricingLabel}</a></li>
+              <li><a href={brand.pricingHref} className="body-regular text-white/80 hover:text-white transition-colors">{brand.pricingLabel}</a></li>
             </ul>
           </div>
           
