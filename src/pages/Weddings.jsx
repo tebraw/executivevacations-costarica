@@ -526,7 +526,7 @@ export default function Weddings() {
               { name: 'Palacio Tropical', badge: 'Guest Estate',        dark: false, slug: 'palacio-tropical',
                 specs: ['10,500 sq ft','7 en-suite bedrooms','Up to 18 overnight guests','Private beachfront pool','Grand dining room (14 seated)','Outside bar & dining'] },
               { name: 'The View House',   badge: 'Family & Bridal Party', dark: false, slug: 'the-view-house',
-                specs: ['2,400 sq ft','1 en-suite, 3 bedrooms','Up to 4 overnight guests','Panoramic Pacific views','Custom infinity pool','5 min from main estate'] },
+                specs: ['2,400 sq ft','4 bedrooms','Up to 8 overnight guests','Panoramic Pacific views','Custom infinity pool','5 min from main estate'] },
             ].map(({ name, badge, dark, slug, specs }, i) => (
               <div key={i} style={{ borderRadius: '22px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', background: '#fff' }}>
                 <div style={{ background: dark ? 'linear-gradient(135deg, #0f172a, #1a2e1a)' : 'linear-gradient(135deg, #1e293b, #0f172a)', padding: '28px 28px 24px' }}>
