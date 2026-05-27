@@ -384,8 +384,8 @@ export default function Weddings() {
               {[
                 { name: 'Palacio Musical',  detail: '7 en-suites &bull; 18 overnight guests', primary: true },
                 { name: 'Palacio Tropical', detail: '7 en-suites &bull; 18 overnight guests', primary: false },
-                { name: 'Casa Oceano',      detail: 'Oceanfront villa &bull; additional guests', primary: false },
-                { name: 'The View House',   detail: '1 en-suite, 3 bedrooms &bull; 4 guests',  primary: false },
+                { name: 'Casa Oceano',      detail: 'Oceanfront villa &bull; 14 guests', primary: false },
+                { name: 'The View House',   detail: '4 bedrooms &bull; 8 guests',  primary: false },
                 { name: '+ Partner Villas', detail: 'Extended network &bull; up to 150 total overnight guests', partner: true },
               ].map(({ name, detail, primary, partner }, i) => (
                 <div key={i} style={{
@@ -416,7 +416,7 @@ export default function Weddings() {
               ))}
               <div style={{ marginTop: '8px', padding: '16px 20px', background: `linear-gradient(135deg, ${GOLD}, #a07040)`, borderRadius: '14px', textAlign: 'center' }}>
                 <p style={{ color: '#fff', fontWeight: 800, fontSize: '1.1rem', margin: '0 0 4px' }}>Up to 150 Overnight Guests</p>
-                <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.82rem', margin: 0 }}>Across all estates &amp; partner villas combined</p>
+                <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.82rem', margin: 0 }}>Across all estates, Boutique Hotel &amp; partner villas combined</p>
               </div>
             </div>
 
