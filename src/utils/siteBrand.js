@@ -4,7 +4,7 @@ const WEDDING_HOSTS = new Set([
 ]);
 
 const EXECUTIVE_DOMAIN = 'https://executivevacations.net';
-const WEDDING_DOMAIN = 'https://paradiseweddingscostarica.com';
+const WEDDING_DOMAIN = 'https://www.paradiseweddingscostarica.com';
 
 function isLocalHost() {
   const hostname = getHostname();
