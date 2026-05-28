@@ -30,8 +30,19 @@ const Footer = () => {
           <div>
             <h4 className="heading-3 mb-4" style={{ color: '#D4AF37' }}>Explore</h4>
             <ul className="space-y-3">
-              <li><a href="#villas" className="body-regular text-white/80 hover:text-white transition-colors">Our Villas</a></li>
-              <li><a href="#experiences" className="body-regular text-white/80 hover:text-white transition-colors">Experiences</a></li>
+              {brand.key === 'executive' ? (
+                <>
+                  <li><a href="#villas" className="body-regular text-white/80 hover:text-white transition-colors">Our Villas</a></li>
+                  <li><a href="#experiences" className="body-regular text-white/80 hover:text-white transition-colors">Experiences</a></li>
+                  <li><a href={brand.weddingsHref} className="body-regular text-white/80 hover:text-white transition-colors">Weddings</a></li>
+                </>
+              ) : (
+                <>
+                  <li><a href={brand.villasHref} className="body-regular text-white/80 hover:text-white transition-colors">Explore Villas</a></li>
+                  <li><a href="#gallery" className="body-regular text-white/80 hover:text-white transition-colors">Gallery</a></li>
+                  <li><a href="#pricing" className="body-regular text-white/80 hover:text-white transition-colors">Packages</a></li>
+                </>
+              )}
               <li><a href="#contact" className="body-regular text-white/80 hover:text-white transition-colors">Contact</a></li>
               <li><a href="/blog" className="body-regular text-white/80 hover:text-white transition-colors">Blog</a></li>
               <li><a href={brand.pricingHref} className="body-regular text-white/80 hover:text-white transition-colors">{brand.pricingLabel}</a></li>

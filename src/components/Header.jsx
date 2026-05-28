@@ -56,8 +56,8 @@ const Header = () => {
                   <Link to="/blog" className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
                     Blog
                   </Link>
-                  <a href={brand.weddingsHref} className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
-                    Weddings
+                  <a href={brand.key === 'wedding' ? brand.villasHref : brand.weddingsHref} className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
+                    {brand.key === 'wedding' ? 'Explore our Villas' : 'Weddings'}
                   </a>
                   <a href={brand.pricingHref} className="block px-4 py-3 body-regular text-dark hover:bg-light" onClick={() => setIsMenuOpen(false)}>
                     {brand.pricingLabel}

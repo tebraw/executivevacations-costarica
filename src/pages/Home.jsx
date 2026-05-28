@@ -102,6 +102,75 @@ function Home() {
     <div className="min-h-screen" style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
       <Header />
       <Hero />
+      
+      {/* Cross-CTA Banner: Planning a Wedding? */}
+      {brand.key === 'executive' && (
+        <div style={{
+          background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+          padding: 'clamp(24px, 5vw, 48px)',
+          borderTop: '2px solid #b8972e',
+          borderBottom: '2px solid #b8972e',
+        }}>
+          <div className="container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '20px',
+              textAlign: 'center',
+            }} className="md:flex-row md:text-left">
+              <div>
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  color: '#b8972e',
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                }}>
+                  Something Special
+                </p>
+                <h3 style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 'clamp(1.2rem, 4vw, 1.8rem)',
+                  color: '#fff',
+                  fontWeight: 800,
+                  lineHeight: 1.2,
+                  margin: 0,
+                }}>
+                  Planning a Destination Wedding?
+                </h3>
+              </div>
+              <a href={brand.weddingsHref}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  whiteSpace: 'nowrap',
+                  padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px)',
+                  background: 'linear-gradient(135deg, #c9a96e, #a07040)',
+                  color: '#fff',
+                  borderRadius: '50px',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                  fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 16px rgba(184,151,46,0.3)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(184,151,46,0.5)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(184,151,46,0.3)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+              >
+                Explore Weddings →
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <VillasSection 
         selectedVilla={selectedVilla}
         onVillaSelect={handleVillaSelect}
