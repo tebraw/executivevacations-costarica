@@ -323,11 +323,18 @@
 
     /* ── PRINT ── */
     @media print {
-      body { background: #fff; }
+      @page { size: A4; margin: 7mm; }
+      html, body {
+        width: auto;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff;
+      }
       .page {
-        width: 100%;
+        width: auto;
         margin: 0;
         box-shadow: none;
+        overflow: visible;
       }
       .print-btn { display: none; }
     }
@@ -527,12 +534,12 @@
           <span class="info-row-value">Costa Rica</span>
         </div>
         <div class="info-row">
-          <span class="info-row-label">Nearest Airport</span>
-          <span class="info-row-value">Tambor (TMU)</span>
+          <span class="info-row-label">Nearest Airports</span>
+          <span class="info-row-value">Cabano (ACO) or Tambor (TMU)</span>
         </div>
         <div class="info-row">
-          <span class="info-row-label">From San José</span>
-          <span class="info-row-value">~45 min flight</span>
+          <span class="info-row-label">From San Jose or Liberia</span>
+          <span class="info-row-value">~30 min flight</span>
         </div>
         <div class="info-row">
           <span class="info-row-label">To Palacio Villas</span>

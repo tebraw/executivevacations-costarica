@@ -36,14 +36,6 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
     });
   };
 
-  // For display purposes, get blocked ranges as strings
-  const getBlockedRangesForDisplay = () => {
-    return bookings.filter(b => {
-      if (!selectedVilla) return true;
-      return Array.isArray(b.villas) && b.villas.includes(selectedVilla.name);
-    }).map(b => ({ start: b.startDate, end: b.endDate }));
-  };
-
   const rangeOverlapsBlocked = (checkIn, checkOut) => {
     if (!checkIn || !checkOut) return null;
     const checkInDate = parseLocalDate(checkIn);
@@ -455,16 +447,6 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
                       <p className="text-red-500 text-sm mt-1">{errors.checkOut}</p>
                     )}
                   </div>
-                </div>
-              )}
-
-              {/* Blocked dates notice - only show when villa is selected */}
-              {selectedVilla && getBlockedRangesForDisplay().length > 0 && (
-                <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
-                  <span className="font-semibold">Already booked for {selectedVilla.name}:</span>{' '}
-                  {getBlockedRangesForDisplay().map((r, i) => (
-                    <span key={i} className="inline-block mr-2">{r.start} – {r.end}{i < getBlockedRangesForDisplay().length - 1 ? ',' : ''}</span>
-                  ))}
                 </div>
               )}
 

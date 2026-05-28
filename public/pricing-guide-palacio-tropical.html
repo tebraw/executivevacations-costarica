@@ -119,8 +119,19 @@
     .activity-tag { background: var(--dark); color: rgba(255,255,255,0.85); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
 
     @media print {
-      body { background: #fff; }
-      .page { width: 100%; margin: 0; box-shadow: none; }
+      @page { size: A4; margin: 7mm; }
+      html, body {
+        width: auto;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff;
+      }
+      .page {
+        width: auto;
+        margin: 0;
+        box-shadow: none;
+        overflow: visible;
+      }
     }
   </style>
 </head>
@@ -262,8 +273,8 @@
         <div class="info-row"><span class="info-row-label">Region</span><span class="info-row-value">Puntarenas Province</span></div>
         <div class="info-row"><span class="info-row-label">Area</span><span class="info-row-value">Tambor, Tango Mar</span></div>
         <div class="info-row"><span class="info-row-label">Country</span><span class="info-row-value">Costa Rica</span></div>
-        <div class="info-row"><span class="info-row-label">Nearest Airport</span><span class="info-row-value">Tambor (TMU)</span></div>
-        <div class="info-row"><span class="info-row-label">From San José</span><span class="info-row-value">~45 min flight</span></div>
+        <div class="info-row"><span class="info-row-label">Nearest Airports</span><span class="info-row-value">Cabano (ACO) or Tambor (TMU)</span></div>
+        <div class="info-row"><span class="info-row-label">From San Jose or Liberia</span><span class="info-row-value">~30 min flight</span></div>
         <div class="info-row"><span class="info-row-label">Next to</span><span class="info-row-value">Palacio Musical</span></div>
       </div>
     </div>

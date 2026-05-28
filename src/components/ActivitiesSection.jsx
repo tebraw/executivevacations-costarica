@@ -71,10 +71,10 @@ const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
     {
       id: 'private-air-charter',
       name: 'Private Air Charter Service',
-      description: 'Fly directly to your paradise! Our exclusive private air charter service brings you from SJO or LIR to Tambor Private Airstrip - just 20 minutes from Palicio Tropical, Palicio Musical, and The View House. Skip the long drive and arrive refreshed, enjoying personalized VIP service and flexible scheduling tailored to your travel needs.',
-      duration: '45-60 minutes',
+      description: 'Fly directly to your paradise! Our exclusive private air charter service brings you from San Jose or Liberia to Cabano (ACO) or Tambor (TMU). Typical flight duration is about 30 minutes. Skip the long drive and arrive refreshed, enjoying personalized VIP service and flexible scheduling tailored to your travel needs.',
+      duration: 'Around 30 minutes',
       image: getImagePath('images/activities/privateaircharter.webp'),
-      highlights: ['20 min to villas', 'Direct to Tambor Airstrip', 'VIP concierge service'],      isService: true
+      highlights: ['~30 min flight time', 'Cabano (ACO) or Tambor (TMU)', 'VIP concierge service'],      isService: true
     },
     {
       id: 'babysitter-service',
