@@ -131,7 +131,7 @@ const villas = [
     id: 1,
     slug: "the-palms-villa-estate",
     name: "The Palms Villa Estate",
-    useEnsuites: true,
+    useEnsuites: false,
     type: "Mountain Villa Retreat",
     location: "Atenas",
     fullLocation: "Santa Eulalia, Atenas, Costa Rica",
@@ -159,7 +159,7 @@ const villas = [
       { name: "Family Friendly", icon: "fa-home" },
       { name: "Event Hosting", icon: "fa-calendar" }
     ],
-    detailedDescription: "This beautiful mountain villa is nestled in the hills of Atenas, Costa Rica. Atenas offers a wonderful opportunity to experience authentic Costa Rican culture, known as a local favorite. The property provides a tranquil, peaceful, and quiet environment perfect for family vacations, intimate weddings, reunions, or personal and business retreats. With 4 en-suites (3 upstairs with full AC, 1 downstairs), the villa accommodates up to 8 guests comfortably. Additional sleeping options include a queen pull-out sofa and futon.",
+    detailedDescription: "This beautiful mountain villa is nestled in the hills of Atenas, Costa Rica. Atenas offers a wonderful opportunity to experience authentic Costa Rican culture, known as a local favorite. The property provides a tranquil, peaceful, and quiet environment perfect for family vacations, intimate weddings, reunions, or personal and business retreats. With 4 bedrooms (3 upstairs with full AC, 1 downstairs), the villa accommodates up to 8 guests comfortably. Additional sleeping options include a queen pull-out sofa and futon.",
     locationDescription: "Located in the hills of Atenas, just 32 miles from the nearest beach and marina on the Pacific coast. Experience authentic Costa Rican culture while staying close to all the adventures Costa Rica offers.",
     specialFeatures: [
       { name: "Full-time Caretaker (Don Manuel)", icon: "fa-user-tie" },
