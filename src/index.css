@@ -968,6 +968,49 @@ body {
   font-size: 0.875rem;
 }
 
+.header-pricing-short {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .header-top-row {
+    height: 72px !important;
+  }
+
+  .header-logo h1 {
+    font-size: 1.9rem;
+    line-height: 1.05;
+  }
+
+  .header-logo-location {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  .header-pricing-btn {
+    padding: 8px 10px !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.02em;
+  }
+
+  .header-pricing-full {
+    display: none;
+  }
+
+  .header-pricing-short {
+    display: inline;
+  }
+
+  .header-menu-btn {
+    padding: 8px 10px;
+    min-width: 74px;
+    font-size: 0.72rem;
+  }
+}
+
 /* Luxury Card System */
 .card {
   background: white;

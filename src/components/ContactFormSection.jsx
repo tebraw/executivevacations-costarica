@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import MiniCalendar, { toMidnight } from './MiniCalendar';
 
 const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
   const [bookings, setBookings] = useState([]);
@@ -12,6 +13,17 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
 
   // Returns booked ranges relevant to the selected villa (or all if none selected)
   const getBlockedRanges = () => {
+    return bookings.filter(b => {
+      if (!selectedVilla) return true;
+      return Array.isArray(b.villas) && b.villas.includes(selectedVilla.name);
+    }).map(b => {
+      const parse = s => { const [y,m,d] = s.split('-').map(Number); return toMidnight(new Date(y, m-1, d)); };
+      return { start: parse(b.startDate), end: parse(b.endDate) };
+    });
+  };
+
+  // For display purposes, get blocked ranges as strings
+  const getBlockedRangesForDisplay = () => {
     return bookings.filter(b => {
       if (!selectedVilla) return true;
       return Array.isArray(b.villas) && b.villas.includes(selectedVilla.name);
@@ -314,54 +326,128 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
               </div>
 
               {/* Check-in & Check-out Row */}
-              <div className="grid md:grid-cols-2 gap-6">
+              {selectedVilla ? (
                 <div>
-                  <label htmlFor="checkIn" className="block body-regular font-semibold mb-2">
-                    Check-in Date *
+                  <label className="block body-regular font-semibold mb-4">
+                    Select Your Dates *
                   </label>
-                  <input
-                    type="date"
-                    id="checkIn"
-                    name="checkIn"
-                    value={formData.checkIn}
-                    onChange={handleInputChange}
-                    min={new Date().toISOString().split('T')[0]}
-                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.checkIn ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                  />
+                  <p className="text-sm text-gray-600 mb-3">
+                    Click on a date to start, then select checkout date. Red dates are already booked.
+                  </p>
+                  <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                    gap: '20px'
+                  }}>
+                    <div style={{
+                      padding: '16px',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      background: '#f9fafb'
+                    }}>
+                      <MiniCalendar 
+                        checkIn={formData.checkIn ? new Date(formData.checkIn + 'T00:00:00Z') : null}
+                        checkOut={formData.checkOut ? new Date(formData.checkOut + 'T00:00:00Z') : null}
+                        onChange={(dates) => {
+                          const formatDate = (d) => d ? d.toISOString().split('T')[0] : '';
+                          setFormData(prev => ({
+                            ...prev,
+                            checkIn: formatDate(dates.checkIn),
+                            checkOut: formatDate(dates.checkOut)
+                          }));
+                          // Clear old errors when dates change
+                          setErrors(prev => ({ ...prev, checkIn: '', checkOut: '' }));
+                        }}
+                        bookedRanges={getBlockedRanges()}
+                      />
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'flex-start',
+                      gap: '12px'
+                    }}>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Check-in
+                        </label>
+                        <input
+                          type="date"
+                          value={formData.checkIn}
+                          onChange={(e) => setFormData(prev => ({ ...prev, checkIn: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Check-out
+                        </label>
+                        <input
+                          type="date"
+                          value={formData.checkOut}
+                          onChange={(e) => setFormData(prev => ({ ...prev, checkOut: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
                   {errors.checkIn && (
-                    <p className="text-red-500 text-sm mt-1">{errors.checkIn}</p>
+                    <p className="text-red-500 text-sm mt-2">{errors.checkIn}</p>
                   )}
-                </div>
-
-                <div>
-                  <label htmlFor="checkOut" className="block body-regular font-semibold mb-2">
-                    Check-out Date *
-                  </label>
-                  <input
-                    type="date"
-                    id="checkOut"
-                    name="checkOut"
-                    value={formData.checkOut}
-                    onChange={handleInputChange}
-                    min={formData.checkIn || new Date().toISOString().split('T')[0]}
-                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.checkOut ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                  />
-                  {errors.checkOut && (
+                  {errors.checkOut && errors.checkOut.trim() !== '' && (
                     <p className="text-red-500 text-sm mt-1">{errors.checkOut}</p>
                   )}
                 </div>
-              </div>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="checkIn" className="block body-regular font-semibold mb-2">
+                      Check-in Date *
+                    </label>
+                    <input
+                      type="date"
+                      id="checkIn"
+                      name="checkIn"
+                      value={formData.checkIn}
+                      onChange={handleInputChange}
+                      min={new Date().toISOString().split('T')[0]}
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        errors.checkIn ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                    />
+                    {errors.checkIn && (
+                      <p className="text-red-500 text-sm mt-1">{errors.checkIn}</p>
+                    )}
+                  </div>
 
-              {/* Blocked dates notice */}
-              {getBlockedRanges().length > 0 && (
+                  <div>
+                    <label htmlFor="checkOut" className="block body-regular font-semibold mb-2">
+                      Check-out Date *
+                    </label>
+                    <input
+                      type="date"
+                      id="checkOut"
+                      name="checkOut"
+                      value={formData.checkOut}
+                      onChange={handleInputChange}
+                      min={formData.checkIn || new Date().toISOString().split('T')[0]}
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        errors.checkOut ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                    />
+                    {errors.checkOut && (
+                      <p className="text-red-500 text-sm mt-1">{errors.checkOut}</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Blocked dates notice - only show when villa is selected */}
+              {selectedVilla && getBlockedRangesForDisplay().length > 0 && (
                 <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
-                  <span className="font-semibold">Already booked{selectedVilla ? ` for ${selectedVilla.name}` : ''}:</span>{' '}
-                  {getBlockedRanges().map((r, i) => (
-                    <span key={i} className="inline-block mr-2">{r.start} – {r.end}{i < getBlockedRanges().length - 1 ? ',' : ''}</span>
+                  <span className="font-semibold">Already booked for {selectedVilla.name}:</span>{' '}
+                  {getBlockedRangesForDisplay().map((r, i) => (
+                    <span key={i} className="inline-block mr-2">{r.start} – {r.end}{i < getBlockedRangesForDisplay().length - 1 ? ',' : ''}</span>
                   ))}
                 </div>
               )}
