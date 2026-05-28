@@ -164,7 +164,7 @@ export default function Weddings() {
       }
       el.setAttribute('content', content);
     };
-    setMeta('description', 'Host your dream destination wedding in Costa Rica. Private beachfront estates, ceremony on the sand, private chefs, full staff, and a free catamaran tour included.');
+    setMeta('description', 'Host your dream destination wedding in Costa Rica. Secluded beachfront estates with private access to the beach, ceremony on the sand, private chefs, full staff, and a free catamaran tour included.');
     setMeta('og:title', `${brand.tagline} | ${brand.fullName}`, true);
     setMeta('og:url', 'https://executivevacations.net/weddings', true);
   }, []);
@@ -304,7 +304,7 @@ export default function Weddings() {
               On the Pacific.
             </h1>
             <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'rgba(255,255,255,0.84)', lineHeight: 1.75, margin: '0 0 34px 0', textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
-              Private beachfront estates. Ceremony on the sand.
+              Secluded beachfront estates with private access to the beach. Ceremony on the sand.
               Full staff, private chefs &mdash; everything your planner needs in one place.
             </p>
             <div style={{ display: 'flex', gap: '14px', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
@@ -422,7 +422,7 @@ export default function Weddings() {
               Vows on the Sand.<br />Ocean in Front of You.
             </h2>
             <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '1rem', lineHeight: 1.85, marginBottom: '28px' }}>
-              Exchange your vows directly on the beach with the Pacific stretching to the horizon. Completely open-air, completely private, completely unforgettable. No ballroom. No restrictions. Just you, your guests, and the ocean.
+              Exchange your vows directly on the beach with the Pacific stretching to the horizon. Completely open-air, highly secluded, and unforgettable. No ballroom. A natural oceanfront setting for you and your guests.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {['Up to 150 ceremony guests', 'Open-air beach setting', 'Fully private & secure'].map((f, i) => (
@@ -538,7 +538,7 @@ export default function Weddings() {
                 <span style={{ color: GOLD_LIGHT, fontStyle: 'italic' }}>Where It All Happens.</span>
               </h2>
               <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '1rem', lineHeight: 1.85, marginBottom: '20px' }}>
-                12,500 sq ft of private beachfront estate directly on Costa Rica's Tango Mar coast. Three ocean-view decks, a professional music studio, a whale watching observatory, and a natural beach ceremony area steps below the property.
+                12,500 sq ft of secluded beachfront estate with private access to the beach directly on Costa Rica's Tango Mar coast. Three ocean-view decks, a professional music studio, a whale watching observatory, and a natural beach ceremony area steps below the property.
               </p>
               <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '1rem', lineHeight: 1.85 }}>
                 The main estate sleeps 18 guests in 7 en-suite bedrooms -- but your wedding doesn't stop there. Right next door sits Palacio Tropical, and together they form one of the most exclusive private venues on the Pacific coast.
@@ -649,11 +649,11 @@ export default function Weddings() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
             {[
               { icon: SVGHome,     title: 'Venue + Overnight Stays',     desc: 'Your guests stay at the venue. Up to 150 overnight guests across our estates and partner villas. No hotel shuttles. No separation.' },
-              { icon: SVGBeach,    title: 'Beach Ceremony',               desc: "Exchange vows on the sand with the Pacific in front of you. Open-air, no restrictions, completely private." },
+              { icon: SVGBeach,    title: 'Beach Ceremony',               desc: "Exchange vows on the sand with the Pacific in front of you. Open-air, naturally secluded, and unforgettable." },
               { icon: SVGChef,     title: 'Private Chefs & Full Staff',   desc: 'Private chefs, concierge, housekeeping, and security -- all included. Every meal, every day handled.' },
               { icon: SVGPlanner,  title: 'Any Planner, Any Vision',      desc: 'Bring your own planner or use ours. We work with any vendor, any setup. Tell us what you need -- we make it happen.' },
               { icon: SVGBoat,     title: 'Free Catamaran Tour',          desc: 'Included free with any 7-night booking. Private boat to Playa Muertos -- the perfect rehearsal dinner.' },
-              { icon: SVGLock,     title: 'Fully Private & Secure',       desc: 'Gated estates with on-site security. Only your guests have access. Your wedding stays intimate and exclusive.' },
+              { icon: SVGLock,     title: 'Fully Private & Secure',       desc: 'Private estate setting with on-site security. Beach access is secluded and primarily used by your group. Your wedding stays intimate and exclusive.' },
             ].map(({ icon: Icon, title, desc }, i) => (
               <div key={i} style={{
                 background: '#fafaf8', borderRadius: '20px', padding: '28px',
@@ -693,7 +693,7 @@ export default function Weddings() {
               { name: 'Palacio Musical',  badge: 'Main Event Estate',  dark: true,  slug: 'palacio-musical',
                 specs: ['12,500 sq ft','7 en-suite bedrooms','Up to 18 overnight guests','Three ocean-view decks','Professional music studio','Beach ceremony venue'] },
               { name: 'Palacio Tropical', badge: 'Guest Estate',        dark: false, slug: 'palacio-tropical',
-                specs: ['10,500 sq ft','7 en-suite bedrooms','Up to 18 overnight guests','Private beachfront pool','Grand dining room (14 seated)','Outside bar & dining'] },
+                specs: ['10,500 sq ft','7 en-suite bedrooms','Up to 18 overnight guests','Secluded beachfront pool','Grand dining room (14 seated)','Outside bar & dining'] },
               { name: 'The View House',   badge: 'Family & Bridal Party', dark: false, slug: 'the-view-house',
                 specs: ['2,400 sq ft','4 bedrooms','Up to 8 overnight guests','Panoramic Pacific views','Custom infinity pool','5 min from main estate'] },
             ].map(({ name, badge, dark, slug, specs }, i) => (

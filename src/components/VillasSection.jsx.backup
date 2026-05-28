@@ -194,7 +194,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         "/images/villas/palacio-tropical/palaciotropical-320.floor2.jpg",
         "/images/villas/palacio-tropical/palaciotropical-327.floor3.jpg"
       ],
-      topAmenities: ["Private Beach", "Full Staff", "Security", "Ocean Views"],
+      topAmenities: ["Secluded Beach Access", "Full Staff", "Security", "Ocean Views"],
       allAmenities: [
         { name: "Private Oceanfront Beach", icon: "fa-umbrella-beach" },
         { name: "Full Staff Available", icon: "fa-concierge-bell" },
@@ -210,7 +210,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "Separate Security Quarters", icon: "fa-home" }
       ],
       detailedDescription: "Experience private luxury throughout this stunning 10,500 sq ft oceanfront villa. Featuring 7 en-suites, each with private bath and A/C, plus a grand dining room seating 14. Multiple large gathering areas open to an outside bar, dining area, and large pool. Safe and private for traveling dignitaries, officials, and politicians. The house can be fully staffed with cooks, housekeeping, and concierge service for outings and excursions. Located directly next to Palicio Musical, both properties can be booked together for larger events and groups. Palacio Tropical offers an unforgettable oceanfront experience with complete privacy and security.",
-      locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and private beach allow you to enjoy family and guests without unwanted attention from media or paparazzi. Situated directly next to Palicio Musical - both villas can be combined for ultimate luxury accommodation.",
+      locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and secluded beach access let you enjoy family and guests with exceptional privacy and minimal foot traffic. Situated directly next to Palicio Musical - both villas can be combined for ultimate luxury accommodation.",
       specialFeatures: [
         { name: "VIP Privacy & Security", icon: "fa-user-shield" },
         { name: "Full Staff Service", icon: "fa-concierge-bell" },
@@ -248,7 +248,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "Full Staff Available", icon: "fa-concierge-bell" },
         { name: "Similar Size to Tropical", icon: "fa-home" },
         { name: "Modern Amenities", icon: "fa-star" },
-        { name: "Private Beach Access", icon: "fa-umbrella-beach" },
+        { name: "Direct Secluded Beach Access", icon: "fa-umbrella-beach" },
         { name: "Enhanced Security", icon: "fa-shield-alt" },
         { name: "Next to Palacio Tropical", icon: "fa-map-marker-alt" },
         { name: "Combinable Booking", icon: "fa-link" }

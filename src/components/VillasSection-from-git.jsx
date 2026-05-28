@@ -39,7 +39,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         {/* Selected Badge */}
         {isSelected && (
           <div className="absolute top-3 left-3 bg-luxury-gold text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-            <span>Ô£ô</span> SELECTED
+            <span>Ô£ï¿½</span> SELECTED
           </div>
         )}
 
@@ -69,7 +69,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         <div className="flex items-center justify-between mb-3">
           <span className="body-regular text-dark font-medium">{villa.location}</span>
           <div className="rating">
-            <span className="body-small">Ôÿà {villa.rating}</span>
+            <span className="body-small">ï¿½ï¿½ï¿½ {villa.rating}</span>
           </div>
         </div>
 
@@ -112,7 +112,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             onClick={() => onSelect(villa)}
             className={`btn flex-1 ${isSelected ? 'btn-success' : 'btn-luxury'}`}
           >
-            {isSelected ? 'Ô£ô Selected' : 'Select Villa'}
+            {isSelected ? 'Ô£ï¿½ Selected' : 'Select Villa'}
           </button>
         </div>
       </div>
@@ -143,7 +143,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         "/images/villas/palacio-tropical/palaciotropical-518.exterior.jpg"
       ],
       detailImages: ["/images/villas/palacio-tropical/palaciotropical.dronephoto-03.jpg", "/images/villas/palacio-tropical/palaciotropical.dronephoto-08.jpg", "/images/villas/palacio-tropical/palaciotropical-008.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-014.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-021.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-049.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-056.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-063.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-1.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-105.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-167.mainfloor.jpg", "/images/villas/palacio-tropical/palaciotropical-201.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-236.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-250.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-320.floor2.jpg", "/images/villas/palacio-tropical/palaciotropical-327.floor3.jpg", "/images/villas/palacio-tropical/palaciotropical-386.basement (1).jpg", "/images/villas/palacio-tropical/palaciotropical-393.basement.jpg", "/images/villas/palacio-tropical/palaciotropical-435.basement.jpg", "/images/villas/palacio-tropical/palaciotropical-455.exterior_1.jpg", "/images/villas/palacio-tropical/palaciotropical-469.exterior_1.jpg", "/images/villas/palacio-tropical/palaciotropical-518.exterior.jpg", "/images/villas/palacio-tropical/palaciotropical-532.exterior.jpg", "/images/villas/palacio-tropical/palaciotropical-567.exterior.jpg", "/images/villas/palacio-tropical/palaciotropical-580.exterior.jpg"],
-      topAmenities: ["Private Beach", "Full Staff", "Security", "Ocean Views"],
+      topAmenities: ["Secluded Beach Access", "Full Staff", "Security", "Ocean Views"],
       allAmenities: [
         { name: "Private Oceanfront Beach", icon: "fa-umbrella-beach" },
         { name: "Full Staff Available", icon: "fa-concierge-bell" },
@@ -159,7 +159,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "Separate Security Quarters", icon: "fa-home" }
       ],
       detailedDescription: "Experience private luxury throughout this stunning 10,500 sq ft oceanfront villa. Featuring 7 en-suites, each with private bath and A/C, plus a grand dining room seating 14. Multiple large gathering areas open to an outside bar, dining area, and large pool. Safe and private for traveling dignitaries, officials, and politicians. The house can be fully staffed with cooks, housekeeping, and concierge service for outings and excursions. Located directly next to Palacio Musical, both properties can be booked together for larger events and groups. Palacio Tropical offers an unforgettable oceanfront experience with complete privacy and security.",
-      locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and private beach allow you to enjoy family and guests without unwanted attention from media or paparazzi. Situated directly next to Palacio Musical - both villas can be combined for ultimate luxury accommodation.",
+      locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and secluded beach access let you enjoy family and guests with exceptional privacy and minimal foot traffic. Situated directly next to Palacio Musical - both villas can be combined for ultimate luxury accommodation.",
       specialFeatures: [
         { name: "VIP Privacy & Security", icon: "fa-user-shield" },
         { name: "Full Staff Service", icon: "fa-concierge-bell" },
@@ -190,7 +190,7 @@ const VillasSection = ({ selectedVilla, onVillaSelect }) => {
         { name: "Full Staff Available", icon: "fa-concierge-bell" },
         { name: "Similar Size to Tropical", icon: "fa-home" },
         { name: "Modern Amenities", icon: "fa-star" },
-        { name: "Private Beach Access", icon: "fa-umbrella-beach" },
+        { name: "Direct Secluded Beach Access", icon: "fa-umbrella-beach" },
         { name: "Enhanced Security", icon: "fa-shield-alt" },
         { name: "Next to Palacio Tropical", icon: "fa-map-marker-alt" },
         { name: "Combinable Booking", icon: "fa-link" }

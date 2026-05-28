@@ -22,9 +22,9 @@ const villas = [
       "/images/villas/palacio-tropical/palaciotropical-518.exterior.webp"
     ],
     detailImages: ["/images/villas/palacio-tropical/ChatGPT Image May 23, 2026, 07_17_57 PM.png", "/images/villas/palacio-tropical/palaciotropical.dronephoto-03.webp", "/images/villas/palacio-tropical/palaciotropical.dronephoto-08.webp", "/images/villas/palacio-tropical/palaciotropical-008.mainfloor.webp", "/images/villas/palacio-tropical/palaciotropical-014.mainfloor.webp", "/images/villas/palacio-tropical/palaciotropical-021.mainfloor.webp", "/images/villas/palacio-tropical/palaciotropical-049.mainfloor.webp", "/images/villas/palacio-tropical/palaciotropical-056.mainfloor.webp", "/images/villas/palacio-tropical/palaciotropical-063.mainfloor.webp", "/images/villas/palacio-tropical/palaciotropical-1.mainfloor.webp", "/images/villas/palacio-tropical/palaciotropical-105.mainfloor.webp", "/images/villas/palacio-tropical/palaciotropical-167.mainfloor.webp", "/images/villas/palacio-tropical/palaciotropical-201.floor2.webp", "/images/villas/palacio-tropical/palaciotropical-236.floor2.webp", "/images/villas/palacio-tropical/palaciotropical-250.floor2.webp", "/images/villas/palacio-tropical/palaciotropical-320.floor2.webp", "/images/villas/palacio-tropical/palaciotropical-327.floor3.webp", "/images/villas/palacio-tropical/palaciotropical-386.basement (1).webp", "/images/villas/palacio-tropical/palaciotropical-393.basement.webp", "/images/villas/palacio-tropical/palaciotropical-435.basement.webp", "/images/villas/palacio-tropical/palaciotropical-455.exterior_1.webp", "/images/villas/palacio-tropical/palaciotropical-469.exterior_1.webp", "/images/villas/palacio-tropical/palaciotropical-518.exterior.webp", "/images/villas/palacio-tropical/palaciotropical-532.exterior.webp", "/images/villas/palacio-tropical/palaciotropical-567.exterior.webp", "/images/villas/palacio-tropical/palaciotropical-580.exterior.webp", "/images/villas/palacio-tropical/ChatGPT Image May 23, 2026, 07_25_28 PM.png"],
-    topAmenities: ["Private Beach", "Full Staff", "Security", "Beach Views"],
+    topAmenities: ["Secluded Beach Access", "Full Staff", "Security", "Beach Views"],
     allAmenities: [
-      { name: "Private Beachfront Access", icon: "fa-umbrella-beach" },
+      { name: "Direct Secluded Beachfront Access", icon: "fa-umbrella-beach" },
       { name: "Full Staff Available", icon: "fa-concierge-bell" },
       { name: "Enhanced Security", icon: "fa-shield-alt" },
       { name: "Beach Views", icon: "fa-water" },
@@ -38,7 +38,7 @@ const villas = [
       { name: "Separate Security Quarters", icon: "fa-home" }
     ],
     detailedDescription: "Experience private luxury throughout this stunning 10,500 sq ft beachfront villa. Featuring 7 en-suites, each with private bath and A/C, plus a grand dining room seating 14. Multiple large gathering areas open to an outside bar, dining area, and large pool. Safe and private for traveling dignitaries, officials, and politicians. The house can be fully staffed with cooks, housekeeping, and concierge service for outings and excursions. Located directly next to Palacio Musical, both properties can be booked together for larger events and groups. Palacio Tropical offers an unforgettable beachfront experience with complete privacy and security.",
-    locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and private beach allow you to enjoy family and guests without unwanted attention from media or paparazzi. Situated directly next to Palacio Musical - both villas can be combined for ultimate luxury accommodation.",
+    locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and secluded beach access let you enjoy family and guests with exceptional privacy and minimal foot traffic. Situated directly next to Palacio Musical - both villas can be combined for ultimate luxury accommodation.",
     specialFeatures: [
       { name: "VIP Privacy & Security", icon: "fa-user-shield" },
       { name: "Full Staff Service", icon: "fa-concierge-bell" },
@@ -76,7 +76,7 @@ const villas = [
       { name: "Full Staff Available", icon: "fa-concierge-bell" },
       { name: "Similar Size to Tropical", icon: "fa-home" },
       { name: "Modern Amenities", icon: "fa-star" },
-      { name: "Private Beach Access", icon: "fa-umbrella-beach" },
+      { name: "Direct Secluded Beach Access", icon: "fa-umbrella-beach" },
       { name: "Enhanced Security", icon: "fa-shield-alt" },
       { name: "Next to Palacio Tropical", icon: "fa-map-marker-alt" },
       { name: "Combinable Booking", icon: "fa-link" }
