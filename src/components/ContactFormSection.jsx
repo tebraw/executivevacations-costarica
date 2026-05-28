@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import MiniCalendar, { toMidnight } from './MiniCalendar';
 
+const parseLocalDate = (value) => {
+  if (!value) return null;
+  const [y, m, d] = value.split('-').map(Number);
+  return toMidnight(new Date(y, m - 1, d));
+};
+
+const formatLocalDate = (date) => {
+  if (!date) return '';
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
 const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
   const [bookings, setBookings] = useState([]);
 
@@ -32,8 +46,11 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
 
   const rangeOverlapsBlocked = (checkIn, checkOut) => {
     if (!checkIn || !checkOut) return null;
+    const checkInDate = parseLocalDate(checkIn);
+    const checkOutDate = parseLocalDate(checkOut);
+    if (!checkInDate || !checkOutDate) return null;
     const ranges = getBlockedRanges();
-    return ranges.find(r => checkIn < r.end && checkOut > r.start) || null;
+    return ranges.find(r => checkInDate < r.end && checkOutDate > r.start) || null;
   };
 
   const [formData, setFormData] = useState({
@@ -346,14 +363,13 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
                       background: '#f9fafb'
                     }}>
                       <MiniCalendar 
-                        checkIn={formData.checkIn ? new Date(formData.checkIn + 'T00:00:00Z') : null}
-                        checkOut={formData.checkOut ? new Date(formData.checkOut + 'T00:00:00Z') : null}
+                        checkIn={parseLocalDate(formData.checkIn)}
+                        checkOut={parseLocalDate(formData.checkOut)}
                         onChange={(dates) => {
-                          const formatDate = (d) => d ? d.toISOString().split('T')[0] : '';
                           setFormData(prev => ({
                             ...prev,
-                            checkIn: formatDate(dates.checkIn),
-                            checkOut: formatDate(dates.checkOut)
+                            checkIn: formatLocalDate(dates.checkIn),
+                            checkOut: formatLocalDate(dates.checkOut)
                           }));
                           // Clear old errors when dates change
                           setErrors(prev => ({ ...prev, checkIn: '', checkOut: '' }));
