@@ -44,7 +44,8 @@ const villas = [
       { name: "Full Staff Service", icon: "fa-concierge-bell" },
       { name: "Airport Transfer Service", icon: "fa-plane" }
     ],
-    virtualTour: "https://my.matterport.com/show/?m=fyPUdmtVF1H"
+    virtualTour: "https://my.matterport.com/show/?m=fyPUdmtVF1H",
+    pricingPdf: "/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf"
   },
   {
     id: 4,
@@ -88,7 +89,8 @@ const villas = [
       { name: "Newly Renovated", icon: "fa-tools" },
       { name: "Combinable with Palacio Tropical", icon: "fa-link" }
     ],
-    virtualTour: "https://my.matterport.com/show/?m=PAjrDDM98oj"
+    virtualTour: "https://my.matterport.com/show/?m=PAjrDDM98oj",
+    pricingPdf: "/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf"
   },
   {
     id: 3,
@@ -125,7 +127,8 @@ const villas = [
       { name: "Newly Constructed", icon: "fa-hammer" },
       { name: "Custom Pool Design", icon: "fa-swimming-pool" },
       { name: "Combinable with Palacio Villas", icon: "fa-link" }
-    ]
+    ],
+    pricingPdf: "/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf"
   },
   {
     id: 1,
@@ -165,7 +168,8 @@ const villas = [
       { name: "Full-time Caretaker (Don Manuel)", icon: "fa-user-tie" },
       { name: "Resort-style Grounds", icon: "fa-tree" },
       { name: "Perfect for Events", icon: "fa-calendar" }
-    ]
+    ],
+    pricingPdf: "/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf"
   }
 ];
 

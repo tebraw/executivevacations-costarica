@@ -118,13 +118,14 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             {isSelected ? '✓ Selected' : 'Select Villa'}
           </button>
         </div>
-        <button
-          onClick={() => navigate(`/pricing?villa=${encodeURIComponent(villa.name)}`)}
+        <a
+          href={villa.pricingPdf}
+          download
           className="btn btn-secondary w-full mt-2"
-          style={{ fontSize: '0.78rem', letterSpacing: '0.06em' }}
+          style={{ fontSize: '0.78rem', letterSpacing: '0.06em', display: 'block', textAlign: 'center', textDecoration: 'none' }}
         >
           Pricing Guide
-        </button>
+        </a>
       </div>
     </div>
   );
