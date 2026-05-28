@@ -70,6 +70,16 @@
       <input type="text" name="villaInterest" />
       <input type="text" name="welcomeMessage" />
     </form>
+
+    <!-- Hidden form for wedding inquiries -->
+    <form name="wedding-contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="date" name="weddingDate" />
+      <input type="text" name="guestCount" />
+      <textarea name="message"></textarea>
+    </form>
     
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
