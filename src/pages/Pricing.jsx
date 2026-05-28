@@ -16,7 +16,7 @@ const VILLAS = [
 ];
 
 const VILLA_PDF_MAP = {
-  'All Villas': '/pdfs/All Villas — Pricing Guide _ Executive Vacations.pdf',
+  'All Villas': '/pdfs/All Villas - Pricing Guide _ Executive Vacations.pdf',
   'Palacio Musical': '/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf',
   'Palacio Tropical': '/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf',
   'The View House': '/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
@@ -96,7 +96,7 @@ export default function Pricing() {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [pdfUrl, setPdfUrl] = useState('');
+  const selectedPdfUrl = VILLA_PDF_MAP[form.villaInterest] || VILLA_PDF_MAP['All Villas'];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -113,10 +113,6 @@ export default function Pricing() {
     setMeta('og:title', title, true);
     setMeta('og:description', desc, true);
     setMeta('og:url', 'https://executivevacations.net/pricing', true);
-    fetch('/.netlify/functions/get-settings')
-      .then(r => r.ok ? r.json() : {})
-      .then(data => { if (data.pricingPdfUrl) setPdfUrl(data.pricingPdfUrl); })
-      .catch(() => {});
   }, []);
 
   const validate = () => {
@@ -170,8 +166,8 @@ export default function Pricing() {
     setSubmitting(false);
     setSubmitted(true);
 
-    // Trigger PDF download for selected villa
-    const villaPdf = VILLA_PDF_MAP[form.villaInterest] || pdfUrl;
+    // Trigger PDF download for selected villa from public/pdfs mapping
+    const villaPdf = selectedPdfUrl;
     if (villaPdf) {
       const a = document.createElement('a');
       a.href = villaPdf;
@@ -339,9 +335,9 @@ export default function Pricing() {
                 }}>
                   {'Your pricing guide has been downloaded. Our team will be in touch with you soon!'}
                 </p>
-                {pdfUrl && (
+                {selectedPdfUrl && (
                   <a
-                    href={pdfUrl}
+                    href={selectedPdfUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     download
