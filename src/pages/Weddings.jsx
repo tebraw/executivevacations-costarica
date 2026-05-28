@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import WeddingContactFormSection from '../components/WeddingContactFormSection';
 import { getSiteBrand } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
@@ -724,7 +725,7 @@ export default function Weddings() {
             }}>
               {brand.pricingLabel}
             </a>
-            <a href="/#contact" style={{
+            <a href="/#wedding-contact" style={{
               display: 'inline-block', padding: '18px 42px',
               background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(12px)',
               border: '1.5px solid rgba(255,255,255,0.3)',
@@ -736,6 +737,8 @@ export default function Weddings() {
           </div>
         </div>
       </BgImage>
+
+      <WeddingContactFormSection />
 
       <Footer />
 
