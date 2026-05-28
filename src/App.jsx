@@ -6,6 +6,7 @@ import AdminDashboard from './pages/AdminDashboard'
 import VillaDetailPage from './pages/VillaDetailPage'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
+import WeddingBlog from './pages/WeddingBlog'
 import Pricing from './pages/Pricing'
 import Weddings from './pages/Weddings'
 import WeddingPackages from './pages/WeddingPackages'
@@ -35,6 +36,7 @@ function App() {
         <Route path="/villa/:slug" element={<VillaDetailPage />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/wedding-blog" element={<WeddingBlog />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/weddings" element={<Weddings />} />
         <Route path="/wedding-packages" element={<WeddingPackages />} />

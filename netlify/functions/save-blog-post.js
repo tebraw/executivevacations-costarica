@@ -12,7 +12,7 @@ function toSlug(title) {
 export default async (req, context) => {
   try {
     const body = await req.json();
-    const { id, title, text, imageUrl, date, metaTitle, metaDesc, focusKeyword } = body;
+    const { id, title, text, imageUrl, date, metaTitle, metaDesc, focusKeyword, site } = body;
 
     if (!title || !title.trim() || !text || !text.trim()) {
       return new Response(JSON.stringify({ error: 'Title and text are required' }), {
@@ -29,6 +29,7 @@ export default async (req, context) => {
     const safeMetaTitle = (metaTitle || '').trim().slice(0, 60);
     const safeMetaDesc = (metaDesc || '').trim().slice(0, 155);
     const safeFocusKeyword = (focusKeyword || '').trim().slice(0, 100);
+    const safeSite = ['villa', 'wedding', 'both'].includes(site) ? site : 'villa';
 
     const store = getStore('blog-posts');
     const existing = await store.get('all-posts');
@@ -53,6 +54,7 @@ export default async (req, context) => {
         metaTitle: safeMetaTitle,
         metaDesc: safeMetaDesc,
         focusKeyword: safeFocusKeyword,
+        site: safeSite,
         updatedAt: new Date().toISOString(),
       };
     } else {
@@ -67,6 +69,7 @@ export default async (req, context) => {
         metaTitle: safeMetaTitle,
         metaDesc: safeMetaDesc,
         focusKeyword: safeFocusKeyword,
+        site: safeSite,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };

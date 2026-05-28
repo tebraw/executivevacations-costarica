@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [blogLoading, setBlogLoading] = useState(false);
   const [blogSaving, setBlogSaving] = useState(false);
-  const [blogForm, setBlogForm] = useState({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0], metaTitle: '', metaDesc: '', focusKeyword: '' });
+  const [blogForm, setBlogForm] = useState({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0], metaTitle: '', metaDesc: '', focusKeyword: '', site: 'villa' });
 
   const BLOG_TEMPLATES = [
     { label: '— Load a template —', value: '' },
@@ -75,6 +75,86 @@ const AdminDashboard = () => {
         metaDesc: 'Discover Palacio Tropical — Costa Rica\'s most exclusive 7-bedroom beachfront villa in Tambor. Direct secluded beach access, full staff, infinity pool & concierge service.',
         focusKeyword: 'Palacio Tropical beachfront villa Costa Rica',
         text: `Palacio Tropical: Costa Rica\'s Most Exclusive Beachfront Villa\n\nNestled on the shores of Tambor Bay on the Nicoya Peninsula, Palacio Tropical is the crown jewel of Executive Vacations Costa Rica — a 7-bedroom, 9.5-bathroom beachfront estate that redefines luxury in Central America.\n\nThe Villa\n\nSpanning 10,500 square feet, Palacio Tropical was designed to be a destination in itself. Every detail — from the hand-crafted furnishings to the panoramic ocean views — reflects an uncompromising commitment to luxury.\n\n• 7 bedrooms, each with its own en-suite bathroom\n• Direct secluded beachfront access on Tambor Bay\n• Resort-style infinity pool overlooking the Pacific\n• Fully equipped gourmet kitchen\n• Multiple indoor and outdoor living areas\n• Home theatre, gym, and game room\n• Lush tropical gardens\n\nThe Staff\n\nPalacio Tropical comes with a full complement of professional staff:\n\n• Private chef\n• Butler service\n• Housekeeping\n• Security\n• Concierge\n\nEverything is taken care of so you can simply enjoy your stay.\n\nThe Location\n\nTambor is one of Costa Rica\'s most beautiful and peaceful bays — sheltered, calm, and surrounded by jungle. Yet it\'s remarkably accessible: around a 30-minute flight from San Jose or Liberia to Cabano (ACO) or Tambor (TMU), or a scenic 3-hour drive via ferry from the capital.\n\nPerfect For\n\nPalacio Tropical accommodates up to 18 guests and is ideal for:\n\n• Multi-family vacations\n• Corporate retreats and incentive trips\n• Milestone celebrations (birthdays, anniversaries, weddings)\n• Executive getaways\n\nBook Palacio Tropical\n\nAvailability for Palacio Tropical is limited, especially during peak season (December–April). Download our free Pricing Guide at executivevacations.net/pricing to check availability and get exact rates.`,
+      },
+    },
+  ];
+  const WEDDING_BLOG_TEMPLATES = [
+    { label: '— Load a template —', value: '' },
+    {
+      label: 'How much does a destination wedding in Costa Rica cost?',
+      value: {
+        title: 'How Much Does a Destination Wedding in Costa Rica Cost? (2026 Guide)',
+        metaTitle: 'Destination Wedding Costa Rica Cost 2026 | Executive Vacations',
+        metaDesc: 'Discover the real cost of a destination wedding in Costa Rica. Venue, catering, décor & full packages — everything you need to budget your dream wedding.',
+        focusKeyword: 'destination wedding Costa Rica cost',
+        site: 'wedding',
+        text: `How Much Does a Destination Wedding in Costa Rica Cost? (2026 Guide)\n\nCosta Rica has become one of the world's most sought-after destination wedding locations — stunning beaches, lush jungle, and world-class private estates. But what does it actually cost to get married here? In this guide, we break down all the key expenses so you can plan with confidence.\n\nWhat Affects the Cost of a Destination Wedding in Costa Rica?\n\nSeveral factors determine the overall price of your Costa Rica wedding:\n\n• Venue type — private beachfront estate vs. hotel vs. public beach\n• Guest count — more guests means higher catering, seating, and logistics costs\n• High vs. low season — December through April (dry season) carries premium pricing\n• Package inclusions — venues that include catering, décor, and staff offer better overall value\n• Ceremony style — beach ceremony, garden ceremony, cliff-top, or indoor\n\nTypical Cost Ranges for a Destination Wedding in Costa Rica\n\nBudget wedding (20–30 guests): $15,000–$25,000\nMid-range wedding (30–60 guests): $25,000–$60,000\nLuxury wedding (60–100+ guests): $60,000–$130,000+\n\nThese ranges vary significantly based on inclusions. At Executive Vacations Costa Rica, our all-inclusive wedding packages cover the venue, catering, staff, décor, and more — eliminating the hidden costs that catch many couples off guard.\n\nOur Wedding Packages\n\nWe offer four exclusive wedding packages at our private beachfront estates in Tambor, Costa Rica:\n\nSilver Package — From $17,900 (low season). Includes 2 nights at Palacio Musical, ceremony for up to 30 guests, brunch and dinner, cocktail hour, and full staff.\n\nGold Package — From $26,900 (low season). 3 nights, up to 50 ceremony guests, all-inclusive food and beverages.\n\nPlatinum Package — From $63,900 (low season). 5 nights at both Palacio Musical and Palacio Tropical, up to 75 guests, full event services.\n\nDiamond Package — From $101,900 (low season). 7 nights across all three estates plus a private catamaran, up to 100 ceremony guests.\n\nIs a Destination Wedding in Costa Rica Worth It?\n\nAbsolutely. When you compare the all-in cost to a traditional hotel wedding at home — and factor in the once-in-a-lifetime setting, privacy, and personalized service — a destination wedding in Costa Rica delivers exceptional value.\n\nGet the Full Pricing Guide\n\nDownload our free Wedding Packages & Pricing Guide to see exact rates, package inclusions, and seasonal pricing. Visit executivevacations.net/wedding-packages to get started.`,
+      },
+    },
+    {
+      label: 'Why Costa Rica is the best destination wedding location',
+      value: {
+        title: 'Why Costa Rica Is the Best Destination Wedding Location in the World',
+        metaTitle: 'Why Get Married in Costa Rica | Executive Vacations',
+        metaDesc: 'Discover why Costa Rica is the world\'s top destination wedding location — stunning scenery, private villas, perfect weather & all-inclusive luxury packages.',
+        focusKeyword: 'best destination wedding location Costa Rica',
+        site: 'wedding',
+        text: `Why Costa Rica Is the Best Destination Wedding Location in the World\n\nChoosing where to get married is one of the most important decisions you'll make. More and more couples are discovering that Costa Rica offers everything a dream wedding requires — and then some. Here are the reasons Costa Rica consistently tops destination wedding lists.\n\n1. Breathtaking Natural Beauty\n\nFew places on earth offer scenery as dramatic and diverse as Costa Rica. From pristine Pacific beaches to lush jungle backdrops, volcanic peaks to turquoise bays — every ceremony setting is a natural masterpiece. No venue dressing needed when the landscape is this extraordinary.\n\n2. Perfect Weather\n\nTambor Bay, where our estates are located, enjoys one of the most consistent climates in Costa Rica. The dry season (December through April) delivers sunshine and warmth — perfect for outdoor beach ceremonies. Even during the green season, mornings are typically bright and evenings brilliantly dramatic.\n\n3. Complete Privacy\n\nOur private beachfront estates are exclusively yours for your stay. No hotel guests, no strangers, no shared spaces. Your wedding unfolds in a setting that feels entirely personal and intimate — even for larger celebrations.\n\n4. All-Inclusive Luxury\n\nOur wedding packages include the venue, private chef, catering team, housekeeping, concierge, and basic décor — so you arrive and celebrate, rather than coordinate.\n\n5. World-Class Cuisine\n\nCoast Rica's fresh tropical ingredients — seafood, exotic fruits, and locally sourced produce — translate into extraordinary wedding menus. Our private chefs create custom menus tailored to your preferences.\n\n6. Adventurous Pre & Post-Wedding Experiences\n\nYour guests won't run out of things to do. Zip-lining, whale watching, ATV tours, snorkelling, catamaran sunset cruises — Costa Rica ensures your wedding week is an adventure from start to finish.\n\n7. Accessible & Well-Connected\n\nTambor is around 30 minutes by light aircraft from San José or Liberia international airports. Regular international flights connect to North America, Europe, and beyond — making travel easy for guests worldwide.\n\nStart Planning Your Costa Rica Wedding\n\nDownload our free Wedding Packages & Pricing Guide at executivevacations.net/wedding-packages and let our team help you create the wedding of a lifetime.`,
+      },
+    },
+    {
+      label: 'How to plan a destination wedding in Costa Rica: complete guide',
+      value: {
+        title: 'How to Plan a Destination Wedding in Costa Rica: The Complete Guide',
+        metaTitle: 'How to Plan a Destination Wedding in Costa Rica | Executive Vacations',
+        metaDesc: 'Step-by-step guide to planning your destination wedding in Costa Rica. Time frames, budgets, vendor tips, and how to choose the perfect venue.',
+        focusKeyword: 'how to plan destination wedding Costa Rica',
+        site: 'wedding',
+        text: `How to Plan a Destination Wedding in Costa Rica: The Complete Guide\n\nPlanning a destination wedding in Costa Rica might feel overwhelming at first — a foreign country, unfamiliar vendors, and all the usual wedding logistics. The good news? With the right venue and support team, a Costa Rica destination wedding can actually be simpler and less stressful than a traditional wedding at home. Here's everything you need to know.\n\nStep 1: Set Your Budget and Guest Count\n\nStart with two numbers: how much you want to spend, and how many guests you want to invite. These two factors will determine your venue options, package tier, and overall logistics. Our packages range from intimate ceremonies of 30 guests to grand celebrations of 100+.\n\nStep 2: Choose Your Season\n\nCosta Rica has two primary seasons. The dry season (December–April) offers the most reliable weather and is peak season — rates are higher and availability books up fast. The green season (May–November) offers significant savings, lush landscapes, and a more private experience — many couples find it their preferred choice.\n\nStep 3: Select Your Venue\n\nThis is the most important decision. For a truly private, luxury wedding experience, a private estate is unmatched. Our venues in Tambor, Puntarenas offer direct beach access, full staff, all-inclusive packages, and total exclusivity.\n\nStep 4: Book Early\n\nPopular wedding dates — especially in December, January, and February — book 12–18 months in advance. If you have a specific date in mind, contact us early to check availability.\n\nStep 5: Sort Out the Legal Requirements\n\nGetting legally married in Costa Rica requires basic documentation (passport, birth certificate, and more). Many couples choose to handle the legal ceremony at home before or after the trip, and have their symbolic ceremony in Costa Rica — this is actually very common and completely valid.\n\nStep 6: Plan Guest Travel & Accommodation\n\nTambor is accessible via a 30-minute charter flight from San José or Liberia, or a scenic 3-hour drive and ferry from the capital. Our estates accommodate all your guests on-property — no hotel logistics required.\n\nStep 7: Plan Your Wedding Week\n\nA destination wedding is more than one day. Plan a welcome dinner, adventure activities for guests, a day-after brunch, and maybe a catamaran sunset cruise. Costa Rica makes it easy to fill every day with extraordinary experiences.\n\nStart With Our Pricing Guide\n\nDownload our free Wedding Packages & Pricing Guide at executivevacations.net/wedding-packages to see all our packages, inclusions, and seasonal rates.`,
+      },
+    },
+    {
+      label: 'Costa Rica beach wedding: everything you need to know',
+      value: {
+        title: 'Costa Rica Beach Wedding: Everything You Need to Know',
+        metaTitle: 'Costa Rica Beach Wedding Guide | Executive Vacations',
+        metaDesc: 'Everything you need to know about a Costa Rica beach wedding — venues, permits, timing, décor, and what makes a private estate the best choice.',
+        focusKeyword: 'Costa Rica beach wedding',
+        site: 'wedding',
+        text: `Costa Rica Beach Wedding: Everything You Need to Know\n\nA beach wedding in Costa Rica is one of the most romantic and spectacular experiences imaginable. Warm sand beneath your feet, turquoise water stretching to the horizon, tropical breezes, and a sky that seems to blush during golden hour. If you're dreaming of a beach wedding, Costa Rica might be your perfect destination. Here's everything you need to know.\n\nWhy Costa Rica Beach Weddings Are So Special\n\nCosta Rica's Pacific coast offers a combination of features that's almost impossible to find elsewhere: calm, warm waters; dramatic jungle-meets-beach scenery; incredible biodiversity; and a culture that genuinely embraces celebration. Add world-class private villas with direct beach access, and you have a wedding setting unlike anything else.\n\nPalacio Tropical: The Ultimate Private Beach Wedding Venue\n\nOur flagship property, Palacio Tropical, sits directly on a secluded stretch of Tambor Bay with private beach access. The estate's multiple outdoor terraces, large pool deck, and beach front create multiple ceremony and reception settings — all completely private and exclusively yours.\n\nPublic Beach vs. Private Beach Venue\n\nMany couples dream of a beach ceremony but don't realise the logistical challenges of public beaches — permits, public access, no onsite facilities, no catering infrastructure. A private estate with direct beach access solves all of these issues: complete privacy, professional staff, catering teams on-site, and all facilities within metres.\n\nBest Time of Year for a Costa Rica Beach Wedding\n\nThe dry season (December–April) is the most popular for beach weddings — guaranteed sunshine and low humidity. However, the green season (May–November) offers dramatic skies for breathtaking photos, fewer tourists, and lower rates. The famous Tambor sunsets are stunning year-round.\n\nCeremony Styles for a Beach Wedding\n\n• Barefoot sand ceremony at the water's edge\n• Elevated terrace ceremony overlooking the beach\n• Pool deck ceremony with the ocean as backdrop\n• Garden ceremony surrounded by tropical foliage\n\nAt our estates, you choose the setting — our team takes care of the rest.\n\nLogistics and What's Included\n\nOur beach wedding packages include: private venue, ceremony setup, private chef, catering team, brunch and dinner, wine, beer and soft drinks, housekeeping, concierge, and security. Everything is handled so you can simply be present.\n\nDownload the Pricing Guide\n\nVisit executivevacations.net/wedding-packages to download our free Wedding Packages & Pricing Guide with full inclusions and seasonal rates.`,
+      },
+    },
+    {
+      label: "Palacio Tropical wedding venue — Costa Rica's finest",
+      value: {
+        title: 'Palacio Tropical: Costa Rica\'s Most Exclusive Private Wedding Venue',
+        metaTitle: 'Palacio Tropical Wedding Venue Costa Rica | Executive Vacations',
+        metaDesc: 'Palacio Tropical is Costa Rica\'s most exclusive private wedding venue — beachfront, fully staffed, accommodating up to 75 guests. Discover our luxury wedding packages.',
+        focusKeyword: 'Palacio Tropical wedding venue Costa Rica',
+        site: 'wedding',
+        text: `Palacio Tropical: Costa Rica's Most Exclusive Private Wedding Venue\n\nNestled on the shores of Tambor Bay, Palacio Tropical is the centrepiece of our most popular wedding packages — a stunning 7-bedroom, 10,500 sq ft beachfront estate that transforms into a truly extraordinary wedding venue.\n\nThe Venue\n\nPalacio Tropical was designed with grand entertaining in mind. Multiple indoor and outdoor living areas, a large resort-style pool, a grand dining room, and direct access to a secluded private beach create a naturally versatile wedding setting.\n\nCeremony Spaces:\n• Beachfront ceremony at the water's edge\n• Pool terrace ceremony with ocean views\n• Garden terrace for an intimate tropical backdrop\n• Grand indoor salon for elegant seated ceremonies\n\nReception Spaces:\n• Pool deck — the perfect outdoor reception venue\n• Grand dining room seating up to 18 guests formally\n• Multiple lounge and bar areas for cocktail hours\n• Beach — for late-night dancing under the stars\n\nCapacity\n• Overnight guests: up to 18 (exclusive use of the estate)\n• Ceremony guests: up to 75 (combined with Palacio Musical)\n\nThe Staff\n\nPalacio Tropical is fully staffed for weddings: private chef, catering team, butler, housekeeping, security, and concierge. Your guests are looked after from the moment they arrive until the moment they depart.\n\nCombining Palacio Tropical with Palacio Musical\n\nFor larger weddings, Palacio Tropical sits directly next to Palacio Musical — our other flagship estate. Combined, both properties accommodate up to 36 overnight guests and up to 75 ceremony guests. Our Platinum Package covers both estates for a 5-night experience.\n\nThe Diamond Experience\n\nFor the ultimate wedding, our Diamond Package adds The View House and a private catamaran for a 7-night celebration accommodating up to 44 overnight guests and 100 ceremony guests.\n\nPlan Your Wedding at Palacio Tropical\n\nDownload our free Wedding Packages & Pricing Guide at executivevacations.net/wedding-packages to see full inclusions, seasonal rates, and availability.`,
+      },
+    },
+    {
+      label: '7 reasons to have your wedding at a private villa in Costa Rica',
+      value: {
+        title: '7 Reasons to Have Your Wedding at a Private Villa in Costa Rica',
+        metaTitle: '7 Reasons for a Private Villa Wedding in Costa Rica | Executive Vacations',
+        metaDesc: '7 compelling reasons to choose a private villa over a hotel for your Costa Rica destination wedding. Privacy, all-inclusive service, and unmatched luxury.',
+        focusKeyword: 'private villa wedding Costa Rica',
+        site: 'wedding',
+        text: `7 Reasons to Have Your Wedding at a Private Villa in Costa Rica\n\nWhen couples begin planning their Costa Rica destination wedding, many initially consider hotels or resort venues. But increasingly, the most discerning couples are choosing private villas — and for very good reasons. Here's why a private estate wedding beats a hotel wedding every time.\n\n1. Complete Exclusivity\n\nAt a private villa, the entire property is yours. No hotel guests wandering through your ceremony, no strangers at the pool, no background noise from other events. Your wedding feels exactly as it should — intimate, personal, and entirely yours.\n\n2. Stays for All Your Guests\n\nAt a private estate like Palacio Tropical and Palacio Musical, your guests sleep, eat, and celebrate together in the same property. That shared experience — morning coffee by the pool, late-night conversations on the terrace — creates the kind of memories a hotel simply can't.\n\n3. Your Own Private Chef\n\nForget hotel banquet menus. Our private chefs create bespoke wedding menus — fresh seafood, tropical fruits, and local Costa Rican ingredients — tailored entirely to your preferences and dietary needs.\n\n4. Total Flexibility\n\nHotels operate on schedules. A private villa operates on yours. Ceremony at sunrise? Late-night dancing until 3am? Barefoot cocktail hour on the beach? You decide.\n\n5. Better Value for Larger Groups\n\nWhen you divide the villa cost among your overnight guests, a private estate often comes out cheaper per person than equivalent hotel rooms — with a dramatically richer experience included.\n\n6. Breathtaking Natural Settings\n\nOur Tambor estates sit on the Pacific coast with direct beach access, ocean views, and tropical gardens. No venue dressing needed — the setting is the statement.\n\n7. A Story Worth Telling\n\nYour guests will talk about a private villa wedding for decades. A hotel is forgettable. Arriving at Palacio Tropical, swimming in the ocean before the ceremony, dancing under the stars on the beach — these are the moments that define a life.\n\nSee Our Wedding Packages\n\nDownload our free Wedding Packages & Pricing Guide at executivevacations.net/wedding-packages and discover how to make your dream wedding a reality.`,
+      },
+    },
+    {
+      label: 'What to include in your destination wedding package',
+      value: {
+        title: 'What to Include in Your Destination Wedding Package: The Complete Checklist',
+        metaTitle: 'Destination Wedding Package Inclusions Checklist | Executive Vacations',
+        metaDesc: 'What should your destination wedding package include? Use our complete checklist to make sure nothing is left out — venue, catering, décor, staff & more.',
+        focusKeyword: 'destination wedding package inclusions',
+        site: 'wedding',
+        text: `What to Include in Your Destination Wedding Package: The Complete Checklist\n\nOne of the most common mistakes couples make when booking a destination wedding is underestimating what's included — and what isn't. A low headline price can quickly balloon with add-ons once you start reading the fine print. Use this checklist to make sure your package covers everything you need.\n\nThe Venue\n\n✓ Exclusive use of the entire property (not shared with other guests)\n✓ Indoor and outdoor ceremony spaces\n✓ Reception and dining areas\n✓ Pool and beach access\n✓ Accommodation for all overnight guests\n\nCatering & Beverages\n\n✓ Welcome dinner or cocktail hour\n✓ Brunch included for each day of your stay\n✓ Dinner included for each night\n✓ Wine, beer, and soft drinks throughout\n✓ Custom wedding cake or dessert arrangements\n✓ Dietary accommodations (vegetarian, vegan, allergies)\n\nStaff & Service\n\n✓ Private chef and catering team\n✓ Butler service\n✓ Daily housekeeping\n✓ On-site security\n✓ Concierge service for activities and excursions\n\nCeremony Essentials\n\n✓ Ceremony setup (chairs, aisle, altar or arch)\n✓ Basic floral décor\n✓ Sound system for music and vows\n✓ Option to add officiant\n\nActivities & Extras\n\n✓ Airport transfers\n✓ Access to water activities\n✓ Catamaran sunset cruise (Diamond Package)\n✓ Local activity coordination\n\nWhat Our Packages Include\n\nAt Executive Vacations Costa Rica, our wedding packages are designed to be genuinely all-inclusive. From the Silver Package (2 nights, up to 30 ceremony guests) to the Diamond Package (7 nights, up to 100 ceremony guests across all three estates), every package includes: venue, catering, beverages, full staff, ceremony setup, and basic décor.\n\nNo hidden fees. No per-person surprise charges. Just a complete, luxury wedding experience from the moment you arrive.\n\nGet the Full Breakdown\n\nDownload our free Wedding Packages & Pricing Guide at executivevacations.net/wedding-packages to see exactly what each package includes and the seasonal rates.`,
       },
     },
   ];
@@ -214,7 +294,7 @@ const AdminDashboard = () => {
   };
 
   const resetBlogForm = () => {
-    setBlogForm({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0], metaTitle: '', metaDesc: '', focusKeyword: '' });
+    setBlogForm({ id: '', title: '', text: '', imageUrl: '', date: new Date().toISOString().split('T')[0], metaTitle: '', metaDesc: '', focusKeyword: '', site: 'villa' });
     setBlogEditMode(false);
   };
 
@@ -255,6 +335,7 @@ const AdminDashboard = () => {
       metaTitle: post.metaTitle || '',
       metaDesc: post.metaDesc || '',
       focusKeyword: post.focusKeyword || '',
+      site: post.site || 'villa',
     });
     setBlogEditMode(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -995,11 +1076,12 @@ const AdminDashboard = () => {
                     <select
                       className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 bg-white"
                       onChange={e => {
-                        const tpl = BLOG_TEMPLATES.find(t => t.label === e.target.value);
+                        const templates = blogForm.site === 'wedding' ? WEDDING_BLOG_TEMPLATES : BLOG_TEMPLATES;
+                        const tpl = templates.find(t => t.label === e.target.value);
                         if (tpl && tpl.value) setBlogForm(f => ({ ...f, ...tpl.value }));
                       }}
                     >
-                      {BLOG_TEMPLATES.map(t => <option key={t.label} value={t.label}>{t.label}</option>)}
+                      {(blogForm.site === 'wedding' ? WEDDING_BLOG_TEMPLATES : BLOG_TEMPLATES).map(t => <option key={t.label} value={t.label}>{t.label}</option>)}
                     </select>
                     <p className="text-xs text-gray-400 mt-1">Templates are pre-written and SEO-optimized — you can edit before publishing.</p>
                   </div>
@@ -1040,6 +1122,29 @@ const AdminDashboard = () => {
                     <img src={blogForm.imageUrl} alt="preview" className="w-full object-cover" style={{ maxHeight: '200px' }} />
                   </div>
                 )}
+                {/* Publish to */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">🌐 Publish to</label>
+                  <div className="flex gap-3">
+                    {[
+                      { value: 'villa', label: '🏡 Villa Site' },
+                      { value: 'wedding', label: '💍 Wedding Site' },
+                      { value: 'both', label: '✨ Both Sites' },
+                    ].map(opt => (
+                      <label key={opt.value} className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer text-sm font-medium transition-colors ${blogForm.site === opt.value ? 'border-yellow-400 bg-yellow-50 text-yellow-800' : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'}`}>
+                        <input
+                          type="radio"
+                          name="blogSite"
+                          value={opt.value}
+                          checked={blogForm.site === opt.value}
+                          onChange={() => setBlogForm(f => ({ ...f, site: opt.value }))}
+                          className="sr-only"
+                        />
+                        {opt.label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Text *</label>
                   <textarea
@@ -1163,6 +1268,11 @@ const AdminDashboard = () => {
                           <div className="flex-1 min-w-0">
                             <div className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#b8972e' }}>{dateStr}</div>
                             <div className="font-bold text-gray-900 text-sm leading-snug mb-1">{post.title}</div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${post.site === 'wedding' ? 'bg-pink-100 text-pink-700' : post.site === 'both' ? 'bg-purple-100 text-purple-700' : 'bg-yellow-50 text-yellow-700'}`}>
+                                {post.site === 'wedding' ? '💍 Wedding' : post.site === 'both' ? '✨ Both' : '🏡 Villa'}
+                              </span>
+                            </div>
                             <div className="text-xs text-gray-500 leading-relaxed">{excerpt}</div>
                           </div>
                           <div className="flex items-center gap-2 flex-shrink-0">
