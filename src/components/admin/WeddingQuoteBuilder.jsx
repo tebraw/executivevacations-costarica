@@ -176,8 +176,10 @@ export default function WeddingQuoteBuilder() {
     const eOverDays = parseFloat(extraOvernightDays) || 1;
     if (eOver > 0) lines.push({ label: `Extra overnight guests (${eOver} × $76 × ${eOverDays} day${eOverDays !== 1 ? 's' : ''})`, amount: eOver * 76 * eOverDays });
 
-    // Extra nights
-    const eNights = parseFloat(extraNights) || 0;
+    // Extra nights — charge only nights beyond what the package includes
+    const totalNights = parseFloat(extraNights) || 0;
+    const inclNights = (pkg && pkg.id !== 'custom' && pkg.nights) ? pkg.nights : 0;
+    const eNights = Math.max(0, totalNights - inclNights);
     const eNightPrice = parseFloat(extraNightPrice) || (season === 'high' ? 4200 : 3200);
     if (eNights > 0) lines.push({ label: `Extra nights (${eNights} × ${fmtUSD(eNightPrice)})`, amount: eNights * eNightPrice });
 
@@ -214,6 +216,7 @@ export default function WeddingQuoteBuilder() {
       setBasePrice('');
       setCeremonyGuests('');
       setOvernightGuests('');
+      setExtraNights('');
     } else {
       setSelectedPkg(pkgId);
       setBasePrice('');
@@ -222,10 +225,12 @@ export default function WeddingQuoteBuilder() {
         if (p) {
           setCeremonyGuests(String(p.ceremonyGuests));
           setOvernightGuests(String(p.overnightGuests));
+          setExtraNights(String(p.nights));
         }
       } else {
         setCeremonyGuests('');
         setOvernightGuests('');
+        setExtraNights('');
       }
     }
   };
@@ -381,6 +386,13 @@ export default function WeddingQuoteBuilder() {
 
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .wqb-outer-grid { grid-template-columns: 1fr !important; }
+          .wqb-2col { grid-template-columns: 1fr !important; }
+          .wqb-sticky { position: static !important; }
+        }
+      `}</style>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
@@ -392,14 +404,14 @@ export default function WeddingQuoteBuilder() {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,380px)', gap: '28px', alignItems: 'start' }}>
+      <div className="wqb-outer-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,380px)', gap: '28px', alignItems: 'start' }}>
 
         {/* ── Left column: inputs ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
           {/* 1. Client Info */}
           <Section title="1. Client Information" icon="👤">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div className="wqb-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <Field label="Name">
                 <input style={inputStyle} value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })} placeholder="Jane & John Smith" />
               </Field>
@@ -511,7 +523,7 @@ export default function WeddingQuoteBuilder() {
 
           {/* 3. Add-ons */}
           <Section title="3. Add-ons & Extras" icon="➕">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div className="wqb-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <Field label={pkg && pkg.id !== 'custom' ? `Total ceremony guests (${pkg.ceremonyGuests} incl.)` : 'Total ceremony guests'}>
                 <input type="number" min="0" style={inputStyle} value={ceremonyGuests} onChange={(e) => setCeremonyGuests(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.ceremonyGuests) : '0 × $61'} />
                 {pkg && pkg.id !== 'custom' && ceremonyGuests && parseInt(ceremonyGuests) > pkg.ceremonyGuests && (
@@ -533,8 +545,13 @@ export default function WeddingQuoteBuilder() {
                   <input type="number" min="1" style={inputStyle} value={extraOvernightDays} onChange={(e) => setExtraOvernightDays(e.target.value)} placeholder="1" />
                 </Field>
               </div>
-              <Field label="Total nights">
-                <input type="number" min="0" style={inputStyle} value={extraNights} onChange={(e) => setExtraNights(e.target.value)} placeholder={`0 nights × ${season === 'high' ? '$4,200' : '$3,200'}`} />
+              <Field label={pkg && pkg.id !== 'custom' ? `Total nights (${pkg.nights} incl.)` : 'Total nights'}>
+                <input type="number" min="0" style={inputStyle} value={extraNights} onChange={(e) => setExtraNights(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.nights) : `0 × ${season === 'high' ? '$4,200' : '$3,200'}`} />
+                {pkg && pkg.id !== 'custom' && extraNights && parseInt(extraNights) > pkg.nights && (
+                  <p style={{ fontSize: '11px', color: '#b8972e', marginTop: '4px', fontWeight: 600 }}>
+                    {parseInt(extraNights) - pkg.nights} extra × {fmtUSD(parseFloat(extraNightPrice) || (season === 'high' ? 4200 : 3200))}
+                  </p>
+                )}
               </Field>
               <Field label="Night price ($ / night)">
                 <div style={{ position: 'relative' }}>
@@ -620,7 +637,7 @@ export default function WeddingQuoteBuilder() {
         </div>
 
         {/* ── Right column: live quote summary ── */}
-        <div style={{ position: 'sticky', top: '20px' }}>
+        <div className="wqb-sticky" style={{ position: 'sticky', top: '20px' }}>
           <div style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', border: '1px solid rgba(184,151,46,0.2)' }}>
             {/* Summary Header */}
             <div style={{ background: 'linear-gradient(135deg, #0b0f18 0%, #1a2744 100%)', padding: '20px 22px' }}>

@@ -179,6 +179,12 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
 
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .bm-outer-grid { grid-template-columns: 1fr !important; }
+          .bm-sticky { position: static !important; }
+        }
+      `}</style>
       {/* Page header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
@@ -192,7 +198,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,340px)', gap: '28px', alignItems: 'start' }}>
+      <div className="bm-outer-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,340px)', gap: '28px', alignItems: 'start' }}>
 
         {/* ── Left: form ── */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -512,7 +518,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                     {/* Activity Details - Only shown when selected */}
                     {isSelected && (
                       <div style={{ padding: '20px 24px' }}>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                           {/* Price Per Person */}
                           <div>
                             <label className="block text-xs font-bold text-gray-600 mb-2">
@@ -695,7 +701,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
         </form>
 
         {/* ── Right: live summary ── */}
-        <div style={{ position: 'sticky', top: '20px' }}>
+        <div className="bm-sticky" style={{ position: 'sticky', top: '20px' }}>
           <div style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)' }}>
             {/* Summary header */}
             <div style={{ background: 'linear-gradient(135deg, #0b0f18 0%, #1a2744 100%)', padding: '20px 22px' }}>
