@@ -715,8 +715,12 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                             <input
                               type="number"
                               min="1"
-                              value={selectedActivity.numberOfPeople || 1}
-                              onChange={(e) => handleActivityDetailChange(activity.name, 'numberOfPeople', parseInt(e.target.value) || 1)}
+                              value={selectedActivity.numberOfPeople === '' ? '' : (selectedActivity.numberOfPeople ?? 1)}
+                              onChange={(e) => handleActivityDetailChange(activity.name, 'numberOfPeople', e.target.value === '' ? '' : parseInt(e.target.value))}
+                              onBlur={(e) => {
+                                const v = parseInt(e.target.value);
+                                if (!v || v < 1) handleActivityDetailChange(activity.name, 'numberOfPeople', 1);
+                              }}
                               onClick={(e) => e.stopPropagation()}
                               placeholder="1"
                               style={{
