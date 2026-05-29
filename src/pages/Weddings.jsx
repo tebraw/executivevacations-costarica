@@ -98,64 +98,37 @@ function BgImage({ src, fallback, style, children, className }) {
   );
 }
 
-// Single gallery tile with graceful fallback
+// Single gallery tile — Instagram-style square with hover overlay
 function GalleryTile({ src, index, onClick }) {
-  const [loaded, setLoaded] = useState(false);
-  const [errored, setErrored] = useState(false);
-
-  useEffect(() => {
-    const img = new Image();
-    img.onload  = () => setLoaded(true);
-    img.onerror = () => setErrored(true);
-    img.src = src;
-  }, [src]);
-
-  const grad = [
-    'linear-gradient(135deg,#0f172a,#1a2e1a)',
-    'linear-gradient(135deg,#1a2e1a,#0b1120)',
-    'linear-gradient(135deg,#0b2030,#1a2e1a)',
-    'linear-gradient(135deg,#1e1a0f,#0f172a)',
-    'linear-gradient(135deg,#111827,#1a2e1a)',
-    'linear-gradient(135deg,#0f172a,#0b2030)',
-  ];
-
-  if (errored || !loaded) {
-    return (
-      <div style={{
-        background: grad[index % grad.length],
-        borderRadius: '16px',
-        cursor: 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        minHeight: '220px',
-        border: '1px solid rgba(201,169,110,0.15)',
-      }}>
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '8px', opacity: 0.4 }}>+</div>
-          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem', margin: 0 }}>
-            gallery-{index + 1}.jpg
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const [hovered, setHovered] = useState(false);
 
   return (
     <div
       onClick={() => onClick(index)}
-      style={{
-        backgroundImage: `url("${src}")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        borderRadius: '16px',
-        cursor: 'pointer',
-        minHeight: '220px',
-        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-        border: '1px solid rgba(255,255,255,0.05)',
-      }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.4)'; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.2)'; }}
-    />
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ position: 'relative', aspectRatio: '1 / 1', cursor: 'pointer', overflow: 'hidden', background: '#0f172a' }}
+    >
+      <img
+        src={src}
+        alt={`Wedding photo ${index + 1}`}
+        loading="lazy"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.35s ease' }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+      />
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'rgba(0,0,0,0.32)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        opacity: hovered ? 1 : 0,
+        transition: 'opacity 0.25s ease',
+      }}>
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+          <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+        </svg>
+      </div>
+    </div>
   );
 }
 

@@ -2275,32 +2275,32 @@ textarea.border-red-500 {
 }
 .wdg-gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
 }
 @media (max-width: 767px) {
   .wdg-venue-top { grid-template-columns: 1fr 1fr; min-height: 260px; }
   .wdg-venue-bot { grid-template-columns: 1fr 1fr; min-height: 200px; }
-  .wdg-gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wdg-gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
 }
 @media (max-width: 480px) {
   .wdg-venue-top { grid-template-columns: 1fr; min-height: 220px; }
   .wdg-venue-bot { grid-template-columns: 1fr 1fr; min-height: 160px; }
-  .wdg-gallery-grid { grid-template-columns: 1fr; gap: 10px; }
+  .wdg-gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
 }
 
 
 /* -- Wedding page responsive --------------------------------- */
 .wdg-venue-top { display: grid; grid-template-columns: repeat(3, 1fr); min-height: 400px; }
 .wdg-venue-bot { display: grid; grid-template-columns: repeat(4, 1fr); min-height: 300px; }
-.wdg-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.wdg-gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
 @media (max-width: 767px) {
   .wdg-venue-top { grid-template-columns: 1fr 1fr; min-height: 260px; }
   .wdg-venue-bot { grid-template-columns: 1fr 1fr; min-height: 200px; }
-  .wdg-gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wdg-gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
 }
 @media (max-width: 480px) {
   .wdg-venue-top { grid-template-columns: 1fr; min-height: 220px; }
   .wdg-venue-bot { grid-template-columns: 1fr 1fr; min-height: 160px; }
-  .wdg-gallery-grid { grid-template-columns: 1fr; gap: 10px; }
+  .wdg-gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
 }
