@@ -40,8 +40,6 @@ const IMG = {
     '/images/weddings/gallery-11.jpg',
     '/images/weddings/gallery-12.jpg',
     '/images/weddings/gallery-13.jpg',
-    '/images/weddings/gallery-14.jpg',
-    '/images/weddings/gallery-15.jpg',
     '/images/weddings/gallery-16.jpg',
     '/images/weddings/gallery-17.jpg',
     '/images/weddings/gallery-18.jpg',
