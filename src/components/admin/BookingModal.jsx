@@ -168,7 +168,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 animate-fadeIn"
       style={{
         backgroundColor: 'rgba(0, 0, 0, 0.75)',
         backdropFilter: 'blur(20px)',
@@ -176,18 +176,17 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
       }}
     >
       <div 
-        className="bg-white w-full max-w-4xl overflow-hidden animate-slideUp"
+        className="bg-white w-full max-w-4xl overflow-hidden animate-slideUp rounded-t-[24px] sm:rounded-[32px]"
         style={{
-          borderRadius: '32px',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)',
-          maxHeight: '95vh'
+          maxHeight: '95svh'
         }}
       >
         <div 
           className="relative overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            padding: '48px'
+            padding: 'clamp(20px, 5vw, 48px)'
           }}
         >
           <div className="absolute inset-0 opacity-10">
@@ -203,9 +202,9 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
           }}></div>
 
           <div className="relative z-10 flex items-center justify-between">
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 sm:gap-6">
               <div 
-                className="relative"
+                className="relative hidden sm:flex"
                 style={{
                   width: '72px',
                   height: '72px',
@@ -213,7 +212,6 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                   backdropFilter: 'blur(20px)',
                   borderRadius: '24px',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
-                  display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
@@ -228,10 +226,10 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                 </svg>
               </div>
               <div>
-                <h2 className="text-4xl font-black text-white tracking-tight">
+                <h2 className="text-xl sm:text-4xl font-black text-white tracking-tight">
                   {editingBooking ? 'Edit Booking' : 'Create New Booking'}
                 </h2>
-                <p className="text-white/80 text-lg mt-2 font-medium">
+                <p className="text-white/80 text-sm sm:text-lg mt-1 sm:mt-2 font-medium">
                   Manage your luxury villa reservations
                 </p>
               </div>
@@ -274,8 +272,8 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
           onSubmit={handleSubmit} 
           className="overflow-y-auto custom-scrollbar"
           style={{
-            maxHeight: 'calc(95vh - 260px)',
-            padding: '48px',
+            maxHeight: 'calc(95svh - 160px)',
+            padding: 'clamp(20px, 5vw, 48px)',
             background: 'linear-gradient(to bottom, #fafafa 0%, #ffffff 100%)'
           }}
         >
@@ -863,7 +861,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
 
         <div 
           style={{
-            padding: '32px 48px',
+            padding: 'clamp(14px, 3vw, 32px) clamp(20px, 5vw, 48px)',
             borderTop: '1px solid rgba(0, 0, 0, 0.08)',
             background: 'linear-gradient(to top, #f9fafb 0%, #ffffff 100%)'
           }}
@@ -875,7 +873,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
               className="group transition-all duration-300"
               style={{
                 flex: '1',
-                padding: '18px 32px',
+                padding: 'clamp(12px, 2vw, 18px) clamp(16px, 3vw, 32px)',
                 borderRadius: '16px',
                 border: '2px solid #e5e7eb',
                 background: 'white',
@@ -899,7 +897,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
               className="group transition-all duration-300 hover:scale-105"
               style={{
                 flex: '2',
-                padding: '18px 32px',
+                padding: 'clamp(12px, 2vw, 18px) clamp(16px, 3vw, 32px)',
                 borderRadius: '16px',
                 border: 'none',
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
