@@ -609,6 +609,18 @@ const AdminDashboard = () => {
 
         {activeTab === 'bookings' && (
           <>
+            {isModalOpen ? (
+              <BookingModal
+                isOpen={isModalOpen}
+                onClose={() => {
+                  setIsModalOpen(false);
+                  setEditingBooking(null);
+                }}
+                onSave={handleCreateBooking}
+                editingBooking={editingBooking}
+              />
+            ) : (
+              <>
             {/* Mobile-only action bar */}
             <div className="md:hidden flex gap-2 mb-4">
               <button
@@ -663,6 +675,8 @@ const AdminDashboard = () => {
               bookings={bookings}
               onBookingClick={handleBookingClick}
             />
+          </>
+            )}
           </>
         )}
 
@@ -1647,15 +1661,6 @@ const AdminDashboard = () => {
         )}
       </div>
 
-      <BookingModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditingBooking(null);
-        }}
-        onSave={handleCreateBooking}
-        editingBooking={editingBooking}
-      />
       {showDeleteConfirm && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 animate-fadeIn"

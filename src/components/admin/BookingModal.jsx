@@ -166,137 +166,37 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
 
   if (!isOpen) return null;
 
+  // ── Derived summary values ──────────────────────────────────
+  const nights = (() => {
+    if (!formData.startDate || !formData.endDate) return 0;
+    const d = (new Date(formData.endDate) - new Date(formData.startDate)) / 86400000;
+    return d > 0 ? d : 0;
+  })();
+  const villaTotal = formData.villas.reduce((s, v) => s + (parseFloat(formData.villaPrice[v]) || 0) * nights, 0);
+  const activityTotal = formData.selectedActivities.reduce((s, a) => s + (a.pricePerPerson || 0) * (a.numberOfPeople || 1), 0);
+  const grandTotal = villaTotal + activityTotal;
+  const fmtUSD = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0 });
+
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 animate-fadeIn"
-      style={{
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)'
-      }}
-    >
-      <div 
-        className="bg-white w-full max-w-4xl overflow-hidden animate-slideUp rounded-t-[24px] sm:rounded-[32px]"
-        style={{
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)',
-          maxHeight: '95svh'
-        }}
-      >
-        <div 
-          className="relative overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            padding: 'clamp(20px, 5vw, 48px)'
-          }}
-        >
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-0 w-full h-full" style={{
-              backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-              backgroundSize: '48px 48px'
-            }}></div>
-          </div>
-          
-          <div className="absolute inset-0" style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-            backdropFilter: 'blur(10px)'
-          }}></div>
-
-          <div className="relative z-10 flex items-center justify-between">
-            <div className="flex items-center gap-3 sm:gap-6">
-              <div 
-                className="relative hidden sm:flex"
-                style={{
-                  width: '72px',
-                  height: '72px',
-                  background: 'rgba(255, 255, 255, 0.15)',
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: '24px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
-                }}
-              >
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
-                  <rect x="3" y="4" width="18" height="18" rx="3" ry="3"/>
-                  <line x1="16" y1="2" x2="16" y2="6"/>
-                  <line x1="8" y1="2" x2="8" y2="6"/>
-                  <line x1="3" y1="10" x2="21" y2="10"/>
-                  <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
-                </svg>
-              </div>
-              <div>
-                <h2 className="text-xl sm:text-4xl font-black text-white tracking-tight">
-                  {editingBooking ? 'Edit Booking' : 'Create New Booking'}
-                </h2>
-                <p className="text-white/80 text-sm sm:text-lg mt-1 sm:mt-2 font-medium">
-                  Manage your luxury villa reservations
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              type="button"
-              className="relative group"
-              style={{
-                width: '56px',
-                height: '56px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(20px)',
-                borderRadius: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            >
-              <svg 
-                width="24" 
-                height="24" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="white" 
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                className="group-hover:rotate-90 transition-transform duration-300"
-              >
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
-          </div>
+    <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+      {/* Page header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: '12px' }}>
+        <div>
+          <h2 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#0b0f18', margin: 0 }}>
+            📅 {editingBooking ? 'Edit Booking' : 'New Booking'}
+          </h2>
+          <p style={{ color: '#6b7280', fontSize: '0.9rem', margin: '4px 0 0' }}>Manage your luxury villa reservations</p>
         </div>
+        <button type="button" onClick={onClose} style={{ padding: '8px 18px', borderRadius: '10px', border: '2px solid #e5e7eb', background: '#fff', color: '#6b7280', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+          ✕ Cancel
+        </button>
+      </div>
 
-        <form 
-          onSubmit={handleSubmit} 
-          className="overflow-y-auto custom-scrollbar"
-          style={{
-            maxHeight: 'calc(95svh - 160px)',
-            padding: 'clamp(20px, 5vw, 48px)',
-            background: 'linear-gradient(to bottom, #fafafa 0%, #ffffff 100%)'
-          }}
-        >
-          <div className="mb-12">
-            <div className="flex items-center gap-4 mb-8">
-              <div style={{
-                width: '48px',
-                height: '48px',
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                borderRadius: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 8px 16px rgba(245, 158, 11, 0.3)'
-              }}>
-                <span className="text-2xl"></span>
-              </div>
-              <div>
-                <h3 className="text-2xl font-black text-gray-900">Select Villas</h3>
-                <p className="text-gray-500 font-medium">Choose one or more luxury properties</p>
-              </div>
-            </div>
-            
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,340px)', gap: '28px', alignItems: 'start' }}>
+
+        {/* ── Left: form ── */}
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <BookingSection title="1. Select Villas" icon="🏰">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {VILLAS.map((villa) => {
                 const isSelected = formData.villas.includes(villa.name);
@@ -389,31 +289,9 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                 );
               })}
             </div>
-          </div>
+          </BookingSection>
 
-          <div className="mb-12">
-            <div className="flex items-center gap-4 mb-8">
-              <div style={{
-                width: '48px',
-                height: '48px',
-                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                borderRadius: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 8px 16px rgba(59, 130, 246, 0.3)'
-              }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="12 6 12 12 16 14"/>
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-2xl font-black text-gray-900">Booking Period</h3>
-                <p className="text-gray-500 font-medium">Select check-in and check-out dates</p>
-              </div>
-            </div>
-
+          <BookingSection title="2. Booking Period" icon="📅">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-3">
@@ -506,31 +384,9 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </BookingSection>
 
-          <div className="mb-12">
-            <div className="flex items-center gap-4 mb-8">
-              <div style={{
-                width: '48px',
-                height: '48px',
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                borderRadius: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 8px 16px rgba(139, 92, 246, 0.3)'
-              }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-2xl font-black text-gray-900">Guest Information</h3>
-                <p className="text-gray-500 font-medium">Contact details for this reservation</p>
-              </div>
-            </div>
-
+          <BookingSection title="3. Guest Information" icon="👤">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-3">
@@ -578,28 +434,9 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                 />
               </div>
             </div>
-          </div>
+          </BookingSection>
 
-          <div className="mb-12">
-            <div className="flex items-center gap-4 mb-8">
-              <div style={{
-                width: '48px',
-                height: '48px',
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                borderRadius: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 8px 16px rgba(16, 185, 129, 0.3)'
-              }}>
-                <span className="text-2xl">­ƒÄ»</span>
-              </div>
-              <div>
-                <h3 className="text-2xl font-black text-gray-900">Activities & Experiences</h3>
-                <p className="text-gray-500 font-medium">Optional add-ons for your stay</p>
-              </div>
-            </div>
-
+          <BookingSection title="4. Activities & Experiences" icon="🎯">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {ACTIVITIES.map((activity) => {
                 const selectedActivity = formData.selectedActivities.find(a => a.name === activity.name);
@@ -807,15 +644,12 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                 );
               })}
             </div>
-          </div>
+          </BookingSection>
 
-          <div>
+          <BookingSection title="5. Notes" icon="📝">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-3">
-                  <span className="mr-2"></span>
-                  Activity Notes
-                </label>
+                <label className="block text-sm font-bold text-gray-700 mb-3">Activity Notes</label>
                 <textarea
                   value={formData.activityNotes}
                   onChange={(e) => setFormData(prev => ({ ...prev, activityNotes: e.target.value }))}
@@ -836,10 +670,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-3">
-                  <span className="mr-2"></span>
-                  Additional Notes
-                </label>
+                <label className="block text-sm font-bold text-gray-700 mb-3">Additional Notes</label>
                 <textarea
                   value={formData.additionalNotes}
                   onChange={(e) => setFormData(prev => ({ ...prev, additionalNotes: e.target.value }))}
@@ -860,64 +691,72 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                 />
               </div>
             </div>
-          </div>
+          </BookingSection>
         </form>
 
-        <div 
-          style={{
-            padding: 'clamp(14px, 3vw, 32px) clamp(20px, 5vw, 48px)',
-            borderTop: '1px solid rgba(0, 0, 0, 0.08)',
-            background: 'linear-gradient(to top, #f9fafb 0%, #ffffff 100%)'
-          }}
-        >
-          <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="group transition-all duration-300"
-              style={{
-                flex: '1',
-                padding: 'clamp(12px, 2vw, 18px) clamp(16px, 3vw, 32px)',
-                borderRadius: '16px',
-                border: '2px solid #e5e7eb',
-                background: 'white',
-                color: '#374151',
-                fontWeight: '800',
-                fontSize: '16px',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
-              }}
-            >
-              <span className="flex items-center justify-center gap-2">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-                Cancel
-              </span>
-            </button>
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="group transition-all duration-300 hover:scale-105"
-              style={{
-                flex: '2',
-                padding: 'clamp(12px, 2vw, 18px) clamp(16px, 3vw, 32px)',
-                borderRadius: '16px',
-                border: 'none',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: 'white',
-                fontWeight: '800',
-                fontSize: '16px',
-                boxShadow: '0 8px 24px rgba(102, 126, 234, 0.4)'
-              }}
-            >
-              <span className="flex items-center justify-center gap-3">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span>{editingBooking ? 'Update Booking' : 'Create Booking'}</span>
-              </span>
-            </button>
+        {/* ── Right: live summary ── */}
+        <div style={{ position: 'sticky', top: '20px' }}>
+          <div style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)' }}>
+            {/* Summary header */}
+            <div style={{ background: 'linear-gradient(135deg, #0b0f18 0%, #1a2744 100%)', padding: '20px 22px' }}>
+              <p style={{ fontSize: '0.7rem', letterSpacing: '0.2em', color: '#c9a96e', fontWeight: 700, textTransform: 'uppercase', margin: '0 0 4px' }}>Live Summary</p>
+              <h3 style={{ color: '#fff', fontWeight: 900, fontSize: '1.1rem', margin: 0 }}>
+                {formData.customerName || 'Guest Name'}
+              </h3>
+              {formData.startDate && formData.endDate && (
+                <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.8rem', margin: '4px 0 0' }}>
+                  {new Date(formData.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} → {new Date(formData.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} · {nights} night{nights !== 1 ? 's' : ''}
+                </p>
+              )}
+            </div>
+
+            {/* Line items */}
+            <div style={{ background: '#fff', padding: '16px 22px' }}>
+              {formData.villas.length === 0 && formData.selectedActivities.length === 0 ? (
+                <p style={{ color: '#d1d5db', textAlign: 'center', padding: '16px 0', fontSize: '13px' }}>Select a villa to start</p>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {formData.villas.map((v) => (
+                    <div key={v} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', paddingBottom: '8px', borderBottom: '1px solid #f3f4f6' }}>
+                      <span style={{ fontSize: '13px', color: '#374151', flex: 1, lineHeight: 1.4 }}>{v} × {nights}n</span>
+                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#1f2937', whiteSpace: 'nowrap' }}>{fmtUSD((parseFloat(formData.villaPrice[v]) || 0) * nights)}</span>
+                    </div>
+                  ))}
+                  {formData.selectedActivities.map((a) => (
+                    <div key={a.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', paddingBottom: '8px', borderBottom: '1px solid #f3f4f6' }}>
+                      <span style={{ fontSize: '13px', color: '#374151', flex: 1, lineHeight: 1.4 }}>{a.name} × {a.numberOfPeople || 1}</span>
+                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#1f2937', whiteSpace: 'nowrap' }}>{fmtUSD((a.pricePerPerson || 0) * (a.numberOfPeople || 1))}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Total */}
+            <div style={{ background: '#f9fafb', padding: '14px 22px', borderTop: '1px solid #f3f4f6' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '14px', fontWeight: 900, color: '#0b0f18' }}>TOTAL</span>
+                <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#b8972e' }}>{fmtUSD(grandTotal)}</span>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div style={{ background: '#fff', padding: '14px 22px', display: 'flex', flexDirection: 'column', gap: '10px', borderTop: '1px solid #f3f4f6' }}>
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                style={{ padding: '12px', borderRadius: '12px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', fontWeight: 800, fontSize: '14px', boxShadow: '0 4px 16px rgba(102,126,234,0.35)' }}
+              >
+                ✓ {editingBooking ? 'Update Booking' : 'Create Booking'}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                style={{ padding: '12px', borderRadius: '12px', border: '2px solid #e5e7eb', cursor: 'pointer', background: '#fff', color: '#374151', fontWeight: 700, fontSize: '14px' }}
+              >
+                ✕ Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -926,3 +765,16 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
 };
 
 export default BookingModal;
+
+// ── Section wrapper (same style as WeddingQuoteBuilder) ───────
+function BookingSection({ title, icon, children }) {
+  return (
+    <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e5e7eb', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+      <div style={{ padding: '14px 20px', borderBottom: '1px solid #f3f4f6', background: '#fafafa', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span style={{ fontSize: '1rem' }}>{icon}</span>
+        <h4 style={{ fontWeight: 900, fontSize: '0.95rem', color: '#0b0f18', margin: 0 }}>{title}</h4>
+      </div>
+      <div style={{ padding: '18px 20px' }}>{children}</div>
+    </div>
+  );
+}
