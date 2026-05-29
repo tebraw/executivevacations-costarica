@@ -6,7 +6,25 @@ import { getBookings, saveBooking, deleteBooking } from '../utils/bookingStorage
 import { generateInvoice } from '../utils/invoiceGenerator';
 import { downloadICalFile } from '../utils/icalGenerator';
 
+const ADMIN_PASSWORD = '1947';
+
 const AdminDashboard = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem('admin_auth') === 'true');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (passwordInput === ADMIN_PASSWORD) {
+      sessionStorage.setItem('admin_auth', 'true');
+      setIsAuthenticated(true);
+      setPasswordError(false);
+    } else {
+      setPasswordError(true);
+      setPasswordInput('');
+    }
+  };
+
   const [bookings, setBookings] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBooking, setEditingBooking] = useState(null);
@@ -471,6 +489,92 @@ const AdminDashboard = () => {
       alert('Failed to approve review.');
     }
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}>
+        <div style={{
+          background: 'rgba(255,255,255,0.05)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255,255,255,0.15)',
+          borderRadius: '24px',
+          padding: '48px 40px',
+          width: '100%',
+          maxWidth: '400px',
+          boxShadow: '0 25px 50px rgba(0,0,0,0.5)'
+        }}>
+          <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+            <div style={{
+              width: '64px', height: '64px',
+              background: 'linear-gradient(135deg, #c9a96e, #a07040)',
+              borderRadius: '18px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 20px'
+            }}>
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <h1 style={{ color: 'white', fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>Admin Dashboard</h1>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>Passwort eingeben um fortzufahren</p>
+          </div>
+          <form onSubmit={handleLogin}>
+            <div style={{ marginBottom: '16px' }}>
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false); }}
+                placeholder="Passwort"
+                autoFocus
+                style={{
+                  width: '100%',
+                  padding: '14px 18px',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: passwordError ? '2px solid #ef4444' : '2px solid rgba(255,255,255,0.2)',
+                  borderRadius: '14px',
+                  color: 'white',
+                  fontSize: '16px',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  letterSpacing: '4px'
+                }}
+              />
+              {passwordError && (
+                <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '8px', textAlign: 'center' }}>Falsches Passwort</p>
+              )}
+            </div>
+            <button
+              type="submit"
+              style={{
+                width: '100%',
+                padding: '14px',
+                background: 'linear-gradient(135deg, #c9a96e, #a07040)',
+                border: 'none',
+                borderRadius: '14px',
+                color: 'white',
+                fontSize: '15px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'opacity 0.2s'
+              }}
+              onMouseOver={e => e.target.style.opacity='0.85'}
+              onMouseOut={e => e.target.style.opacity='1'}
+            >
+              Einloggen
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
