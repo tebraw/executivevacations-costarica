@@ -64,6 +64,21 @@ const PACKAGES = [
     bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)',
     textColor: '#4c1d95',
   },
+  {
+    id: 'custom',
+    name: 'Custom',
+    tagline: 'Own base price',
+    nights: null,
+    overnightGuests: 0,
+    ceremonyGuests: 0,
+    priceLow: 0,
+    priceHigh: 0,
+    villas: [],
+    catamaran: false,
+    color: '#6b7280',
+    bg: 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)',
+    textColor: '#374151',
+  },
 ];
 
 const GOLD = '#b8972e';
@@ -112,8 +127,8 @@ export default function WeddingQuoteBuilder() {
   const [basePrice, setBasePrice] = useState('');
 
   // Add-ons
-  const [extraCeremonyGuests, setExtraCeremonyGuests] = useState('');
-  const [extraOvernightGuests, setExtraOvernightGuests] = useState('');
+  const [ceremonyGuests, setCeremonyGuests] = useState('');
+  const [overnightGuests, setOvernightGuests] = useState('');
   const [extraOvernightDays, setExtraOvernightDays] = useState('');
   const [extraNights, setExtraNights] = useState('');
   const [extraNightPrice, setExtraNightPrice] = useState('');
@@ -142,18 +157,22 @@ export default function WeddingQuoteBuilder() {
     // Base
     const base = resolvedBase();
     if (base > 0) {
-      const label = pkg
+      const label = pkg && pkg.id !== 'custom'
         ? `${pkg.name} Package — ${pkg.nights} nights (${season === 'high' ? 'high' : 'low'} season)`
-        : 'Custom Package Base Price';
+        : 'Custom Package — Base Price';
       lines.push({ label, amount: base });
     }
 
-    // Extra ceremony guests: $61/person
-    const eCerem = parseFloat(extraCeremonyGuests) || 0;
+    // Ceremony guests — charge only guests beyond what the package includes
+    const totalCeremony = parseFloat(ceremonyGuests) || 0;
+    const inclCeremony = (pkg && pkg.id !== 'custom' && pkg.ceremonyGuests) ? pkg.ceremonyGuests : 0;
+    const eCerem = Math.max(0, totalCeremony - inclCeremony);
     if (eCerem > 0) lines.push({ label: `Extra ceremony guests (${eCerem} × $61)`, amount: eCerem * 61 });
 
-    // Extra overnight guests: $76/person/day
-    const eOver = parseFloat(extraOvernightGuests) || 0;
+    // Overnight guests — charge only guests beyond what the package includes
+    const totalOvernight = parseFloat(overnightGuests) || 0;
+    const inclOvernight = (pkg && pkg.id !== 'custom' && pkg.overnightGuests) ? pkg.overnightGuests : 0;
+    const eOver = Math.max(0, totalOvernight - inclOvernight);
     const eOverDays = parseFloat(extraOvernightDays) || 1;
     if (eOver > 0) lines.push({ label: `Extra overnight guests (${eOver} × $76 × ${eOverDays} day${eOverDays !== 1 ? 's' : ''})`, amount: eOver * 76 * eOverDays });
 
@@ -181,7 +200,7 @@ export default function WeddingQuoteBuilder() {
     });
 
     return lines;
-  }, [basePrice, pkg, season, extraCeremonyGuests, extraOvernightGuests, extraOvernightDays, extraNights, extraNightPrice, catamaranAddon, catamaranGuests, decoUpgrade, customLines]);
+  }, [basePrice, pkg, season, ceremonyGuests, overnightGuests, extraOvernightDays, extraNights, extraNightPrice, catamaranAddon, catamaranGuests, decoUpgrade, customLines]);
 
   const subtotal = lineItems().reduce((s, l) => s + l.amount, 0);
   const discountAmt = parseFloat(discount) || 0;
@@ -190,11 +209,24 @@ export default function WeddingQuoteBuilder() {
   // ── Actions ─────────────────────────────────────────────────
   const handleSelectPackage = (pkgId) => {
     if (selectedPkg === pkgId) {
+      // Deselect → clear everything
       setSelectedPkg(null);
       setBasePrice('');
+      setCeremonyGuests('');
+      setOvernightGuests('');
     } else {
       setSelectedPkg(pkgId);
       setBasePrice('');
+      if (pkgId !== 'custom') {
+        const p = PACKAGES.find((pk) => pk.id === pkgId);
+        if (p) {
+          setCeremonyGuests(String(p.ceremonyGuests));
+          setOvernightGuests(String(p.overnightGuests));
+        }
+      } else {
+        setCeremonyGuests('');
+        setOvernightGuests('');
+      }
     }
   };
 
@@ -208,8 +240,8 @@ export default function WeddingQuoteBuilder() {
     setSelectedPkg(null);
     setSeason('low');
     setBasePrice('');
-    setExtraCeremonyGuests('');
-    setExtraOvernightGuests('');
+    setCeremonyGuests('');
+    setOvernightGuests('');
     setExtraOvernightDays('');
     setExtraNights('');
     setExtraNightPrice('');
@@ -406,10 +438,33 @@ export default function WeddingQuoteBuilder() {
               ))}
             </div>
 
-            {/* Package cards */}
+            {/* Package cards (Silver / Gold / Platinum / Diamond / Custom) */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: '10px', marginBottom: '16px' }}>
               {PACKAGES.map((p) => {
                 const active = selectedPkg === p.id;
+                if (p.id === 'custom') {
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => handleSelectPackage(p.id)}
+                      style={{
+                        padding: '14px', borderRadius: '14px', textAlign: 'left', cursor: 'pointer',
+                        border: active ? '2px solid #6b7280' : '2px dashed #d1d5db',
+                        background: active ? '#f3f4f6' : '#fafafa',
+                        boxShadow: 'none',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      <div style={{ fontWeight: 900, fontSize: '1rem', color: '#374151', marginBottom: '2px' }}>Custom</div>
+                      <div style={{ fontSize: '0.75rem', color: '#6b7280', opacity: 0.9, marginBottom: '6px' }}>Own base price</div>
+                      <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#6b7280' }}>
+                        {active && basePrice ? fmtUSD(parseFloat(basePrice)) : '—'}
+                      </div>
+                      <div style={{ fontSize: '0.7rem', color: '#9ca3af', marginTop: '4px' }}>flexible</div>
+                      {active && <div style={{ marginTop: '6px', fontSize: '0.7rem', color: '#6b7280', fontWeight: 700 }}>✓ Selected</div>}
+                    </button>
+                  );
+                }
                 return (
                   <button
                     key={p.id}
@@ -436,35 +491,33 @@ export default function WeddingQuoteBuilder() {
               })}
             </div>
 
-            {/* OR custom base price */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-              <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }} />
-              <span style={{ fontSize: '12px', color: '#9ca3af', fontWeight: 600 }}>OR set custom base price</span>
-              <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }} />
-            </div>
-            <Field label="Custom Base Price ($)">
-              <div style={{ position: 'relative' }}>
-                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 700 }}>$</span>
-                <input
-                  type="number"
-                  style={{ ...inputStyle, paddingLeft: '28px' }}
-                  value={basePrice}
-                  onChange={(e) => { setBasePrice(e.target.value); setSelectedPkg(null); }}
-                  placeholder="e.g. 45000"
-                />
-              </div>
-            </Field>
+            {/* Custom base price input — only visible when Custom card is selected */}
+            {selectedPkg === 'custom' && (
+              <Field label="Custom Base Price ($)">
+                <div style={{ position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 700 }}>$</span>
+                  <input
+                    type="number"
+                    style={{ ...inputStyle, paddingLeft: '28px' }}
+                    value={basePrice}
+                    onChange={(e) => setBasePrice(e.target.value)}
+                    placeholder="e.g. 45000"
+                    autoFocus
+                  />
+                </div>
+              </Field>
+            )}
           </Section>
 
           {/* 3. Add-ons */}
           <Section title="3. Add-ons & Extras" icon="➕">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <Field label="Extra ceremony guests">
-                <input type="number" min="0" style={inputStyle} value={extraCeremonyGuests} onChange={(e) => setExtraCeremonyGuests(e.target.value)} placeholder="0 persons × $61" />
+              <Field label={pkg && pkg.id !== 'custom' ? `Ceremony guests (incl. ${pkg.ceremonyGuests})` : 'Extra ceremony guests'}>
+                <input type="number" min="0" style={inputStyle} value={ceremonyGuests} onChange={(e) => setCeremonyGuests(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.ceremonyGuests) : '0 × $61'} />
               </Field>
               <div>
-                <Field label="Extra overnight guests">
-                  <input type="number" min="0" style={inputStyle} value={extraOvernightGuests} onChange={(e) => setExtraOvernightGuests(e.target.value)} placeholder="0 persons × $76/day" />
+                <Field label={pkg && pkg.id !== 'custom' ? `Overnight guests (incl. ${pkg.overnightGuests})` : 'Extra overnight guests'}>
+                  <input type="number" min="0" style={inputStyle} value={overnightGuests} onChange={(e) => setOvernightGuests(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.overnightGuests) : '0 × $76/day'} />
                 </Field>
                 <Field label="  ↳ for how many days">
                   <input type="number" min="1" style={inputStyle} value={extraOvernightDays} onChange={(e) => setExtraOvernightDays(e.target.value)} placeholder="1" />
