@@ -512,17 +512,36 @@ export default function WeddingQuoteBuilder() {
           {/* 3. Add-ons */}
           <Section title="3. Add-ons & Extras" icon="➕">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <Field label={pkg && pkg.id !== 'custom' ? `Ceremony guests (incl. ${pkg.ceremonyGuests})` : 'Extra ceremony guests'}>
-                <input type="number" min="0" style={inputStyle} value={ceremonyGuests} onChange={(e) => setCeremonyGuests(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.ceremonyGuests) : '0 × $61'} />
-              </Field>
-              <div>
-                <Field label={pkg && pkg.id !== 'custom' ? `Overnight guests (incl. ${pkg.overnightGuests})` : 'Extra overnight guests'}>
-                  <input type="number" min="0" style={inputStyle} value={overnightGuests} onChange={(e) => setOvernightGuests(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.overnightGuests) : '0 × $76/day'} />
-                </Field>
-                <Field label="  ↳ for how many days">
-                  <input type="number" min="1" style={inputStyle} value={extraOvernightDays} onChange={(e) => setExtraOvernightDays(e.target.value)} placeholder="1" />
-                </Field>
-              </div>
+              {selectedPkg && selectedPkg !== 'custom' ? (
+                <>
+                  <Field label={`Ceremony guests (${pkg.ceremonyGuests} incl.)`}>
+                    <input type="number" min="0" style={inputStyle} value={ceremonyGuests} onChange={(e) => setCeremonyGuests(e.target.value)} placeholder={String(pkg.ceremonyGuests)} />
+                    {ceremonyGuests && parseInt(ceremonyGuests) > pkg.ceremonyGuests && (
+                      <p style={{ fontSize: '11px', color: '#b8972e', marginTop: '4px', fontWeight: 600 }}>
+                        {parseInt(ceremonyGuests) - pkg.ceremonyGuests} extra × $61 = {fmtUSD((parseInt(ceremonyGuests) - pkg.ceremonyGuests) * 61)}
+                      </p>
+                    )}
+                  </Field>
+                  <div>
+                    <Field label={`Overnight guests (${pkg.overnightGuests} incl.)`}>
+                      <input type="number" min="0" style={inputStyle} value={overnightGuests} onChange={(e) => setOvernightGuests(e.target.value)} placeholder={String(pkg.overnightGuests)} />
+                      {overnightGuests && parseInt(overnightGuests) > pkg.overnightGuests && (
+                        <p style={{ fontSize: '11px', color: '#b8972e', marginTop: '4px', fontWeight: 600 }}>
+                          {parseInt(overnightGuests) - pkg.overnightGuests} extra × $76/day
+                        </p>
+                      )}
+                    </Field>
+                    <Field label="  ↳ for how many days">
+                      <input type="number" min="1" style={inputStyle} value={extraOvernightDays} onChange={(e) => setExtraOvernightDays(e.target.value)} placeholder="1" />
+                    </Field>
+                  </div>
+                </>
+              ) : selectedPkg === 'custom' ? (
+                <div style={{ gridColumn: '1 / -1', padding: '12px 14px', borderRadius: '10px', background: '#f9fafb', border: '1px dashed #d1d5db', fontSize: '13px', color: '#6b7280' }}>
+                  💡 Custom package — use <strong>Section 4</strong> below to add guest charges or any other line items manually.
+                </div>
+              ) : null}
+
               <Field label="Extra nights">
                 <input type="number" min="0" style={inputStyle} value={extraNights} onChange={(e) => setExtraNights(e.target.value)} placeholder={`0 nights × ${season === 'high' ? '$4,200' : '$3,200'}`} />
               </Field>
