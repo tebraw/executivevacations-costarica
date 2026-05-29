@@ -404,7 +404,7 @@ export default function WeddingQuoteBuilder() {
         </button>
       </div>
 
-      <div className="wqb-outer-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,380px)', gap: '28px', alignItems: 'start' }}>
+      <div className="wqb-outer-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,380px)', gap: '28px', alignItems: 'stretch' }}>
 
         {/* ── Left column: inputs ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>

@@ -198,7 +198,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
         </button>
       </div>
 
-      <div className="bm-outer-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,340px)', gap: '28px', alignItems: 'start' }}>
+      <div className="bm-outer-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,340px)', gap: '28px', alignItems: 'stretch' }}>
 
         {/* ── Left: form ── */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
