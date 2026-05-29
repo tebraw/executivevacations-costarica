@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import BookingCalendar from '../components/admin/BookingCalendar';
 import BookingModal from '../components/admin/BookingModal';
+import WeddingQuoteBuilder from '../components/admin/WeddingQuoteBuilder';
 import { getBookings, saveBooking, deleteBooking } from '../utils/bookingStorage';
 import { generateInvoice } from '../utils/invoiceGenerator';
 import { downloadICalFile } from '../utils/icalGenerator';
@@ -592,6 +593,17 @@ const AdminDashboard = () => {
             style={activeTab === 'messages' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
           >
             ✉️ Messages
+          </button>
+          <button
+            onClick={() => setActiveTab('wedding')}
+            className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+              activeTab === 'wedding'
+                ? 'text-white shadow-md'
+                : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-400'
+            }`}
+            style={activeTab === 'wedding' ? { background: 'linear-gradient(135deg, #c9a96e, #a07040)' } : {}}
+          >
+            💍 Wedding Quote
           </button>
         </div>
 
@@ -1627,6 +1639,12 @@ const AdminDashboard = () => {
             )}
           </div>
         )}
+
+        {activeTab === 'wedding' && (
+          <div style={{ paddingBottom: '32px' }}>
+            <WeddingQuoteBuilder />
+          </div>
+        )}
       </div>
 
       <BookingModal
@@ -2265,6 +2283,7 @@ const AdminDashboard = () => {
           { id: 'blog', icon: '📝', label: 'Blog' },
           { id: 'leads', icon: '📋', label: 'Leads' },
           { id: 'messages', icon: '✉️', label: 'Messages' },
+          { id: 'wedding', icon: '💍', label: 'Wedding' },
         ].map(tab => (
           <button
             key={tab.id}
