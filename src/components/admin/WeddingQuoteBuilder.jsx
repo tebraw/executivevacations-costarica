@@ -167,21 +167,21 @@ export default function WeddingQuoteBuilder() {
     const totalCeremony = parseFloat(ceremonyGuests) || 0;
     const inclCeremony = (pkg && pkg.id !== 'custom' && pkg.ceremonyGuests) ? pkg.ceremonyGuests : 0;
     const eCerem = Math.max(0, totalCeremony - inclCeremony);
-    if (eCerem > 0) lines.push({ label: `Extra ceremony guests (${eCerem} × $61)`, amount: eCerem * 61 });
+    if (eCerem > 0) lines.push({ label: `${inclCeremony > 0 ? 'Extra' : 'Total'} ceremony guests (${eCerem} × $61)`, amount: eCerem * 61 });
 
     // Overnight guests — charge only guests beyond what the package includes
     const totalOvernight = parseFloat(overnightGuests) || 0;
     const inclOvernight = (pkg && pkg.id !== 'custom' && pkg.overnightGuests) ? pkg.overnightGuests : 0;
     const eOver = Math.max(0, totalOvernight - inclOvernight);
     const eOverDays = parseFloat(extraOvernightDays) || 1;
-    if (eOver > 0) lines.push({ label: `Extra overnight guests (${eOver} × $76 × ${eOverDays} day${eOverDays !== 1 ? 's' : ''})`, amount: eOver * 76 * eOverDays });
+    if (eOver > 0) lines.push({ label: `${inclOvernight > 0 ? 'Extra' : 'Total'} overnight guests (${eOver} × $76 × ${eOverDays} day${eOverDays !== 1 ? 's' : ''})`, amount: eOver * 76 * eOverDays });
 
     // Extra nights — charge only nights beyond what the package includes
     const totalNights = parseFloat(extraNights) || 0;
     const inclNights = (pkg && pkg.id !== 'custom' && pkg.nights) ? pkg.nights : 0;
     const eNights = Math.max(0, totalNights - inclNights);
     const eNightPrice = parseFloat(extraNightPrice) || (season === 'high' ? 4200 : 3200);
-    if (eNights > 0) lines.push({ label: `Extra nights (${eNights} × ${fmtUSD(eNightPrice)})`, amount: eNights * eNightPrice });
+    if (eNights > 0) lines.push({ label: `${inclNights > 0 ? 'Extra' : 'Total'} nights (${eNights} × ${fmtUSD(eNightPrice)})`, amount: eNights * eNightPrice });
 
     // Catamaran add-on (not for Diamond which already includes it)
     const catamaranIncluded = pkg?.catamaran;
@@ -637,7 +637,7 @@ export default function WeddingQuoteBuilder() {
         </div>
 
         {/* ── Right column: live quote summary ── */}
-        <div className="wqb-sticky" style={{ position: 'sticky', top: '20px' }}>
+        <div className="wqb-sticky" style={{ position: 'sticky', top: '104px' }}>
           <div style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', border: '1px solid rgba(184,151,46,0.2)' }}>
             {/* Summary Header */}
             <div style={{ background: 'linear-gradient(135deg, #0b0f18 0%, #1a2744 100%)', padding: '20px 22px' }}>

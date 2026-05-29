@@ -701,7 +701,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
         </form>
 
         {/* ── Right: live summary ── */}
-        <div className="bm-sticky" style={{ position: 'sticky', top: '20px' }}>
+        <div className="bm-sticky" style={{ position: 'sticky', top: '104px' }}>
           <div style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)' }}>
             {/* Summary header */}
             <div style={{ background: 'linear-gradient(135deg, #0b0f18 0%, #1a2744 100%)', padding: '20px 22px' }}>
