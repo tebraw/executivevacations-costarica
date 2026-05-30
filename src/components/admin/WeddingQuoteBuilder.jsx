@@ -141,6 +141,7 @@ export default function WeddingQuoteBuilder() {
 
   // Discount
   const [discount, setDiscount] = useState('');
+  const [applyTax, setApplyTax] = useState(false);
 
   // ── Derived values ──────────────────────────────────────────
   const pkg = PACKAGES.find((p) => p.id === selectedPkg) || null;
@@ -206,7 +207,9 @@ export default function WeddingQuoteBuilder() {
 
   const subtotal = lineItems().reduce((s, l) => s + l.amount, 0);
   const discountAmt = parseFloat(discount) || 0;
-  const total = subtotal - discountAmt;
+  const afterDiscount = subtotal - discountAmt;
+  const taxAmt = applyTax ? afterDiscount * 0.13 : 0;
+  const total = afterDiscount + taxAmt;
 
   // ── Actions ─────────────────────────────────────────────────
   const handleSelectPackage = (pkgId) => {
@@ -255,6 +258,7 @@ export default function WeddingQuoteBuilder() {
     setDecoUpgrade('');
     setCustomLines([{ label: '', amount: '' }]);
     setDiscount('');
+    setApplyTax(false);
   };
 
   const copyToClipboard = () => {
@@ -267,9 +271,14 @@ export default function WeddingQuoteBuilder() {
     text += `\n📋 QUOTE BREAKDOWN\n`;
     items.forEach((l) => { text += `  ${l.label}: ${fmtUSD(l.amount)}\n`; });
     text += `${'─'.repeat(45)}\n`;
-    if (discountAmt > 0) {
+    if (discountAmt > 0 || applyTax) {
       text += `Subtotal: ${fmtUSD(subtotal)}\n`;
+    }
+    if (discountAmt > 0) {
       text += `Discount: -${fmtUSD(discountAmt)}\n`;
+    }
+    if (applyTax) {
+      text += `13% Sales Tax: ${fmtUSD(taxAmt)}\n`;
     }
     text += `TOTAL: ${fmtUSD(total)}\n`;
     if (customer.notes) text += `\nNotes: ${customer.notes}\n`;
@@ -327,9 +336,14 @@ export default function WeddingQuoteBuilder() {
     // Line items table
     const items = lineItems();
     const tableData = items.map((l) => [l.label, fmtUSD(l.amount)]);
-    if (discountAmt > 0) {
+    if (discountAmt > 0 || applyTax) {
       tableData.push(['Subtotal', fmtUSD(subtotal)]);
+    }
+    if (discountAmt > 0) {
       tableData.push(['Discount', `-${fmtUSD(discountAmt)}`]);
+    }
+    if (applyTax) {
+      tableData.push(['13% Sales Tax', fmtUSD(taxAmt)]);
     }
 
     autoTable(doc, {
@@ -625,14 +639,28 @@ export default function WeddingQuoteBuilder() {
             </button>
           </Section>
 
-          {/* 5. Discount */}
-          <Section title="5. Discount" icon="🏷️">
+          {/* 5. Discount & Tax */}
+          <Section title="5. Discount & Tax" icon="🏷️">
             <Field label="Discount amount ($)">
               <div style={{ position: 'relative' }}>
                 <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 700 }}>$</span>
                 <input type="number" min="0" style={{ ...inputStyle, paddingLeft: '28px' }} value={discount} onChange={(e) => setDiscount(e.target.value)} placeholder="0" />
               </div>
             </Field>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', marginTop: '6px', padding: '12px 14px', borderRadius: '12px', border: applyTax ? '2px solid #b8972e' : '2px solid #e5e7eb', background: applyTax ? '#fef9ec' : '#fff', transition: 'all 0.2s' }}>
+              <input
+                type="checkbox"
+                checked={applyTax}
+                onChange={(e) => setApplyTax(e.target.checked)}
+                style={{ width: '18px', height: '18px', accentColor: '#b8972e', cursor: 'pointer', flexShrink: 0 }}
+              />
+              <div>
+                <span style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937' }}>Apply 13% Sales Tax</span>
+                {applyTax && afterDiscount > 0 && (
+                  <span style={{ fontSize: '12px', color: '#b8972e', marginLeft: '8px', fontWeight: 600 }}>+ {fmtUSD(taxAmt)}</span>
+                )}
+              </div>
+            </label>
           </Section>
         </div>
 
@@ -675,19 +703,25 @@ export default function WeddingQuoteBuilder() {
 
             {/* Totals */}
             <div style={{ background: '#f9fafb', padding: '14px 22px', borderTop: '1px solid #f3f4f6' }}>
-              {discountAmt > 0 && (
-                <>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                    <span style={{ fontSize: '13px', color: '#6b7280' }}>Subtotal</span>
-                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#374151' }}>{fmtUSD(subtotal)}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                    <span style={{ fontSize: '13px', color: '#16a34a' }}>Discount</span>
-                    <span style={{ fontSize: '13px', fontWeight: 700, color: '#16a34a' }}>-{fmtUSD(discountAmt)}</span>
-                  </div>
-                </>
+              {(discountAmt > 0 || applyTax) && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '13px', color: '#6b7280' }}>Subtotal</span>
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#374151' }}>{fmtUSD(subtotal)}</span>
+                </div>
               )}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: discountAmt > 0 ? '1px solid #e5e7eb' : 'none', marginTop: discountAmt > 0 ? '6px' : 0 }}>
+              {discountAmt > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '13px', color: '#16a34a' }}>Discount</span>
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#16a34a' }}>-{fmtUSD(discountAmt)}</span>
+                </div>
+              )}
+              {applyTax && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '13px', color: '#b8972e' }}>13% Sales Tax</span>
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#b8972e' }}>+{fmtUSD(taxAmt)}</span>
+                </div>
+              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: (discountAmt > 0 || applyTax) ? '1px solid #e5e7eb' : 'none', marginTop: (discountAmt > 0 || applyTax) ? '6px' : 0 }}>
                 <span style={{ fontSize: '14px', fontWeight: 900, color: '#0b0f18' }}>TOTAL</span>
                 <span style={{ fontSize: '1.6rem', fontWeight: 900, color: GOLD }}>{fmtUSD(total)}</span>
               </div>
