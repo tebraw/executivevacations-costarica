@@ -81,6 +81,12 @@ const PACKAGES = [
   },
 ];
 
+const VILLA_DEFAULTS = [
+  { key: 'palacioTropical', name: 'Palacio Tropical', pricing: { low: 2400, high: 3200 } },
+  { key: 'palacioMusical', name: 'Palacio Musical', pricing: { low: 2700, high: 3500 } },
+  { key: 'viewHouse', name: 'The View House', pricing: { low: 399, high: 500 } },
+];
+
 const GOLD = '#b8972e';
 const GOLD_LIGHT = '#c9a96e';
 
@@ -123,6 +129,14 @@ export default function WeddingQuoteBuilder() {
   const [selectedPkg, setSelectedPkg] = useState(null);
   const [season, setSeason] = useState('low'); // 'low' | 'high'
 
+  // Custom villa selection
+  const [customVillas, setCustomVillas] = useState({
+    palacioTropical: { selected: false, pricePerNight: '' },
+    palacioMusical: { selected: false, pricePerNight: '' },
+    viewHouse: { selected: false, pricePerNight: '' },
+  });
+  const [customNights, setCustomNights] = useState('');
+
   // Core line items (editable base price)
   const [basePrice, setBasePrice] = useState('');
 
@@ -148,7 +162,17 @@ export default function WeddingQuoteBuilder() {
 
   const resolvedBase = () => {
     if (basePrice !== '') return parseFloat(basePrice) || 0;
-    if (pkg) return season === 'high' ? pkg.priceHigh : pkg.priceLow;
+    if (pkg && pkg.id !== 'custom') return season === 'high' ? pkg.priceHigh : pkg.priceLow;
+    // Custom: compute from selected villas × nights
+    const nights = parseFloat(customNights) || 0;
+    if (nights > 0) {
+      return VILLA_DEFAULTS.reduce((sum, v) => {
+        const sel = customVillas[v.key];
+        if (!sel.selected) return sum;
+        const rate = parseFloat(sel.pricePerNight) !== 0 && sel.pricePerNight !== '' ? parseFloat(sel.pricePerNight) : v.pricing[season];
+        return sum + rate * nights;
+      }, 0);
+    }
     return 0;
   };
 
@@ -158,9 +182,16 @@ export default function WeddingQuoteBuilder() {
     // Base
     const base = resolvedBase();
     if (base > 0) {
-      const label = pkg && pkg.id !== 'custom'
-        ? `${pkg.name} Package — ${pkg.nights} nights (${season === 'high' ? 'high' : 'low'} season)`
-        : 'Custom Package — Base Price';
+      let label;
+      if (pkg && pkg.id !== 'custom') {
+        label = `${pkg.name} Package — ${pkg.nights} nights (${season === 'high' ? 'high' : 'low'} season)`;
+      } else {
+        const selectedVillaNames = VILLA_DEFAULTS.filter((v) => customVillas[v.key].selected).map((v) => v.name);
+        const nights = parseFloat(customNights) || 0;
+        label = selectedVillaNames.length > 0 && nights > 0
+          ? `Custom Package — ${selectedVillaNames.join(' + ')} · ${nights} night${nights !== 1 ? 's' : ''}`
+          : 'Custom Package — Base Price';
+      }
       lines.push({ label, amount: base });
     }
 
@@ -203,7 +234,7 @@ export default function WeddingQuoteBuilder() {
     });
 
     return lines;
-  }, [basePrice, pkg, season, ceremonyGuests, overnightGuests, extraOvernightDays, extraNights, extraNightPrice, catamaranAddon, catamaranGuests, decoUpgrade, customLines]);
+  }, [basePrice, pkg, season, ceremonyGuests, overnightGuests, extraOvernightDays, extraNights, extraNightPrice, catamaranAddon, catamaranGuests, decoUpgrade, customLines, customVillas, customNights]);
 
   const subtotal = lineItems().reduce((s, l) => s + l.amount, 0);
   const discountAmt = parseFloat(discount) || 0;
@@ -234,6 +265,12 @@ export default function WeddingQuoteBuilder() {
         setCeremonyGuests('');
         setOvernightGuests('');
         setExtraNights('');
+        setCustomVillas({
+          palacioTropical: { selected: false, pricePerNight: '' },
+          palacioMusical: { selected: false, pricePerNight: '' },
+          viewHouse: { selected: false, pricePerNight: '' },
+        });
+        setCustomNights('');
       }
     }
   };
@@ -259,6 +296,12 @@ export default function WeddingQuoteBuilder() {
     setCustomLines([{ label: '', amount: '' }]);
     setDiscount('');
     setApplyTax(false);
+    setCustomVillas({
+      palacioTropical: { selected: false, pricePerNight: '' },
+      palacioMusical: { selected: false, pricePerNight: '' },
+      viewHouse: { selected: false, pricePerNight: '' },
+    });
+    setCustomNights('');
   };
 
   const copyToClipboard = () => {
@@ -517,21 +560,73 @@ export default function WeddingQuoteBuilder() {
               })}
             </div>
 
-            {/* Custom base price input — only visible when Custom card is selected */}
+            {/* Custom villa selection — visible when Custom card is selected */}
             {selectedPkg === 'custom' && (
-              <Field label="Custom Base Price ($)">
-                <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 700 }}>$</span>
+              <div style={{ background: '#f9fafb', borderRadius: '14px', border: '2px solid #e5e7eb', padding: '16px' }}>
+                <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Select Villas</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
+                  {VILLA_DEFAULTS.map((v) => {
+                    const sel = customVillas[v.key];
+                    const defaultRate = v.pricing[season];
+                    return (
+                      <div key={v.key} style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '10px', alignItems: 'center', padding: '10px 12px', borderRadius: '10px', background: sel.selected ? '#fef9ec' : '#fff', border: sel.selected ? `2px solid ${GOLD}` : '2px solid #e5e7eb', transition: 'all 0.2s' }}>
+                        <input
+                          type="checkbox"
+                          checked={sel.selected}
+                          onChange={(e) => setCustomVillas((prev) => ({ ...prev, [v.key]: { ...prev[v.key], selected: e.target.checked } }))}
+                          style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: GOLD }}
+                        />
+                        <span style={{ fontWeight: 700, fontSize: '14px', color: '#1f2937' }}>{v.name}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <span style={{ color: '#6b7280', fontWeight: 700, fontSize: '13px' }}>$</span>
+                          <input
+                            type="number"
+                            min="0"
+                            style={{ ...inputStyle, width: '110px', padding: '7px 10px', fontSize: '13px', opacity: sel.selected ? 1 : 0.4 }}
+                            disabled={!sel.selected}
+                            value={sel.pricePerNight !== '' ? sel.pricePerNight : (sel.selected ? String(defaultRate) : '')}
+                            placeholder={String(defaultRate)}
+                            onChange={(e) => setCustomVillas((prev) => ({ ...prev, [v.key]: { ...prev[v.key], pricePerNight: e.target.value } }))}
+                            onFocus={(e) => { if (sel.pricePerNight === '' && sel.selected) setCustomVillas((prev) => ({ ...prev, [v.key]: { ...prev[v.key], pricePerNight: String(defaultRate) } })); }}
+                          />
+                          <span style={{ color: '#9ca3af', fontSize: '12px', whiteSpace: 'nowrap' }}>/night</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <Field label="Number of nights">
                   <input
                     type="number"
-                    style={{ ...inputStyle, paddingLeft: '28px' }}
-                    value={basePrice}
-                    onChange={(e) => setBasePrice(e.target.value)}
-                    placeholder="e.g. 45000"
-                    autoFocus
+                    min="1"
+                    style={inputStyle}
+                    value={customNights}
+                    onChange={(e) => setCustomNights(e.target.value)}
+                    placeholder="e.g. 5"
                   />
+                </Field>
+                {/* Computed total preview */}
+                {resolvedBase() > 0 && (
+                  <div style={{ padding: '10px 14px', borderRadius: '10px', background: '#0b0f18', color: '#c9a96e', fontWeight: 800, fontSize: '15px', textAlign: 'center', marginTop: '4px' }}>
+                    Villa base: {fmtUSD(resolvedBase())}
+                  </div>
+                )}
+                {/* Manual override */}
+                <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px dashed #e5e7eb' }}>
+                  <Field label="Manual override base price ($) — optional">
+                    <div style={{ position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 700 }}>$</span>
+                      <input
+                        type="number"
+                        style={{ ...inputStyle, paddingLeft: '28px' }}
+                        value={basePrice}
+                        onChange={(e) => setBasePrice(e.target.value)}
+                        placeholder="Leave empty to use villa calculation"
+                      />
+                    </div>
+                  </Field>
                 </div>
-              </Field>
+              </div>
             )}
           </Section>
 
@@ -539,19 +634,19 @@ export default function WeddingQuoteBuilder() {
           <Section title="3. Add-ons & Extras" icon="➕">
             <div className="wqb-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <Field label={pkg && pkg.id !== 'custom' ? `Total ceremony guests (${pkg.ceremonyGuests} incl.)` : 'Total ceremony guests'}>
-                <input type="number" min="0" style={inputStyle} value={ceremonyGuests} onChange={(e) => setCeremonyGuests(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.ceremonyGuests) : '0 × $61'} />
+                <input type="number" min="0" style={inputStyle} value={ceremonyGuests} onChange={(e) => setCeremonyGuests(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.ceremonyGuests) : '0 × $120'} />
                 {pkg && pkg.id !== 'custom' && ceremonyGuests && parseInt(ceremonyGuests) > pkg.ceremonyGuests && (
                   <p style={{ fontSize: '11px', color: '#b8972e', marginTop: '4px', fontWeight: 600 }}>
-                    {parseInt(ceremonyGuests) - pkg.ceremonyGuests} extra × $61 = {fmtUSD((parseInt(ceremonyGuests) - pkg.ceremonyGuests) * 61)}
+                    {parseInt(ceremonyGuests) - pkg.ceremonyGuests} extra × $120 = {fmtUSD((parseInt(ceremonyGuests) - pkg.ceremonyGuests) * 120)}
                   </p>
                 )}
               </Field>
               <div>
                 <Field label={pkg && pkg.id !== 'custom' ? `Total overnight guests (${pkg.overnightGuests} incl.)` : 'Total overnight guests'}>
-                  <input type="number" min="0" style={inputStyle} value={overnightGuests} onChange={(e) => setOvernightGuests(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.overnightGuests) : '0 × $76/day'} />
+                  <input type="number" min="0" style={inputStyle} value={overnightGuests} onChange={(e) => setOvernightGuests(e.target.value)} placeholder={pkg && pkg.id !== 'custom' ? String(pkg.overnightGuests) : '0 × $180/day'} />
                   {pkg && pkg.id !== 'custom' && overnightGuests && parseInt(overnightGuests) > pkg.overnightGuests && (
                     <p style={{ fontSize: '11px', color: '#b8972e', marginTop: '4px', fontWeight: 600 }}>
-                      {parseInt(overnightGuests) - pkg.overnightGuests} extra × $76/day
+                      {parseInt(overnightGuests) - pkg.overnightGuests} extra × $180/day
                     </p>
                   )}
                 </Field>
