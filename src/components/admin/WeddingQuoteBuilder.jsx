@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -155,6 +155,20 @@ export default function WeddingQuoteBuilder() {
   // ── Derived values ──────────────────────────────────────────
   const pkg = PACKAGES.find((p) => p.id === selectedPkg) || null;
 
+  // When season changes for a standard package, recalculate the villa rates
+  useEffect(() => {
+    if (pkg && pkg.id !== 'custom' && basePrice === '') {
+      const pkgPrice = season === 'high' ? pkg.priceHigh : pkg.priceLow;
+      const ratePerVilla = Math.round(pkgPrice / pkg.nights / pkg.villas.length);
+      const newRates = { palacioTropical: '', palacioMusical: '', viewHouse: '' };
+      pkg.villas.forEach((villaName) => {
+        const vd = VILLA_DEFAULTS.find((v) => v.name === villaName);
+        if (vd) newRates[vd.key] = String(ratePerVilla);
+      });
+      setVillaRates(newRates);
+    }
+  }, [season, selectedPkg]);
+
   // Sum of per-night villa rates for the active package / custom selection
   const perNightRate = () => {
     if (pkg && pkg.id !== 'custom') {
@@ -172,7 +186,7 @@ export default function WeddingQuoteBuilder() {
 
   const resolvedBase = () => {
     if (basePrice !== '') return parseFloat(basePrice) || 0;
-    if (pkg && pkg.id !== 'custom') return season === 'high' ? pkg.priceHigh : pkg.priceLow;
+    if (pkg && pkg.id !== 'custom') return perNightRate() * pkg.nights;
     // Custom: sum of selected villa rates × nights
     const nights = parseFloat(extraNights) || 0;
     return nights > 0 ? VILLA_DEFAULTS.reduce((sum, v) => {
@@ -218,7 +232,8 @@ export default function WeddingQuoteBuilder() {
     const inclNights = (pkg && pkg.id !== 'custom' && pkg.nights) ? pkg.nights : 0;
     const eNights = Math.max(0, totalNights - inclNights);
     const nightRate = perNightRate();
-    if (eNights > 0 && nightRate > 0) lines.push({ label: `${inclNights > 0 ? 'Extra' : 'Total'} nights (${eNights} × ${fmtUSD(nightRate)})`, amount: eNights * nightRate });
+    // For custom packages, nights are already part of the base price — don't double-count
+    if (eNights > 0 && nightRate > 0 && pkg?.id !== 'custom') lines.push({ label: `${inclNights > 0 ? 'Extra' : 'Total'} nights (${eNights} × ${fmtUSD(nightRate)})`, amount: eNights * nightRate });
 
     // Catamaran add-on (not for Diamond which already includes it)
     const catamaranIncluded = pkg?.catamaran;
@@ -268,9 +283,11 @@ export default function WeddingQuoteBuilder() {
           setOvernightGuests(String(p.overnightGuests));
           setExtraNights(String(p.nights));
           const newRates = { palacioTropical: '', palacioMusical: '', viewHouse: '' };
+          const pkgPrice = season === 'high' ? p.priceHigh : p.priceLow;
+          const ratePerVilla = Math.round(pkgPrice / p.nights / p.villas.length);
           p.villas.forEach((villaName) => {
             const vd = VILLA_DEFAULTS.find((v) => v.name === villaName);
-            if (vd) newRates[vd.key] = String(vd.pricing[season]);
+            if (vd) newRates[vd.key] = String(ratePerVilla);
           });
           setVillaRates(newRates);
           setSelectedVillasCustom({ palacioTropical: false, palacioMusical: false, viewHouse: false });
