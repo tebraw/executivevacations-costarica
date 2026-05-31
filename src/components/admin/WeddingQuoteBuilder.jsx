@@ -158,12 +158,10 @@ export default function WeddingQuoteBuilder() {
   // When season changes for a standard package, recalculate the villa rates
   useEffect(() => {
     if (pkg && pkg.id !== 'custom' && basePrice === '') {
-      const pkgPrice = season === 'high' ? pkg.priceHigh : pkg.priceLow;
-      const ratePerVilla = Math.round(pkgPrice / pkg.nights / pkg.villas.length);
       const newRates = { palacioTropical: '', palacioMusical: '', viewHouse: '' };
       pkg.villas.forEach((villaName) => {
         const vd = VILLA_DEFAULTS.find((v) => v.name === villaName);
-        if (vd) newRates[vd.key] = String(ratePerVilla);
+        if (vd) newRates[vd.key] = String(vd.pricing[season]);
       });
       setVillaRates(newRates);
     }
@@ -186,10 +184,7 @@ export default function WeddingQuoteBuilder() {
 
   const resolvedBase = () => {
     if (basePrice !== '') return parseFloat(basePrice) || 0;
-    if (pkg && pkg.id !== 'custom') {
-      const nights = parseFloat(extraNights) || pkg.nights;
-      return perNightRate() * nights;
-    }
+    if (pkg && pkg.id !== 'custom') return season === 'high' ? pkg.priceHigh : pkg.priceLow;
     // Custom: sum of selected villa rates × nights
     const nights = parseFloat(extraNights) || 0;
     return nights > 0 ? VILLA_DEFAULTS.reduce((sum, v) => {
@@ -206,8 +201,7 @@ export default function WeddingQuoteBuilder() {
     if (base > 0) {
       let label;
       if (pkg && pkg.id !== 'custom') {
-        const nights = parseFloat(extraNights) || pkg.nights;
-        label = `${pkg.name} Package — ${nights} night${nights !== 1 ? 's' : ''} (${season === 'high' ? 'high' : 'low'} season)`;
+        label = `${pkg.name} Package — ${pkg.nights} nights (${season === 'high' ? 'high' : 'low'} season)`;
       } else {
         const selectedVillaNames = VILLA_DEFAULTS.filter((v) => selectedVillasCustom[v.key]).map((v) => v.name);
         const nights = parseFloat(extraNights) || 0;
@@ -231,7 +225,12 @@ export default function WeddingQuoteBuilder() {
     const totalNightsForOvernight = Math.max(1, parseFloat(extraNights) || 1);
     if (eOver > 0) lines.push({ label: `${inclOvernight > 0 ? 'Extra' : 'Total'} overnight guests (${eOver} × $180 × ${totalNightsForOvernight} night${totalNightsForOvernight !== 1 ? 's' : ''})`, amount: eOver * 180 * totalNightsForOvernight });
 
-    // Nights are fully included in the base price for all package types — no separate extra-nights line
+    // Extra nights beyond what the package includes
+    const totalNights = parseFloat(extraNights) || 0;
+    const inclNights = (pkg && pkg.id !== 'custom' && pkg.nights) ? pkg.nights : 0;
+    const eNights = Math.max(0, totalNights - inclNights);
+    const nightRate = perNightRate();
+    if (eNights > 0 && nightRate > 0 && pkg?.id !== 'custom') lines.push({ label: `Extra nights (${eNights} × ${fmtUSD(nightRate)})`, amount: eNights * nightRate });
 
     // Catamaran add-on (not for Diamond which already includes it)
     const catamaranIncluded = pkg?.catamaran;
@@ -279,13 +278,11 @@ export default function WeddingQuoteBuilder() {
         if (p) {
           setCeremonyGuests(String(p.ceremonyGuests));
           setOvernightGuests(String(p.overnightGuests));
-          setExtraNights(String(p.nights));
+          setExtraNights('');
           const newRates = { palacioTropical: '', palacioMusical: '', viewHouse: '' };
-          const pkgPrice = season === 'high' ? p.priceHigh : p.priceLow;
-          const ratePerVilla = Math.round(pkgPrice / p.nights / p.villas.length);
           p.villas.forEach((villaName) => {
             const vd = VILLA_DEFAULTS.find((v) => v.name === villaName);
-            if (vd) newRates[vd.key] = String(ratePerVilla);
+            if (vd) newRates[vd.key] = String(vd.pricing[season]);
           });
           setVillaRates(newRates);
           setSelectedVillasCustom({ palacioTropical: false, palacioMusical: false, viewHouse: false });
@@ -583,7 +580,7 @@ export default function WeddingQuoteBuilder() {
             {selectedPkg && selectedPkg !== 'custom' && pkg && (
               <div style={{ background: '#f9fafb', borderRadius: '14px', border: '2px solid #e5e7eb', padding: '16px' }}>
                 <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Included Villas & Rates</p>
-                <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '12px' }}>Rate/night per villa — edit if needed</p>
+                <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '12px' }}>Real nightly rates — used to price extra nights</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
                   {pkg.villas.map((villaName) => {
                     const vd = VILLA_DEFAULTS.find((v) => v.name === villaName);
@@ -608,14 +605,14 @@ export default function WeddingQuoteBuilder() {
                     );
                   })}
                 </div>
-                <Field label="Number of nights">
-                  <input type="number" min="1" style={inputStyle} value={extraNights} onChange={(e) => setExtraNights(e.target.value)} placeholder={String(pkg.nights)} />
+                <Field label={`Extra nights beyond ${pkg.nights} incl. (× ${fmtUSD(perNightRate())} total/night)`}>
+                  <input type="number" min="0" style={inputStyle} value={extraNights} onChange={(e) => setExtraNights(e.target.value)} placeholder="0" />
+                  {extraNights && parseInt(extraNights) > 0 && (
+                    <p style={{ fontSize: '11px', color: '#b8972e', marginTop: '4px', fontWeight: 600 }}>
+                      {parseInt(extraNights)} extra × {fmtUSD(perNightRate())} = {fmtUSD(parseInt(extraNights) * perNightRate())}
+                    </p>
+                  )}
                 </Field>
-                {resolvedBase() > 0 && (
-                  <div style={{ padding: '10px 14px', borderRadius: '10px', background: '#0b0f18', color: '#c9a96e', fontWeight: 800, fontSize: '15px', textAlign: 'center', marginTop: '4px' }}>
-                    Villa base: {fmtUSD(resolvedBase())}
-                  </div>
-                )}
               </div>
             )}
             {/* Custom package: villa selection */}
@@ -693,7 +690,14 @@ export default function WeddingQuoteBuilder() {
                 )}
               </Field>
             </div>
-            {/* Total nights — handled in villa block above for all packages */}
+                <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px dashed #e5e7eb' }}>
+                  <Field label={`Base price override ($) — empty = ${fmtUSD(season === 'high' ? pkg.priceHigh : pkg.priceLow)}`}>
+                    <div style={{ position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 700 }}>$</span>
+                      <input type="number" style={{ ...inputStyle, paddingLeft: '28px' }} value={basePrice} onChange={(e) => setBasePrice(e.target.value)} placeholder={String(season === 'high' ? pkg.priceHigh : pkg.priceLow)} />
+                    </div>
+                  </Field>
+                </div>
 
             {/* Catamaran */}
             {!pkg?.catamaran && (
