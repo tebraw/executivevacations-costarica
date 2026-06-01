@@ -121,7 +121,7 @@ const villas = [
       { name: "5 Min to Palacio Villas", icon: "fa-map-marker-alt" },
       { name: "Group Booking Available", icon: "fa-users" }
     ],
-    detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for Whale Watching from patio. With 4 en-suites and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palacio Tropical and Palacio Musical, it can be booked together with these properties for larger groups or events.",
+    detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for Whale Watching from patio. With 4 bedrooms and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palacio Tropical and Palacio Musical, it can be booked together with these properties for larger groups or events.",
     locationDescription: "Located in Puntarenas Province with stunning Pacific Ocean views. Just 5 minutes from Palacio Tropical and Palacio Musical villas, perfect for combined bookings and group events.",
     specialFeatures: [
       { name: "Newly Constructed", icon: "fa-hammer" },
