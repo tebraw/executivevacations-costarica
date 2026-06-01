@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import villas, { getVillaPrice, calculateTotalPrice } from '../data/villas';
 import { getBookings } from '../utils/bookingStorage';
 import Header from '../components/Header';
@@ -182,6 +183,14 @@ const VillaDetailPage = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{villa?.seoTitle || `${villa?.name} — Luxury Villa in Costa Rica | Executive Vacations`}</title>
+        <meta name="description" content={villa?.seoDescription || `Luxury villa rental in Costa Rica. ${villa?.detailedDescription?.slice(0, 150) || ''}`} />
+        <meta property="og:title" content={villa?.seoTitle || villa?.name} />
+        <meta property="og:description" content={villa?.seoDescription || ''} />
+        <meta property="og:type" content="website" />
+        {villa?.images?.[0] && <meta property="og:image" content={villa.images[0]} />}
+      </Helmet>
       <Header />
       <main className="min-h-screen" style={{ paddingTop:'80px', background:'#f8f7f4' }}>
 

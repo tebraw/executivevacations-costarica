@@ -37,15 +37,17 @@ const villas = [
       { name: "VIP Privacy Protection", icon: "fa-user-shield" },
       { name: "Separate Security Quarters", icon: "fa-home" }
     ],
-    detailedDescription: "Experience private luxury throughout this stunning 10,500 sq ft beachfront villa. Featuring 7 en-suites, each with private bath and A/C, plus a grand dining room seating 14. Multiple large gathering areas open to an outside bar, dining area, and large pool. Safe and private for traveling dignitaries, officials, and politicians. The house can be fully staffed with cooks, housekeeping, and concierge service for outings and excursions. Located directly next to Palacio Musical, both properties can be booked together for larger events and groups. Palacio Tropical offers an unforgettable beachfront experience with complete privacy and security.",
-    locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and secluded beach access let you enjoy family and guests with exceptional privacy and minimal foot traffic. Situated directly next to Palacio Musical - both villas can be combined for ultimate luxury accommodation.",
+    detailedDescription: "Experience private luxury throughout this stunning 10,500 sq ft beachfront villa. Featuring 7 en-suites, each with private bath and A/C, plus a grand dining room seating 14. Multiple large gathering areas open to an outside bar, dining area, and large pool. Safe and private for traveling dignitaries, officials, and politicians. The house can be fully staffed with cooks, housekeeping, and concierge service for outings and excursions. Located directly next to Palacio Musical, both properties can be booked together for larger events and groups. Palacio Tropical offers an unforgettable beachfront experience with complete privacy and security — and for those who want to explore, the world-famous surf and yoga destination Santa Teresa is just 35 minutes away.",
+    locationDescription: "Located in an isolated and pristine area of Tambor, Costa Rica. Perfect for privacy and safety for public officials, dignitaries, and those requiring discretion. The grounds and secluded beach access let you enjoy family and guests with exceptional privacy and minimal foot traffic. Situated directly next to Palacio Musical - both villas can be combined for ultimate luxury accommodation. Just 35 minutes from Santa Teresa, one of Costa Rica's most sought-after beach destinations.",
     specialFeatures: [
       { name: "VIP Privacy & Security", icon: "fa-user-shield" },
       { name: "Full Staff Service", icon: "fa-concierge-bell" },
       { name: "Airport Transfer Service", icon: "fa-plane" }
     ],
     virtualTour: "https://my.matterport.com/show/?m=fyPUdmtVF1H",
-    pricingPdf: "/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf"
+    pricingPdf: "/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf",
+    seoTitle: "Palacio Tropical — Luxury Beachfront Villa in Tambor, Costa Rica | Executive Vacations",
+    seoDescription: "7-bedroom beachfront villa with private beach access, full staff & pool in Tambor, Costa Rica. Just 35 min from Santa Teresa. Perfect for dignitaries & large groups."
   },
   {
     id: 4,
@@ -82,15 +84,17 @@ const villas = [
       { name: "Next to Palacio Tropical", icon: "fa-map-marker-alt" },
       { name: "Combinable Booking", icon: "fa-link" }
     ],
-    detailedDescription: "Experience the ultimate beachfront luxury in this spectacular 12,500 sq ft villa featuring three magnificent decks, each offering breathtaking ocean views. The property includes a unique whale watching observatory - perfect for spotting humpback whales during migration season. With its stunning architecture and expansive outdoor spaces, this villa is ideal for weddings, celebrations, and special events. The three-level deck system provides versatile entertainment areas, from intimate gatherings to grand celebrations. Located directly next to Palacio Tropical, both villas can be combined for the ultimate luxury experience, accommodating large groups and multi-family vacations.",
-    locationDescription: "Situated directly next to Palacio Tropical in the pristine area of Tambor, Costa Rica. Both properties can be combined for the ultimate luxury experience, offering unparalleled privacy and space.",
+    detailedDescription: "Experience the ultimate beachfront luxury in this spectacular 12,500 sq ft villa featuring three magnificent decks, each offering breathtaking ocean views. The property includes a unique whale watching observatory - perfect for spotting humpback whales during migration season. With its stunning architecture and expansive outdoor spaces, this villa is ideal for weddings, celebrations, and special events. The three-level deck system provides versatile entertainment areas, from intimate gatherings to grand celebrations. Located directly next to Palacio Tropical, both villas can be combined for the ultimate luxury experience, accommodating large groups and multi-family vacations. Santa Teresa — Costa Rica's iconic surf and wellness destination — is just 35 minutes away, offering the perfect day-trip complement to a secluded beachfront stay.",
+    locationDescription: "Situated directly next to Palacio Tropical in the pristine area of Tambor, Costa Rica. Both properties can be combined for the ultimate luxury experience, offering unparalleled privacy and space. Just 35 minutes from Santa Teresa, one of Costa Rica's most beloved surf and yoga destinations.",
     specialFeatures: [
       { name: "Professional Music Studio", icon: "fa-music" },
       { name: "Newly Renovated", icon: "fa-tools" },
       { name: "Combinable with Palacio Tropical", icon: "fa-link" }
     ],
     virtualTour: "https://my.matterport.com/show/?m=PAjrDDM98oj",
-    pricingPdf: "/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf"
+    pricingPdf: "/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf",
+    seoTitle: "Palacio Musical — Oceanfront Villa for Weddings & Events in Costa Rica | Executive Vacations",
+    seoDescription: "12,500 sq ft beachfront villa with whale watching deck, ocean-view terraces & music studio in Tambor, Costa Rica. 35 min from Santa Teresa. Ideal for weddings & events."
   },
   {
     id: 3,
@@ -121,14 +125,16 @@ const villas = [
       { name: "5 Min to Palacio Villas", icon: "fa-map-marker-alt" },
       { name: "Group Booking Available", icon: "fa-users" }
     ],
-    detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for Whale Watching from patio. With 4 bedrooms and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palacio Tropical and Palacio Musical, it can be booked together with these properties for larger groups or events.",
-    locationDescription: "Located in Puntarenas Province with stunning Pacific Ocean views. Just 5 minutes from Palacio Tropical and Palacio Musical villas, perfect for combined bookings and group events.",
+    detailedDescription: "Lean back and relax in this peaceful, stylish accommodation with magnificent Pacific Ocean views and a beautiful, custom-designed swimming pool. This newly constructed 2,400 sq ft villa offers modern luxury and comfort in a tranquil setting, with spectacular opportunities for Whale Watching from patio. With 4 bedrooms and contemporary amenities, it's perfect for families or nature lovers seeking a serene getaway. Located just 5 minutes from Palacio Tropical and Palacio Musical, it can be booked together with these properties for larger groups or events. The world-famous surf destination Santa Teresa is just 35 minutes away — ideal for a day of waves, yoga, and local dining.",
+    locationDescription: "Located in Puntarenas Province with stunning Pacific Ocean views. Just 5 minutes from Palacio Tropical and Palacio Musical villas, perfect for combined bookings and group events. Only 35 minutes from Santa Teresa, Costa Rica's most celebrated surf and wellness destination.",
     specialFeatures: [
       { name: "Newly Constructed", icon: "fa-hammer" },
       { name: "Custom Pool Design", icon: "fa-swimming-pool" },
       { name: "Combinable with Palacio Villas", icon: "fa-link" }
     ],
-    pricingPdf: "/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf"
+    pricingPdf: "/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf",
+    seoTitle: "The View House — Boutique Luxury Villa with Pacific Ocean Views, Costa Rica | Executive Vacations",
+    seoDescription: "Modern 4-bedroom villa with custom pool & Pacific Ocean views in Tambor, Costa Rica. 5 min from Palacio Tropical & Musical, 35 min from Santa Teresa. Perfect for families."
   },
   {
     id: 1,
@@ -169,7 +175,9 @@ const villas = [
       { name: "Resort-style Grounds", icon: "fa-tree" },
       { name: "Perfect for Events", icon: "fa-calendar" }
     ],
-    pricingPdf: "/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf"
+    pricingPdf: "/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf",
+    seoTitle: "The Palms Villa Estate — Mountain Villa Retreat in Atenas, Costa Rica | Executive Vacations",
+    seoDescription: "4-bedroom luxury mountain villa with private pool, tennis court & full-time caretaker in Atenas, Costa Rica. Perfect for families, weddings & private retreats."
   }
 ];
 
