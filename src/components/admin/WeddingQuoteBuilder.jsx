@@ -690,14 +690,6 @@ export default function WeddingQuoteBuilder() {
                 )}
               </Field>
             </div>
-                <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px dashed #e5e7eb' }}>
-                  <Field label={`Base price override ($) — empty = ${fmtUSD(season === 'high' ? pkg.priceHigh : pkg.priceLow)}`}>
-                    <div style={{ position: 'relative' }}>
-                      <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 700 }}>$</span>
-                      <input type="number" style={{ ...inputStyle, paddingLeft: '28px' }} value={basePrice} onChange={(e) => setBasePrice(e.target.value)} placeholder={String(season === 'high' ? pkg.priceHigh : pkg.priceLow)} />
-                    </div>
-                  </Field>
-                </div>
 
             {/* Catamaran */}
             {!pkg?.catamaran && (
