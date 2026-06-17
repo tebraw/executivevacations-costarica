@@ -37,7 +37,8 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/wedding-blog" element={<WeddingBlog />} />
-        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/pricing" element={weddingDomain ? <WeddingPackages /> : <Pricing />} />
+        <Route path="/pricing/" element={weddingDomain ? <WeddingPackages /> : <Pricing />} />
         <Route path="/weddings" element={<Weddings />} />
         <Route path="/wedding-packages" element={<WeddingPackages />} />
         <Route path="/admin12345" element={<AdminDashboard />} />

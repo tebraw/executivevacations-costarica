@@ -52,7 +52,7 @@ export function getSiteBrand() {
       homeHref,
       weddingsHref: homeHref,
       villasHref: isLocalHost() ? localUrl('/', 'executive') : `${EXECUTIVE_DOMAIN}/`,
-      pricingHref: isLocalHost() ? localUrl('/pricing', 'paradise') : `${WEDDING_DOMAIN}/pricing/`,
+      pricingHref: isLocalHost() ? localUrl('/pricing', 'paradise') : `${WEDDING_DOMAIN}/pricing`,
       footerText: 'Your exclusive wedding partner in Costa Rica. We create unforgettable destination weddings in the country\'s most beautiful villas.',
     };
   }
