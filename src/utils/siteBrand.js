@@ -47,11 +47,12 @@ export function getSiteBrand() {
       fullName: 'Paradise Weddings Costa Rica',
       shortName: 'Paradise Weddings',
       tagline: 'Destination Weddings in Costa Rica',
-      pricingLabel: 'Wedding Pricing Guide',
+      pricingLabel: 'Download Our Pricing Guide',
+      heroCtaLabel: 'Start Planning Your Celebration',
       homeHref,
       weddingsHref: homeHref,
       villasHref: isLocalHost() ? localUrl('/', 'executive') : `${EXECUTIVE_DOMAIN}/`,
-      pricingHref: isLocalHost() ? localUrl('/wedding-packages', 'paradise') : `${WEDDING_DOMAIN}/wedding-packages`,
+      pricingHref: isLocalHost() ? localUrl('/pricing', 'paradise') : `${WEDDING_DOMAIN}/pricing/`,
       footerText: 'Your exclusive wedding partner in Costa Rica. We create unforgettable destination weddings in the country\'s most beautiful villas.',
     };
   }

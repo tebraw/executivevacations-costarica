@@ -1,3 +1,8 @@
 # SPA fallback - Functions are automatically excluded by Netlify
 /pricing-guide-view-house.html  /pricing-guide-view-house.html  200
+
+# 301 redirects: /wedding-packages -> /pricing/
+/wedding-packages   /pricing/   301!
+/wedding-packages/  /pricing/   301!
+
 /*  /index.html  200

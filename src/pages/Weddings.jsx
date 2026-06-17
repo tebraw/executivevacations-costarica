@@ -310,7 +310,7 @@ export default function Weddings() {
               fontSize: '0.95rem', textDecoration: 'none',
               letterSpacing: '0.02em',
             }}>
-              {brand.pricingLabel}
+              {brand.heroCtaLabel || brand.pricingLabel}
             </a>
             </div>
           </div>
