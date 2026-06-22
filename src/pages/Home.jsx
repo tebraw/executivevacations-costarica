@@ -175,6 +175,29 @@ function Home() {
         selectedVilla={selectedVilla}
         onVillaSelect={handleVillaSelect}
       />
+
+      {/* Villa Video Section */}
+      <section style={{ background: '#0f172a', padding: 'clamp(48px, 7vw, 80px) clamp(24px, 5vw, 48px)' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.72rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: '#c9a96e', fontWeight: 700, marginBottom: '14px', fontFamily: "'DM Sans', sans-serif" }}>
+            See It For Yourself
+          </p>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', color: '#fff', lineHeight: 1.2, marginBottom: '32px' }}>
+            A Glimpse Into Your Stay
+          </h2>
+          <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,0.5)' }}>
+            <iframe
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+              src="https://www.youtube.com/embed/HhYCNti-fjc?si=Q6hg_G15vIrUTXOx"
+              title="Executive Vacations Costa Rica — Villa Tour"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </section>
+
       <ActivitiesSection onActivitiesChange={handleActivitiesChange} selectedVilla={selectedVilla} />
       <ContactFormSection 
         selectedVilla={selectedVilla}
