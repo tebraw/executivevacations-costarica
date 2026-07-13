@@ -140,6 +140,7 @@ const villas = [
     id: 1,
     slug: "the-palms-villa-estate",
     name: "The Palms Villa Estate",
+    forSale: true,
     useEnsuites: false,
     type: "Mountain Villa Retreat",
     location: "Atenas",

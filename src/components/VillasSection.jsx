@@ -63,6 +63,11 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             PREMIUM
           </div>
         )}
+        {villa.forSale && (
+          <div style={{ position: 'absolute', top: '12px', right: '12px', background: '#dc2626', color: '#fff', padding: '3px 10px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+            For Sale
+          </div>
+        )}
       </div>
 
       <div className="p-4">
