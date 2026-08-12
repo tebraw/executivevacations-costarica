@@ -4,18 +4,21 @@ const DEFAULT_TEMPLATES = {
   welcomeSms: `Hi {firstName}! 🌴 Thanks for your interest in Executive Vacations Costa Rica. We'll send you our exclusive pricing guide shortly. Questions? Reply anytime! — Executive Vacations CR`,
   welcomeEmail: {
     subject: `Your Exclusive Pricing Guide — Executive Vacations Costa Rica`,
-    body: `Hi {firstName},
+    body: `Pura Vida {firstName}! 🌴 I hope this email finds you well. My name is Wendy, and my husband and I own all the Villas at Executive Vacations Costa Rica. You'll be directly dealing with me, not through a third party.
 
-Thank you for your interest in {villaInterest} at Executive Vacations Costa Rica!
+I'm thrilled to hear about your interest in planning a trip to Costa Rica. I'm personally excited to help you create the perfect itinerary that combines luxury, relaxation, exploration, adventure, or a combination of all your preferences. With our 24/7 on-site concierge service, your dream vacation is just a few clicks away!
 
-We're thrilled you're considering a luxury stay with us. Your exclusive pricing guide is attached.
+I'd like to schedule a quick call to walk you through everything and answer any questions you may have. Please let me know a couple of days and times that work for you. I'll give you a call as soon as possible. Alternatively, you can call me anytime on my cell phone.
 
-Our villas offer world-class amenities in the heart of Costa Rica's stunning landscape. We'd love to help you plan the perfect getaway.
+I look forward to speaking with you soon!
 
-Feel free to reply to this email or visit our website at {siteUrl} to learn more.
+Best regards,
 
-Pura Vida,
-The Executive Vacations Costa Rica Team`,
+Wendy Meritt
+
+Executive Vacations Costa Rica
+
+303-881-8588`,
   },
   followUpSms: `Hi {firstName}! 🌺 Just checking in — did you get a chance to review our Costa Rica villa pricing? We'd love to answer any questions. Reply here or visit {siteUrl} — Executive Vacations CR`,
   followUpEmail: {
