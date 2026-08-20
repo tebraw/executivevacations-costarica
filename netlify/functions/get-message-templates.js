@@ -6,7 +6,7 @@ const DEFAULT_TEMPLATES = {
     subject: `Your Exclusive Pricing Guide — Executive Vacations Costa Rica`,
     body: `Pura Vida {firstName}! 🌴 I hope this email finds you well. My name is Wendy, and my husband and I own all the Villas at Executive Vacations Costa Rica. You'll be directly dealing with me, not through a third party.
 
-I'm thrilled to hear about your interest in planning a trip to Costa Rica. I'm personally excited to help you create the perfect itinerary that combines luxury, relaxation, exploration, adventure, or a combination of all your preferences. With our 24/7 on-site concierge service, your dream vacation is just a few clicks away!
+I hope you enjoyed downloading our pricing guide! I'm personally excited to help you create the perfect itinerary that combines luxury, relaxation, exploration, adventure, or a combination of all your preferences. With our 24/7 on-site concierge service, your dream vacation is just a few clicks away!
 
 I'd like to schedule a quick call to walk you through everything and answer any questions you may have. Please let me know a couple of days and times that work for you. I'll give you a call as soon as possible. Alternatively, you can call me anytime on my cell phone.
 
