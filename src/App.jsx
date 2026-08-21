@@ -31,6 +31,34 @@ function App() {
   return (
     <Router>
       <QRTracker />
+      {/* Floating WhatsApp button */}
+      <a
+        href="https://wa.me/13038818588"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat with us on WhatsApp"
+        style={{
+          position: 'fixed',
+          bottom: '28px',
+          right: '28px',
+          zIndex: 9999,
+          width: '60px',
+          height: '60px',
+          borderRadius: '50%',
+          backgroundColor: '#25D366',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+          transition: 'transform 0.2s, box-shadow 0.2s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.35)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.25)'; }}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32" fill="white">
+          <path d="M24 4C13 4 4 13 4 24c0 3.6 1 7 2.7 9.9L4 44l10.4-2.7C17.2 43 20.5 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.1 0-6.1-.8-8.7-2.4l-.6-.4-6.2 1.6 1.7-6-.4-.6C8.2 29.8 7.3 27 7.3 24 7.3 14.8 14.8 7.3 24 7.3S40.7 14.8 40.7 24 33.2 40 24 40zm10.9-14.4c-.6-.3-3.5-1.7-4-1.9s-.9-.3-1.3.3-1.5 1.9-1.8 2.3-.7.4-1.3.1c-.6-.3-2.4-.9-4.6-2.8-1.7-1.5-2.8-3.4-3.2-3.9s0-.8.3-1.1l.9-1.1c.2-.3.3-.6.5-.9s.1-.6 0-.9c-.1-.3-1.3-3.1-1.8-4.3-.5-1.1-1-1-1.3-1h-1.1c-.4 0-1 .1-1.5.7s-2 2-2 4.8 2.1 5.6 2.4 6c.3.4 4.1 6.3 10 8.8 1.4.6 2.5 1 3.3 1.2 1.4.4 2.7.4 3.7.2 1.1-.2 3.5-1.4 4-2.8s.5-2.5.4-2.8c-.2-.3-.6-.4-1.2-.7z"/>
+        </svg>
+      </a>
       <Routes>
         <Route path="/" element={weddingDomain ? <Weddings /> : <Home />} />
         <Route path="/villa/:slug" element={<VillaDetailPage />} />
