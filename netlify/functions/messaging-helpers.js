@@ -73,7 +73,7 @@ export async function sendSms(toPhone, message) {
  */
 export async function sendEmail(toEmail, subject, bodyText, replyTo) {
   const apiKey = process.env.RESEND_API_KEY;
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@executivevacations.cr';
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'wendy@executivevacations.net';
   const adminEmail = process.env.ADMIN_EMAIL;
 
   if (!apiKey) {
