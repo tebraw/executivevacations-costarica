@@ -1,6 +1,16 @@
 import { getStore } from '@netlify/blobs';
 
 export default async (req, context) => {
+  const adminSecret = process.env.ADMIN_SECRET;
+  const token = req.headers.get('x-admin-token');
+
+  if (!adminSecret || token !== adminSecret) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   try {
     const store = getStore('leads');
     const existing = await store.get('all-leads');

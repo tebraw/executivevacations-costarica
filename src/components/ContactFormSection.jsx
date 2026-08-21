@@ -144,27 +144,24 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
     setIsSubmitting(true);
 
     try {
-      // Create form data object for Netlify
-      const formDataObject = {
-        'form-name': 'contact',
-        'name': formData.name,
-        'email': formData.email,
-        'phone': formData.phone,
-        'checkIn': formData.checkIn,
-        'checkOut': formData.checkOut,
-        'numberOfPeople': formData.numberOfPeople,
-        'message': formData.message,
-        'villa-selected': selectedVilla?.name || 'None',
-        'activities-selected': selectedActivities.length > 0 
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        checkIn: formData.checkIn,
+        checkOut: formData.checkOut,
+        numberOfPeople: formData.numberOfPeople,
+        message: formData.message,
+        villaSelected: selectedVilla?.name || 'Not specified',
+        activitiesSelected: selectedActivities.length > 0
           ? selectedActivities.map(a => `${a.name} (${a.duration})`).join(', ')
-          : 'None'
+          : 'None',
       };
 
-      // Submit to Netlify
-      const response = await fetch('/', {
+      const response = await fetch('/.netlify/functions/save-inquiry', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formDataObject).toString()
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
@@ -253,20 +250,10 @@ const ContactFormSection = ({ selectedVilla, selectedActivities }) => {
             )}
 
             <form 
-              name="contact" 
-              method="POST" 
-              data-netlify="true"
-              data-netlify-honeypot="bot-field"
               onSubmit={handleSubmit} 
               className="space-y-6"
             >
-              {/* Netlify Forms required fields */}
-              <input type="hidden" name="form-name" value="contact" />
-              <input type="hidden" name="bot-field" />
-              <input type="hidden" name="checkIn" />
-              <input type="hidden" name="checkOut" />
-              
-              {/* Hidden fields for villa and activities */}
+              {/* Hidden fields for villa and activities (kept for reference only) */}
               <input type="hidden" name="villa-selected" value={selectedVilla?.name || ''} />
               <input type="hidden" name="activities-selected" value={selectedActivities.map(a => `${a.name} (${a.duration})`).join(', ')} />
               

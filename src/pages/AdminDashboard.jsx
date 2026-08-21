@@ -236,7 +236,9 @@ const AdminDashboard = () => {
   const loadLeads = async () => {
     setLeadsLoading(true);
     try {
-      const res = await fetch('/.netlify/functions/get-leads');
+      const res = await fetch('/.netlify/functions/get-leads', {
+        headers: { 'x-admin-token': import.meta.env.VITE_ADMIN_SECRET || '' },
+      });
       if (res.ok) setLeads(await res.json());
     } catch { setLeads([]); }
     setLeadsLoading(false);
@@ -341,7 +343,7 @@ const AdminDashboard = () => {
 
   const loadBookings = async () => {
     setLoading(true);
-    const data = await getBookings();
+    const data = await getBookings(import.meta.env.VITE_ADMIN_SECRET);
     setBookings(data);
     setLoading(false);
   };

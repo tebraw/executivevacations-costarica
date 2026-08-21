@@ -27,10 +27,12 @@ export const VILLA_COLORS = {
 };
 
 // Get all bookings from API (or localStorage as fallback)
-export const getBookings = async () => {
+// Pass adminToken to receive full booking data; omit for public/sanitized data.
+export const getBookings = async (adminToken = null) => {
   try {
     console.log('Fetching bookings from Netlify Blobs...');
-    const response = await fetch('/.netlify/functions/get-bookings');
+    const headers = adminToken ? { 'x-admin-token': adminToken } : {};
+    const response = await fetch('/.netlify/functions/get-bookings', { headers });
     console.log('Response status:', response.status);
     if (response.ok) {
       const data = await response.json();
