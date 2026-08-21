@@ -20,7 +20,7 @@ const Footer = () => {
             
             {/* Social Media */}
             <div className="flex gap-4">
-              <a href="https://www.instagram.com/executive_vacations_cr/" target="_blank" rel="noopener noreferrer" className="body-small text-white/80 hover:text-white transition-colors border-b border-transparent hover:border-white/50">
+              <a href="https://www.instagram.com/paradisevillascostarica/" target="_blank" rel="noopener noreferrer" className="body-small text-white/80 hover:text-white transition-colors border-b border-transparent hover:border-white/50">
                 Instagram  
               </a>
             </div>
