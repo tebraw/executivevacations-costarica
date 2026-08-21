@@ -54,10 +54,10 @@ const Footer = () => {
             <h4 className="heading-3 mb-4" style={{ color: '#D4AF37' }}>Contact</h4>
             <div className="space-y-3">
               <div>
-                <span className="body-regular text-white/80">propertieswithmeritt@yahoo.com</span>
+                <a href="mailto:propertieswithmeritt@yahoo.com" className="body-regular text-white/80 hover:text-white transition-colors">propertieswithmeritt@yahoo.com</a>
               </div>
               <div>
-                <span className="body-regular text-white/80">303-881-8588</span>
+                <a href="tel:+13038818588" className="body-regular text-white/80 hover:text-white transition-colors">303-881-8588</a>
               </div>
             </div>
           </div>
@@ -67,7 +67,7 @@ const Footer = () => {
         <div className="border-t border-white/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="body-small text-white/60">
-              &copy; 2024 {brand.name}. All rights reserved.
+              &copy; {new Date().getFullYear()} {brand.name}. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a href="#" className="body-small text-white/60 hover:text-white transition-colors">Privacy Policy</a>
