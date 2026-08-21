@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -132,9 +133,10 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen" style={{ background: '#fafaf8' }}>
-      <Header />
-
-      {/* Hero Banner */}
+      <Helmet>
+        <link rel="canonical" href="https://executivevacations.net/blog" />
+      </Helmet>
+      <Header />}
       <div style={{
         paddingTop: '120px', paddingBottom: '64px',
         background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)',

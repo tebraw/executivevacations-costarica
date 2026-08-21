@@ -5,4 +5,4 @@ Allow: /
 Disallow: /admin12345
 Disallow: /.netlify/
 
-Sitemap: https://executivevacations.net/sitemap.xml
+Sitemap: https://executivevacations.net/.netlify/functions/sitemap-xml

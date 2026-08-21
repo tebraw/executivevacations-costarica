@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import VillasSection from '../components/VillasSection'
@@ -100,6 +101,9 @@ function Home() {
 
   return (
     <div className="min-h-screen" style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
+      <Helmet>
+        <link rel="canonical" href="https://executivevacations.net/" />
+      </Helmet>
       <Header />
       <Hero />
       

@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-router-dom'
 import './index.css'
 import Home from './pages/Home'
-import AdminDashboard from './pages/AdminDashboard'
 import VillaDetailPage from './pages/VillaDetailPage'
-import Blog from './pages/Blog'
-import BlogPost from './pages/BlogPost'
-import WeddingBlog from './pages/WeddingBlog'
-import Pricing from './pages/Pricing'
-import Weddings from './pages/Weddings'
-import WeddingPackages from './pages/WeddingPackages'
+
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'))
+const Blog = lazy(() => import('./pages/Blog'))
+const BlogPost = lazy(() => import('./pages/BlogPost'))
+const WeddingBlog = lazy(() => import('./pages/WeddingBlog'))
+const Pricing = lazy(() => import('./pages/Pricing'))
+const Weddings = lazy(() => import('./pages/Weddings'))
+const WeddingPackages = lazy(() => import('./pages/WeddingPackages'))
+
 import { isWeddingDomain } from './utils/siteBrand'
 
 // Fires once on load to record QR-code-sourced visits (?ref=...)
@@ -67,6 +69,7 @@ function App() {
           <span style={{fontSize: '16px', fontWeight: '700'}}>Wendy 👋</span>
         </div>
       </a>
+      <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={weddingDomain ? <Weddings /> : <Home />} />
         <Route path="/villa/:slug" element={<VillaDetailPage />} />
@@ -79,6 +82,7 @@ function App() {
         <Route path="/wedding-packages" element={<WeddingPackages />} />
         <Route path="/admin12345" element={<AdminDashboard />} />
       </Routes>
+      </Suspense>
     </Router>
   )
 }

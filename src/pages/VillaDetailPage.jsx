@@ -186,6 +186,7 @@ const VillaDetailPage = () => {
       <Helmet>
         <title>{villa?.seoTitle || `${villa?.name} — Luxury Villa in Costa Rica | Executive Vacations`}</title>
         <meta name="description" content={villa?.seoDescription || `Luxury villa rental in Costa Rica. ${villa?.detailedDescription?.slice(0, 150) || ''}`} />
+        <link rel="canonical" href={`https://executivevacations.net/villa/${villa?.slug}`} />
         <meta property="og:title" content={villa?.seoTitle || villa?.name} />
         <meta property="og:description" content={villa?.seoDescription || ''} />
         <meta property="og:type" content="website" />

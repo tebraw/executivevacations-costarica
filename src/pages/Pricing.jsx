@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { getSiteBrand } from '../utils/siteBrand';
@@ -184,6 +185,9 @@ export default function Pricing() {
 
   return (
     <div className="min-h-screen" style={{ background: '#fafaf8' }}>
+      <Helmet>
+        <link rel="canonical" href="https://executivevacations.net/pricing" />
+      </Helmet>
       <Header />
 
       {/* Hero */}
