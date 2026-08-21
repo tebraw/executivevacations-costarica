@@ -11,6 +11,9 @@ const WeddingBlog = lazy(() => import('./pages/WeddingBlog'))
 const Pricing = lazy(() => import('./pages/Pricing'))
 const Weddings = lazy(() => import('./pages/Weddings'))
 const WeddingPackages = lazy(() => import('./pages/WeddingPackages'))
+const Privacy = lazy(() => import('./pages/Privacy'))
+const Terms = lazy(() => import('./pages/Terms'))
+const Cookies = lazy(() => import('./pages/Cookies'))
 
 import { isWeddingDomain } from './utils/siteBrand'
 
@@ -81,6 +84,9 @@ function App() {
         <Route path="/weddings" element={<Weddings />} />
         <Route path="/wedding-packages" element={<WeddingPackages />} />
         <Route path="/admin12345" element={<AdminDashboard />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/cookies" element={<Cookies />} />
       </Routes>
       </Suspense>
     </Router>

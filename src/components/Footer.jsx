@@ -70,9 +70,9 @@ const Footer = () => {
               &copy; {new Date().getFullYear()} {brand.name}. All rights reserved.
             </p>
             <div className="flex gap-6">
-              <a href="https://www.termsfeed.com/live/executivevacations-privacy" target="_blank" rel="noopener noreferrer" className="body-small text-white/60 hover:text-white transition-colors">Privacy Policy</a>
-              <a href="https://www.termsfeed.com/live/executivevacations-terms" target="_blank" rel="noopener noreferrer" className="body-small text-white/60 hover:text-white transition-colors">Terms of Service</a>
-              <a href="https://www.termsfeed.com/live/executivevacations-cookies" target="_blank" rel="noopener noreferrer" className="body-small text-white/60 hover:text-white transition-colors">Cookie Policy</a>
+              <a href="/privacy" className="body-small text-white/60 hover:text-white transition-colors">Privacy Policy</a>
+              <a href="/terms" className="body-small text-white/60 hover:text-white transition-colors">Terms of Service</a>
+              <a href="/cookies" className="body-small text-white/60 hover:text-white transition-colors">Cookie Policy</a>
             </div>
           </div>
         </div>
