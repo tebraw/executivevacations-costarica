@@ -136,7 +136,7 @@ export default function Blog() {
       <Helmet>
         <link rel="canonical" href="https://executivevacations.net/blog" />
       </Helmet>
-      <Header />}
+      <Header />
       <div style={{
         paddingTop: '120px', paddingBottom: '64px',
         background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)',
