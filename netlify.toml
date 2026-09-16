@@ -17,6 +17,11 @@
 [functions."follow-up"]
   schedule = "0 10 * * *"
 
+# Scheduled function — hourly check for Gmail replies from leads
+[functions."check-replies"]
+  schedule = "0 * * * *"
+
+
 # Redirects are now in public/_redirects file
 
 # Headers for better performance

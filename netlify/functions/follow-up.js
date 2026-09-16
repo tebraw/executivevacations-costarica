@@ -29,14 +29,15 @@ export default async (req) => {
       return new Response('No templates', { status: 200 });
     }
 
-    const delayDays = templates?.followUpDelayDays || 3;
+    const delayDays = templates?.followUpDelayDays || 2;
     const now = new Date();
     const siteUrl = process.env.SITE_URL || 'https://executivevacations.netlify.app';
 
     let sentCount = 0;
     const updatedLeads = leads.map(lead => {
-      // Skip if already followed up
+      // Skip if already followed up, or if the lead already replied
       if (lead.followedUp) return lead;
+      if (lead.replied) return lead;
 
       const createdAt = new Date(lead.createdAt);
       const daysSince = (now - createdAt) / (1000 * 60 * 60 * 24);

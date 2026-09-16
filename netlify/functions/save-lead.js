@@ -1,5 +1,12 @@
 import { getStore } from '@netlify/blobs';
-import { fillTemplate, sendSms, sendEmail, sendWhatsAppToAdmin } from './messaging-helpers.js';
+import { fillTemplate, sendSms, sendEmail, sendWhatsAppToAdmin, fetchPdfAsAttachment } from './messaging-helpers.js';
+
+const VILLA_PDF_MAP = {
+  'All Villas': '/pdfs/All Villas - Pricing Guide _ Executive Vacations.pdf',
+  'Palacio Musical': '/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf',
+  'Palacio Tropical': '/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf',
+  'The View House': '/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
+};
 
 export default async (req, context) => {
   try {
@@ -56,11 +63,22 @@ export default async (req, context) => {
         await sendSms(newLead.phone, fillTemplate(templates.welcomeSms, vars));
       }
 
-      // Welcome Email
+      // Welcome Email (with pricing guide PDF attached)
       if (newLead.email && templates?.welcomeEmail) {
         const subj = fillTemplate(templates.welcomeEmail.subject, vars);
         const body = fillTemplate(templates.welcomeEmail.body, vars);
-        await sendEmail(newLead.email, subj, body);
+
+        let attachments;
+        try {
+          const pdfPath = VILLA_PDF_MAP[newLead.villaInterest] || VILLA_PDF_MAP['All Villas'];
+          const filename = pdfPath.split('/').pop();
+          attachments = [await fetchPdfAsAttachment(pdfPath, filename)];
+        } catch (pdfErr) {
+          console.error('Failed to attach pricing guide PDF (non-fatal):', pdfErr);
+        }
+
+        await sendEmail(newLead.email, subj, body, undefined, attachments);
+        newLead.emailSentAt = new Date().toISOString();
       }
 
       // WhatsApp notification to admin
@@ -101,6 +119,15 @@ export default async (req, context) => {
 
       for (const recipient of notificationEmails) {
         await sendEmail(recipient, notifSubject, notifBody, newLead.email);
+      }
+
+      // Persist emailSentAt (set above when the welcome email was sent)
+      if (newLead.emailSentAt) {
+        const idx = leads.findIndex(l => l.id === newLead.id);
+        if (idx !== -1) {
+          leads[idx] = newLead;
+          await store.set('all-leads', JSON.stringify(leads));
+        }
       }
     } catch (msgErr) {
       console.error('Messaging error (non-fatal):', msgErr);

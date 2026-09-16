@@ -256,6 +256,76 @@ const AdminDashboard = () => {
     } catch { alert('Failed to delete lead.'); }
   };
 
+  const handleUpdateLead = async (id, updates) => {
+    // Optimistic update
+    setLeads(prev => prev.map(l => (l.id === id ? { ...l, ...updates } : l)));
+    try {
+      const res = await fetch('/.netlify/functions/update-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': import.meta.env.VITE_ADMIN_SECRET || '' },
+        body: JSON.stringify({ id, updates }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setLeads(prev => prev.map(l => (l.id === id ? data.lead : l)));
+      } else {
+        loadLeads(); // revert on failure
+      }
+    } catch { loadLeads(); }
+  };
+
+  const LEAD_STAGES = [
+    { value: 'new', label: 'New', color: '#dbeafe', text: '#1e40af' },
+    { value: 'contacted', label: 'Contacted', color: '#fef3c7', text: '#92400e' },
+    { value: 'quoted', label: 'Quoted', color: '#e0e7ff', text: '#3730a3' },
+    { value: 'booked', label: 'Booked', color: '#d1fae5', text: '#065f46' },
+    { value: 'lost', label: 'Lost', color: '#fee2e2', text: '#991b1b' },
+  ];
+
+  const LeadStatusBadges = ({ lead }) => (
+    <div className="flex flex-wrap gap-1.5">
+      {lead.emailSentAt && (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700">
+          ✉️ Welcome sent
+        </span>
+      )}
+      {lead.followedUp && (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700">
+          🔄 Follow-up sent
+        </span>
+      )}
+      {lead.replied ? (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700">
+          ✅ Replied
+        </span>
+      ) : (
+        <button
+          onClick={() => handleUpdateLead(lead.id, { replied: true })}
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-50 text-gray-500 hover:bg-green-50 hover:text-green-700 transition-colors"
+          title="Mark this lead as replied manually"
+        >
+          Mark as replied
+        </button>
+      )}
+    </div>
+  );
+
+  const LeadStageSelect = ({ lead }) => {
+    const current = LEAD_STAGES.find(s => s.value === (lead.stage || 'new')) || LEAD_STAGES[0];
+    return (
+      <select
+        value={lead.stage || 'new'}
+        onChange={e => handleUpdateLead(lead.id, { stage: e.target.value })}
+        className="rounded-full text-xs font-bold px-3 py-1 border-0 focus:outline-none focus:ring-2 focus:ring-offset-1"
+        style={{ background: current.color, color: current.text }}
+      >
+        {LEAD_STAGES.map(s => (
+          <option key={s.value} value={s.value}>{s.label}</option>
+        ))}
+      </select>
+    );
+  };
+
   const loadPdfUrl = async () => {
     try {
       const res = await fetch('/.netlify/functions/get-settings');
@@ -1532,6 +1602,10 @@ const AdminDashboard = () => {
                           </a>
                         )}
                       </div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <LeadStatusBadges lead={lead} />
+                        <LeadStageSelect lead={lead} />
+                      </div>
                       <div className="flex justify-end">
                         {leadsDeleteConfirm === lead.id ? (
                           <div className="flex items-center gap-1">
@@ -1557,6 +1631,8 @@ const AdminDashboard = () => {
                       <th className="text-left px-5 py-3 font-semibold text-gray-600">Email</th>
                       <th className="text-left px-5 py-3 font-semibold text-gray-600">Phone</th>
                       <th className="text-left px-5 py-3 font-semibold text-gray-600">Villa Interest</th>
+                      <th className="text-left px-5 py-3 font-semibold text-gray-600">Status</th>
+                      <th className="text-left px-5 py-3 font-semibold text-gray-600">Stage</th>
                       <th className="px-5 py-3"></th>
                     </tr>
                   </thead>
@@ -1583,6 +1659,12 @@ const AdminDashboard = () => {
                           <span className="inline-block px-3 py-1 rounded-full text-xs font-bold" style={{ background: '#fef3c7', color: '#92400e' }}>
                             {lead.villaInterest}
                           </span>
+                        </td>
+                        <td className="px-5 py-4">
+                          <LeadStatusBadges lead={lead} />
+                        </td>
+                        <td className="px-5 py-4">
+                          <LeadStageSelect lead={lead} />
                         </td>
                         <td className="px-5 py-4">
                           {leadsDeleteConfirm === lead.id ? (

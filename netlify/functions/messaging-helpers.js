@@ -70,8 +70,13 @@ export async function sendSms(toPhone, message) {
 
 /**
  * Send an email via Resend
+ * @param {string} toEmail
+ * @param {string} subject
+ * @param {string} bodyText
+ * @param {string} [replyTo]
+ * @param {Array<{filename: string, content: string}>} [attachments] - content must be base64-encoded
  */
-export async function sendEmail(toEmail, subject, bodyText, replyTo) {
+export async function sendEmail(toEmail, subject, bodyText, replyTo, attachments) {
   const apiKey = process.env.RESEND_API_KEY;
   const fromEmail = process.env.RESEND_FROM_EMAIL || 'wendy@executivevacations.net';
   const adminEmail = process.env.ADMIN_EMAIL;
@@ -101,5 +106,82 @@ export async function sendEmail(toEmail, subject, bodyText, replyTo) {
     text: bodyText,
     html: htmlBody,
     reply_to: replyTo || adminEmail,
+    ...(attachments && attachments.length ? { attachments } : {}),
   });
+}
+
+/**
+ * Fetch a PDF from the deployed site and return it as a base64 string,
+ * ready to attach to a Resend email.
+ */
+export async function fetchPdfAsAttachment(pdfPath, filename) {
+  const siteUrl = process.env.SITE_URL || 'https://executivevacations.netlify.app';
+  const url = pdfPath.startsWith('http') ? pdfPath : `${siteUrl}${pdfPath}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch PDF at ${url}: ${res.status}`);
+  const buf = await res.arrayBuffer();
+  return {
+    filename,
+    content: Buffer.from(buf).toString('base64'),
+  };
+}
+
+/**
+ * Get a fresh Gmail API access token using a stored OAuth refresh token
+ * (GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN env vars).
+ */
+async function getGmailAccessToken() {
+  const clientId = process.env.GMAIL_CLIENT_ID;
+  const clientSecret = process.env.GMAIL_CLIENT_SECRET;
+  const refreshToken = process.env.GMAIL_REFRESH_TOKEN;
+
+  if (!clientId || !clientSecret || !refreshToken) {
+    console.warn('Gmail OAuth env vars not set — skipping reply check');
+    return null;
+  }
+
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      refresh_token: refreshToken,
+      grant_type: 'refresh_token',
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Gmail token refresh failed: ${err}`);
+  }
+
+  const data = await res.json();
+  return data.access_token;
+}
+
+/**
+ * Check whether a message from `fromEmail` exists in the Gmail inbox
+ * on or after `afterDate` (JS Date). Returns true/false.
+ * Requires GMAIL_CLIENT_ID / GMAIL_CLIENT_SECRET / GMAIL_REFRESH_TOKEN.
+ */
+export async function hasGmailReplyFrom(fromEmail, afterDate) {
+  const accessToken = await getGmailAccessToken();
+  if (!accessToken) return false;
+
+  const afterSeconds = Math.floor(new Date(afterDate).getTime() / 1000);
+  const q = `from:${fromEmail} after:${afterSeconds}`;
+  const url = `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(q)}&maxResults=1`;
+
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Gmail search failed: ${err}`);
+  }
+
+  const data = await res.json();
+  return Array.isArray(data.messages) && data.messages.length > 0;
 }
