@@ -110,12 +110,14 @@ export default async (req, context) => {
         console.error('WhatsApp admin notification failed (non-fatal):', waErr);
       }
 
-      // Email notification to all admin addresses
+      // Email notification to all admin addresses (never the customer's own address)
       const notificationEmails = [
         'grujicic.filip17@gmail.com',
         'propertieswithmeritt@yahoo.com',
         ...(process.env.ADMIN_EMAIL ? [process.env.ADMIN_EMAIL] : []),
-      ].filter((v, i, a) => v && a.indexOf(v) === i); // deduplicate
+      ]
+        .filter((v, i, a) => v && a.indexOf(v) === i) // deduplicate
+        .filter((v) => v.toLowerCase() !== newLead.email.toLowerCase()); // never notify the lead as if they were an admin
 
       const notifSubject = `🌴 New Pricing Lead — ${newLead.firstName} ${newLead.lastName}`;
       const notifBody =

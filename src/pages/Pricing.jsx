@@ -143,25 +143,6 @@ export default function Pricing() {
         }),
       });
     } catch (_) {}
-
-    // Also submit to Netlify Forms so email notifications fire automatically
-    try {
-      const firstName = form.firstName.trim();
-      const welcomeMessage = `Pura Vida ${firstName}! 🌴 I hope this email finds you well. My name is Wendy, and my husband and I own all the Villas at Executive Vacations Costa Rica. You'll be directly dealing with me, not through a third party.\n\nI hope you enjoyed downloading our pricing guide! I'm personally excited to help you create the perfect itinerary that combines luxury, relaxation, exploration, adventure, or a combination of all your preferences. With our 24/7 on-site concierge service, your dream vacation is just a few clicks away!\n\nI'd like to schedule a quick call to walk you through everything and answer any questions you may have. Please let me know a couple of days and times that work for you. I'll give you a call as soon as possible. Alternatively, you can call me anytime on my cell phone.\n\nI look forward to speaking with you soon!\n\nBest regards,\nWendy Meritt\nExecutive Vacations Costa Rica\n303-881-8588`;
-      const formData = new URLSearchParams();
-      formData.append('form-name', 'pricing-lead');
-      formData.append('firstName', firstName);
-      formData.append('lastName', form.lastName.trim());
-      formData.append('email', form.email.trim());
-      formData.append('phone', form.phone.trim());
-      formData.append('villaInterest', form.villaInterest || 'Not specified');
-      formData.append('welcomeMessage', welcomeMessage);
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData.toString(),
-      });
-    } catch (_) {}
     setSubmitting(false);
     setSubmitted(true);
 
