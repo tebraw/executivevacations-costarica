@@ -13,7 +13,6 @@ const VILLAS = [
   'Palacio Musical',
   'Palacio Tropical',
   'The View House',
-  'The Palms Villa Estate',
 ];
 
 const VILLA_PDF_MAP = {
@@ -21,7 +20,6 @@ const VILLA_PDF_MAP = {
   'Palacio Musical': '/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf',
   'Palacio Tropical': '/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf',
   'The View House': '/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
-  'The Palms Villa Estate': '/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf',
 };
 
 const Field = ({ name, label, type = 'text', placeholder, as, form, setForm, errors }) => (
@@ -102,7 +100,7 @@ export default function Pricing() {
   useEffect(() => {
     window.scrollTo(0, 0);
     const title = `Free Pricing Guide — Luxury Villas Costa Rica | ${brand.fullName}`;
-    const desc = 'Download your free pricing guide for luxury villa rentals in Costa Rica. Get rates for Palacio Tropical, Palacio Musical, The View House, and The Palms Villa Estate.';
+    const desc = 'Download your free pricing guide for luxury villa rentals in Costa Rica. Get rates for Palacio Tropical, Palacio Musical, and The View House.';
     document.title = title;
     const setMeta = (name, content, prop) => {
       const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;

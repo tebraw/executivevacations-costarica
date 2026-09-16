@@ -12,7 +12,6 @@ const VILLA_SLUGS = [
   'palacio-tropical',
   'palacio-musical',
   'the-view-house',
-  'the-palms-villa-estate',
 ];
 
 export default async (req, context) => {

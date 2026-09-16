@@ -135,52 +135,9 @@ const villas = [
     pricingPdf: "/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf",
     seoTitle: "The View House — Boutique Luxury Villa with Pacific Ocean Views, Costa Rica | Executive Vacations",
     seoDescription: "Modern 4-bedroom villa with custom pool & Pacific Ocean views in Tambor, Costa Rica. 5 min from Palacio Tropical & Musical, 35 min from Santa Teresa. Perfect for families."
-  },
-  {
-    id: 1,
-    slug: "the-palms-villa-estate",
-    name: "The Palms Villa Estate",
-    forSale: true,
-    useEnsuites: false,
-    type: "Mountain Villa Retreat",
-    location: "Atenas",
-    fullLocation: "Santa Eulalia, Atenas, Costa Rica",
-    rating: 4.95,
-    bedrooms: 4,
-    bathrooms: 3.5,
-    guests: 8,
-    size: "4,700 sq ft",
-    isPremium: true,
-    pricePerNight: 950,
-    pricing: { low: 950, high: 950 },
-    images: ["/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif"],
-    detailImages: ["/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif", "/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp", "/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif", "/images/villas/the-palms-villa-estate/3010682d-f127-4ff9-b647-099323082072.webp", "/images/villas/the-palms-villa-estate/30e39a33-4457-4f91-be63-2c9c0fcdb863.webp", "/images/villas/the-palms-villa-estate/31f4ba1b-839f-4f90-83ff-9c6dfe7e0c8b.avif", "/images/villas/the-palms-villa-estate/4e674d32-d726-4169-84ae-555f037c13b0.webp", "/images/villas/the-palms-villa-estate/573860c1-ba80-4638-a8b4-bf0375b57abf.avif", "/images/villas/the-palms-villa-estate/5c6f3701-b2d4-45bd-803c-01f8f36b7abe.avif", "/images/villas/the-palms-villa-estate/910cba2e-cbaf-41f4-a725-57ddbebf7ac1.webp", "/images/villas/the-palms-villa-estate/c2de55f9-02b9-464b-9966-ae056fcee665.avif", "/images/villas/the-palms-villa-estate/d990535c-645c-4e23-b04f-9c4f3bd9040c.webp", "/images/villas/the-palms-villa-estate/f9aafc09-ec54-4b03-a21b-a4d799f059c1.webp"],
-    topAmenities: ["Private Pool", "Mountain Views", "Full-time Caretaker", "Air Conditioning"],
-    allAmenities: [
-      { name: "Private Tennis Court", icon: "fa-table-tennis" },
-      { name: "Private Pool", icon: "fa-swimming-pool" },
-      { name: "Mountain Views", icon: "fa-mountain" },
-      { name: "Full-time Caretaker", icon: "fa-user-tie" },
-      { name: "Air Conditioning", icon: "fa-snowflake" },
-      { name: "Resort-style Grounds", icon: "fa-tree" },
-      { name: "Peaceful Setting", icon: "fa-leaf" },
-      { name: "32 Miles to Beach", icon: "fa-umbrella-beach" },
-      { name: "Cultural Experience", icon: "fa-heart" },
-      { name: "Family Friendly", icon: "fa-home" },
-      { name: "Event Hosting", icon: "fa-calendar" }
-    ],
-    detailedDescription: "This beautiful mountain villa is nestled in the hills of Atenas, Costa Rica. Atenas offers a wonderful opportunity to experience authentic Costa Rican culture, known as a local favorite. The property provides a tranquil, peaceful, and quiet environment perfect for family vacations, intimate weddings, reunions, or personal and business retreats. With 4 bedrooms (3 upstairs with full AC, 1 downstairs), the villa accommodates up to 8 guests comfortably. Additional sleeping options include a queen pull-out sofa and futon.",
-    locationDescription: "Located in the hills of Atenas, just 32 miles from the nearest beach and marina on the Pacific coast. Experience authentic Costa Rican culture while staying close to all the adventures Costa Rica offers.",
-    specialFeatures: [
-      { name: "Full-time Caretaker (Don Manuel)", icon: "fa-user-tie" },
-      { name: "Resort-style Grounds", icon: "fa-tree" },
-      { name: "Perfect for Events", icon: "fa-calendar" }
-    ],
-    pricingPdf: "/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf",
-    seoTitle: "The Palms Villa Estate — Mountain Villa Retreat in Atenas, Costa Rica | Executive Vacations",
-    seoDescription: "4-bedroom luxury mountain villa with private pool, tennis court & full-time caretaker in Atenas, Costa Rica. Perfect for families, weddings & private retreats."
   }
 ];
+
 
 // Low season: June (6) through September (9)
 const LOW_SEASON_MONTHS = [6, 7, 8, 9];

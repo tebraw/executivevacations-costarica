@@ -18,11 +18,6 @@ export const VILLA_COLORS = {
     bg: '#bfdbfe',
     border: '#3b82f6',
     text: '#1e40af'
-  },
-  'The Palms Villa Estate': {
-    bg: '#d1fae5',
-    border: '#10b981',
-    text: '#065f46'
   }
 };
 

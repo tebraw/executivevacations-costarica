@@ -372,8 +372,7 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
         {Object.entries({
           'Palacio Tropical': getVillaColor('Palacio Tropical'),
           'Palacio Musical': getVillaColor('Palacio Musical'),
-          'The View House': getVillaColor('The View House'),
-          'The Palms Villa Estate': getVillaColor('The Palms Villa Estate')
+          'The View House': getVillaColor('The View House')
         }).map(([name, colors]) => (
           <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{

@@ -4,8 +4,7 @@ import { getVillaPriceForDate, DEFAULT_ACTIVITY_PRICES } from '../../utils/invoi
 const VILLAS = [
   { name: 'Palacio Tropical', icon: '🏰', color: 'from-amber-400 to-yellow-500', accentColor: '#f59e0b' },
   { name: 'Palacio Musical', icon: '🎵', color: 'from-purple-400 to-pink-500', accentColor: '#8b5cf6' },
-  { name: 'The View House', icon: '🏔️', color: 'from-blue-400 to-cyan-500', accentColor: '#3b82f6' },
-  { name: 'The Palms Villa Estate', icon: '🌴', color: 'from-green-400 to-emerald-500', accentColor: '#10b981' }
+  { name: 'The View House', icon: '🏔️', color: 'from-blue-400 to-cyan-500', accentColor: '#3b82f6' }
 ];
 
 const ACTIVITIES = [

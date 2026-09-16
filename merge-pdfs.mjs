@@ -6,7 +6,6 @@ const pdfDir = './public/pdfs';
 const files = [
   'Palacio Musical — Pricing Guide _ Executive Vacations.pdf',
   'Palacio Tropical — Pricing Guide _ Executive Vacations.pdf',
-  'The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf',
   'The View House — Pricing Guide _ Executive Vacations.pdf',
 ];
 

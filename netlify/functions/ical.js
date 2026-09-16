@@ -126,8 +126,7 @@ function getVillaLocation(villaName) {
   const locations = {
     'Palacio Tropical': 'Playa Flamingo, Guanacaste, Costa Rica',
     'Palacio Musical': 'Playa Flamingo, Guanacaste, Costa Rica',
-    'The View House': 'Playa Flamingo, Guanacaste, Costa Rica',
-    'The Palms Villa Estate': 'Playa Flamingo, Guanacaste, Costa Rica'
+    'The View House': 'Playa Flamingo, Guanacaste, Costa Rica'
   };
   return locations[villaName] || 'Costa Rica';
 }
