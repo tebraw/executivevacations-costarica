@@ -1,5 +1,6 @@
 import { getStore } from '@netlify/blobs';
 import { fillTemplate, sendSms, sendEmail, sendWhatsAppToAdmin, fetchPdfAsAttachment } from './messaging-helpers.js';
+import { DEFAULT_TEMPLATES } from './default-templates.js';
 
 const VILLA_PDF_MAP = {
   'All Villas': '/pdfs/All Villas - Pricing Guide _ Executive Vacations.pdf',
@@ -49,7 +50,8 @@ export default async (req, context) => {
     try {
       const settingsStore = getStore('site-settings');
       const templatesRaw = await settingsStore.get('message-templates');
-      const templates = templatesRaw ? JSON.parse(templatesRaw) : null;
+      // Fall back to sensible defaults if the admin hasn't saved custom templates yet
+      const templates = templatesRaw ? JSON.parse(templatesRaw) : DEFAULT_TEMPLATES;
 
       const vars = {
         firstName: newLead.firstName,

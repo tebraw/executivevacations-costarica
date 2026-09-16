@@ -1,5 +1,6 @@
 import { getStore } from '@netlify/blobs';
 import { fillTemplate, sendSms, sendEmail } from './messaging-helpers.js';
+import { DEFAULT_TEMPLATES } from './default-templates.js';
 
 // Netlify Scheduled Function — runs daily at 10:00 AM UTC
 export const config = {
@@ -22,7 +23,8 @@ export default async (req) => {
     }
 
     const leads = JSON.parse(leadsRaw);
-    const templates = templatesRaw ? JSON.parse(templatesRaw) : null;
+    // Fall back to sensible defaults if the admin hasn't saved custom templates yet
+    const templates = templatesRaw ? JSON.parse(templatesRaw) : DEFAULT_TEMPLATES;
 
     if (!templates?.followUpSms && !templates?.followUpEmail) {
       console.log('No follow-up templates configured');
