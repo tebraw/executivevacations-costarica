@@ -58,9 +58,13 @@ export default async (req, context) => {
         siteUrl: process.env.SITE_URL || 'https://executivevacations.netlify.app',
       };
 
-      // Welcome SMS
+      // Welcome SMS (isolated — a failure here must not block the welcome email)
       if (newLead.phone && templates?.welcomeSms) {
-        await sendSms(newLead.phone, fillTemplate(templates.welcomeSms, vars));
+        try {
+          await sendSms(newLead.phone, fillTemplate(templates.welcomeSms, vars));
+        } catch (smsErr) {
+          console.error('Welcome SMS failed (non-fatal):', smsErr);
+        }
       }
 
       // Welcome Email (with pricing guide PDF attached)
@@ -77,8 +81,12 @@ export default async (req, context) => {
           console.error('Failed to attach pricing guide PDF (non-fatal):', pdfErr);
         }
 
-        await sendEmail(newLead.email, subj, body, undefined, attachments);
-        newLead.emailSentAt = new Date().toISOString();
+        try {
+          await sendEmail(newLead.email, subj, body, undefined, attachments);
+          newLead.emailSentAt = new Date().toISOString();
+        } catch (emailErr) {
+          console.error('Welcome email failed:', emailErr);
+        }
       }
 
       // WhatsApp notification to admin
@@ -94,7 +102,11 @@ export default async (req, context) => {
         `🏡 ${newLead.villaInterest}\n\n` +
         `--- Suggested welcome message ---\n${welcomeTemplate}`;
 
-      await sendWhatsAppToAdmin(adminMsg);
+      try {
+        await sendWhatsAppToAdmin(adminMsg);
+      } catch (waErr) {
+        console.error('WhatsApp admin notification failed (non-fatal):', waErr);
+      }
 
       // Email notification to all admin addresses
       const notificationEmails = [
@@ -118,7 +130,11 @@ export default async (req, context) => {
         `I look forward to speaking with you soon!\n\nBest regards,\nWendy Meritt\nExecutive Vacations Costa Rica\n303-881-8588`;
 
       for (const recipient of notificationEmails) {
-        await sendEmail(recipient, notifSubject, notifBody, newLead.email);
+        try {
+          await sendEmail(recipient, notifSubject, notifBody, newLead.email);
+        } catch (notifErr) {
+          console.error(`Admin notification email to ${recipient} failed (non-fatal):`, notifErr);
+        }
       }
 
       // Persist emailSentAt (set above when the welcome email was sent)

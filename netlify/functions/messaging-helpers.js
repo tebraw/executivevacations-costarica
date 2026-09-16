@@ -116,7 +116,8 @@ export async function sendEmail(toEmail, subject, bodyText, replyTo, attachments
  */
 export async function fetchPdfAsAttachment(pdfPath, filename) {
   const siteUrl = process.env.SITE_URL || 'https://executivevacations.netlify.app';
-  const url = pdfPath.startsWith('http') ? pdfPath : `${siteUrl}${pdfPath}`;
+  const rawUrl = pdfPath.startsWith('http') ? pdfPath : `${siteUrl}${pdfPath}`;
+  const url = encodeURI(rawUrl);
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch PDF at ${url}: ${res.status}`);
   const buf = await res.arrayBuffer();
