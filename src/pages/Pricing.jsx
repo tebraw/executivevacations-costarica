@@ -22,6 +22,13 @@ const VILLA_PDF_MAP = {
   'The View House': '/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
 };
 
+const VILLA_HERO_IMAGE_MAP = {
+  'All Villas': '/images/villas/palacio-tropical/palaciotropical-469.exterior_1.webp',
+  'Palacio Musical': '/images/villas/palacio-musical/palacio-musical-hero.jpg',
+  'Palacio Tropical': '/images/villas/palacio-tropical/palaciotropical-469.exterior_1.webp',
+  'The View House': '/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif',
+};
+
 const Field = ({ name, label, type = 'text', placeholder, as, form, setForm, errors }) => (
   <div>
     <label style={{
@@ -96,6 +103,7 @@ export default function Pricing() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const selectedPdfUrl = VILLA_PDF_MAP[form.villaInterest] || VILLA_PDF_MAP['All Villas'];
+  const heroImage = VILLA_HERO_IMAGE_MAP[form.villaInterest] || VILLA_HERO_IMAGE_MAP['All Villas'];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -193,10 +201,33 @@ export default function Pricing() {
           <p style={{
             fontFamily: "'DM Sans', sans-serif", fontSize: '1rem',
             color: 'rgba(255,255,255,0.55)', maxWidth: '480px',
-            margin: '0 auto 48px', lineHeight: 1.7, textAlign: 'center',
+            margin: '0 auto 32px', lineHeight: 1.7, textAlign: 'center',
           }}>
             Fill in your details below and instantly receive our exclusive villa pricing brochure.
           </p>
+
+          {/* Trust bar */}
+          <div style={{
+            display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
+            gap: '28px', maxWidth: '640px', margin: '0 auto 48px',
+            paddingBottom: '32px', borderBottom: '1px solid rgba(255,255,255,0.08)',
+          }}>
+            {[
+              { icon: '⭐', label: '4.97★ Guest Rating' },
+              { icon: '🏝️', label: '4 Exclusive Beachfront Villas' },
+              { icon: '🛎️', label: '24/7 Concierge Service' },
+              { icon: '🔒', label: 'No Third-Party Booking Fees' },
+            ].map((item) => (
+              <div key={item.label} style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                fontFamily: "'DM Sans', sans-serif", fontSize: '0.82rem',
+                color: 'rgba(255,255,255,0.65)', fontWeight: 600,
+              }}>
+                <span style={{ fontSize: '1rem' }}>{item.icon}</span>
+                {item.label}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -242,10 +273,11 @@ export default function Pricing() {
               {/* Villa image */}
               <div style={{ height: '200px', overflow: 'hidden', position: 'relative' }}>
                 <img
-                  src="/images/villas/palacio-musical/ChatGPT Image May 23, 2026, 07_14_19 PM.png"
+                  key={heroImage}
+                  src={heroImage}
                   alt="Executive Vacations Pricing Guide"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                  onError={e => { e.target.style.display = 'none'; }}
+                  onError={e => { e.target.src = '/images/villas/palacio-tropical/palaciotropical-469.exterior_1.webp'; }}
                 />
                 <div style={{
                   position: 'absolute', inset: 0,
@@ -290,6 +322,31 @@ export default function Pricing() {
             }}>
               Exclusive rates &amp; availability for all four luxury villas
             </p>
+
+            {/* What's inside */}
+            <div style={{
+              marginTop: '28px', position: 'relative', zIndex: 1,
+              display: 'flex', flexDirection: 'column', gap: '10px',
+              width: '100%', maxWidth: '260px',
+            }}>
+              {[
+                'Exact nightly & festive season rates',
+                'Photos & full amenity breakdown',
+                'Instant access — no waiting, no calls',
+              ].map((line) => (
+                <div key={line} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={GOLD_LIGHT} strokeWidth="3" style={{ flexShrink: 0, marginTop: '2px' }}>
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem',
+                    color: 'rgba(255,255,255,0.75)', lineHeight: 1.5,
+                  }}>
+                    {line}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Right — Form */}
@@ -426,11 +483,80 @@ export default function Pricing() {
                         </>
                       )}
                     </button>
+
+                    <p style={{
+                      textAlign: 'center', fontFamily: "'DM Sans', sans-serif",
+                      fontSize: '0.72rem', color: '#9ca3af', marginTop: '2px',
+                    }}>
+                      🔒 Your information is safe. No spam — unsubscribe anytime.
+                    </p>
                   </div>
                 </form>
               </>
             )}
           </div>
+        </div>
+
+        {/* Social proof strip */}
+        <div style={{
+          marginTop: '32px',
+          background: '#fff',
+          borderRadius: '20px',
+          padding: '32px 36px',
+          boxShadow: '0 8px 30px rgba(0,0,0,0.06)',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '24px',
+        }}
+          className="proof-grid"
+        >
+          {[
+            { value: '4.97★', label: 'Average Guest Rating' },
+            { value: '18', label: 'Guests Per Villa, Up To' },
+            { value: '24/7', label: 'On-Site Concierge Team' },
+          ].map((stat) => (
+            <div key={stat.label} style={{ textAlign: 'center' }}>
+              <div style={{
+                fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
+                fontSize: '1.8rem', color: '#111', marginBottom: '4px',
+              }}>
+                {stat.value}
+              </div>
+              <div style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: '0.78rem',
+                color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em',
+              }}>
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Testimonial */}
+        <div style={{
+          marginTop: '24px',
+          background: 'linear-gradient(135deg, #fef9ee, #fff8ec)',
+          border: '1px solid #fde68a',
+          borderRadius: '20px',
+          padding: '32px 36px',
+          textAlign: 'center',
+        }}>
+          <div style={{ color: GOLD, fontSize: '1.1rem', marginBottom: '12px', letterSpacing: '2px' }}>
+            ★★★★★
+          </div>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontStyle: 'italic',
+            fontSize: '1rem', color: '#374151', lineHeight: 1.7,
+            maxWidth: '620px', margin: '0 auto 14px',
+          }}>
+            "Booking directly with Wendy made all the difference. The pricing was transparent, the villa exceeded every photo we saw, and the concierge team handled everything — we're already planning our next trip."
+          </p>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif", fontWeight: 700,
+            fontSize: '0.85rem', color: '#111',
+          }}>
+            — Recent Guest, Palacio Tropical
+          </p>
         </div>
       </div>
 
@@ -439,6 +565,10 @@ export default function Pricing() {
         @media (max-width: 700px) {
           .pricing-grid {
             grid-template-columns: 1fr !important;
+          }
+          .proof-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
           }
         }
       `}</style>
