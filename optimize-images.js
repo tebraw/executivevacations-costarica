@@ -11,6 +11,7 @@ async function optimizeImages() {
   const villaFolders = [
     'public/images/villas/palacio-tropical',
     'public/images/villas/palicio-musical',
+    'public/images/villas/the-palms-villa-estate',
     'public/images/villas/the-view-house'
   ];
 

@@ -29,6 +29,10 @@ const jobs = [
     url: 'http://localhost:5173/pricing-guide-view-house.html',
     output: 'public/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
   },
+  {
+    url: 'http://localhost:5173/pricing-guide-palms-villa-estate.html',
+    output: 'public/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf',
+  },
 ];
 
 const browser = await puppeteer.launch({
@@ -87,6 +91,7 @@ const allVillasFiles = [
   'public/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf',
   'public/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf',
   'public/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
+  'public/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf',
 ];
 
 const merged = await PDFDocument.create();

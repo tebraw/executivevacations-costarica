@@ -114,7 +114,11 @@ const ActivitiesSection = ({ onActivitiesChange, selectedVilla }) => {
   
   // Check if activity is available for selected villa
   const isActivityAvailable = (activityId) => {
-    // All activities available for all villas
+    // The Palms Villa Estate: Only massage and private chef available
+    if (selectedVilla && selectedVilla.name === "The Palms Villa Estate") {
+      return activityId === 'massage' || activityId === 'private-chef';
+    }
+    // All activities available for other villas
     return true;
   };
 

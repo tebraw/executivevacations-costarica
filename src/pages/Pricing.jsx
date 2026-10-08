@@ -13,6 +13,7 @@ const VILLAS = [
   'Palacio Musical',
   'Palacio Tropical',
   'The View House',
+  'The Palms Villa Estate',
 ];
 
 const VILLA_PDF_MAP = {
@@ -20,6 +21,7 @@ const VILLA_PDF_MAP = {
   'Palacio Musical': '/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf',
   'Palacio Tropical': '/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf',
   'The View House': '/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
+  'The Palms Villa Estate': '/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf',
 };
 
 const VILLA_HERO_IMAGE_MAP = {
@@ -27,6 +29,7 @@ const VILLA_HERO_IMAGE_MAP = {
   'Palacio Musical': '/images/villas/palacio-musical/palacio-musical-hero.jpg',
   'Palacio Tropical': '/images/villas/palacio-tropical/palaciotropical-469.exterior_1.webp',
   'The View House': '/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif',
+  'The Palms Villa Estate': '/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif',
 };
 
 const Field = ({ name, label, type = 'text', placeholder, as, form, setForm, errors }) => (

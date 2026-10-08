@@ -17,7 +17,8 @@ const SEASONAL_PRICING_2025 = {
 
 // Static prices for villas without seasonal pricing (fallback)
 const STATIC_VILLA_PRICES = {
-  'The View House': 650
+  'The View House': 650,
+  'The Palms Villa Estate': 950
 };
 
 // Default activity prices (in USD per person)
