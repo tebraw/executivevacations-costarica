@@ -32,6 +32,60 @@ const VILLA_HERO_IMAGE_MAP = {
   'The Palms Villa Estate': '/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif',
 };
 
+const SHOWCASE = [
+  {
+    name: 'Palacio Tropical',
+    tagline: 'Ultra-Luxury Beachfront Estate',
+    text: 'A 10,500 sq ft beachfront villa with direct secluded beach access, a grand pool, full staff and VIP-grade privacy. Perfect for large groups, families and discerning guests.',
+    stats: ['7 En-suites', 'Up to 18 Guests', 'Private Beach'],
+    images: [
+      '/images/villas/palacio-tropical/palaciotropical.dronephoto-03.webp',
+      '/images/villas/palacio-tropical/palaciotropical-518.exterior.webp',
+      '/images/villas/palacio-tropical/palaciotropical-469.exterior_1.webp',
+    ],
+  },
+  {
+    name: 'Palacio Musical',
+    tagline: 'Oceanfront Villa with Recording Studio',
+    text: 'A 12,500 sq ft oceanfront villa with three panoramic decks, whale watching observatory, tiki bar and a professional music studio. Ideal for weddings, events and creative retreats.',
+    stats: ['7 En-suites', 'Up to 18 Guests', 'Music Studio'],
+    images: [
+      '/images/villas/palacio-musical/palacio-musical-hero.jpg',
+      '/images/villas/palacio-musical/palacio-musical-infinity-pool.webp',
+      '/images/villas/palacio-musical/palacio-musical-ocean-view-deck-1.webp',
+    ],
+  },
+  {
+    name: 'The View House',
+    tagline: 'Modern Villa with Pacific Views',
+    text: 'A newly built 4-bedroom villa with a custom pool and sweeping Pacific Ocean views. Just 5 minutes from the Palacio villas. Ideal for families and smaller groups.',
+    stats: ['4 Bedrooms', 'Up to 8 Guests', 'Ocean Views'],
+    images: [
+      '/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif',
+      '/images/villas/the-view-house/25d56bc7-19f0-4a97-b056-f39312120697.avif',
+      '/images/villas/the-view-house/3a85d083-c4c6-4289-93d9-d2e92feff052.avif',
+    ],
+  },
+  {
+    name: 'The Palms Villa Estate',
+    tagline: 'Mountain Villa Retreat in Atenas',
+    text: 'A 4,700 sq ft mountain estate with private pool, tennis court, resort-style grounds and a full-time caretaker. A tranquil escape for families, reunions and retreats.',
+    stats: ['4 Bedrooms', 'Up to 8 Guests', 'Tennis Court'],
+    images: [
+      '/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif',
+      '/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp',
+      '/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif',
+    ],
+  },
+];
+
+const EXPERIENCES = [
+  { icon: '🛎️', title: 'Full Staff & Concierge', text: 'Private chef, housekeeping and 24/7 concierge on request.' },
+  { icon: '🐋', title: 'Whales, Beaches & Jungle', text: 'Humpback whales, secluded beaches and Santa Teresa 35 min away.' },
+  { icon: '🚤', title: 'Curated Excursions', text: 'Catamaran tours, ATV, zipline, fishing and more, arranged for you.' },
+  { icon: '🔒', title: 'Total Privacy', text: 'Secluded, secure properties trusted by dignitaries and families.' },
+];
+
 const Field = ({ name, label, type = 'text', placeholder, as, form, setForm, errors }) => (
   <div>
     <label style={{
@@ -107,6 +161,21 @@ export default function Pricing() {
   const [submitted, setSubmitted] = useState(false);
   const selectedPdfUrl = VILLA_PDF_MAP[form.villaInterest] || VILLA_PDF_MAP['All Villas'];
   const heroImage = VILLA_HERO_IMAGE_MAP[form.villaInterest] || VILLA_HERO_IMAGE_MAP['All Villas'];
+  const [formInView, setFormInView] = useState(true);
+
+  const goToForm = (villa) => {
+    if (villa) setForm((f) => ({ ...f, villaInterest: villa }));
+    const el = document.getElementById('pricing-form');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  useEffect(() => {
+    const el = document.getElementById('pricing-form');
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const obs = new IntersectionObserver(([entry]) => setFormInView(entry.isIntersecting), { threshold: 0.15 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -236,13 +305,14 @@ export default function Pricing() {
 
       {/* Main card */}
       <div style={{ maxWidth: '1000px', margin: '-2px auto 80px', padding: '0 24px' }}>
-        <div style={{
+        <div id="pricing-form" style={{
           background: '#fff',
           borderRadius: '24px',
           boxShadow: '0 20px 60px rgba(0,0,0,0.12)',
           overflow: 'hidden',
           display: 'grid',
           gridTemplateColumns: 'minmax(0,1fr) minmax(0,1.1fr)',
+          scrollMarginTop: '100px',
         }}
           className="pricing-grid"
         >
@@ -563,8 +633,119 @@ export default function Pricing() {
         </div>
       </div>
 
+      {/* Villa showcase */}
+      <section style={{ background: '#fff', padding: '80px 24px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.78rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: GOLD, fontWeight: 600, textAlign: 'center', marginBottom: '10px' }}>
+            Our Villas
+          </p>
+          <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 'clamp(1.6rem, 4vw, 2.4rem)', color: '#111', textAlign: 'center', marginBottom: '12px' }}>
+            Find the Villa That Fits Your Vacation
+          </h2>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", color: '#6b7280', textAlign: 'center', maxWidth: '560px', margin: '0 auto 56px', lineHeight: 1.7 }}>
+            Four private luxury villas in Costa Rica. Get exact rates for the one you love.
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '64px' }}>
+            {SHOWCASE.map((v, i) => (
+              <div key={v.name} className="showcase-row" style={{
+                display: 'grid', gridTemplateColumns: 'minmax(0,1.2fr) minmax(0,1fr)', gap: '40px', alignItems: 'center',
+              }}>
+                <div className="showcase-gallery" style={{
+                  order: i % 2 === 0 ? 0 : 1,
+                  display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '10px', height: '380px',
+                }}>
+                  <img src={v.images[0]} alt={v.name} loading="lazy" style={{ gridRow: '1 / 3', width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }} />
+                  <img src={v.images[1]} alt={`${v.name} view`} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }} />
+                  <img src={v.images[2]} alt={`${v.name} detail`} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }} />
+                </div>
+                <div style={{ order: i % 2 === 0 ? 1 : 0 }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.75rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: GOLD, fontWeight: 700, marginBottom: '8px' }}>{v.tagline}</p>
+                  <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: '1.8rem', color: '#111', marginBottom: '14px' }}>{v.name}</h3>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", color: '#4b5563', lineHeight: 1.7, marginBottom: '18px' }}>{v.text}</p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+                    {v.stats.map((s) => (
+                      <span key={s} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.8rem', fontWeight: 600, color: '#7a6120', background: '#fdf6e3', border: '1px solid #f1e2b3', padding: '6px 14px', borderRadius: '999px' }}>{s}</span>
+                    ))}
+                  </div>
+                  <button type="button" onClick={() => goToForm(v.name)} style={{
+                    padding: '14px 28px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                    background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`, color: '#fff',
+                    fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: '0.95rem',
+                  }}>
+                    Get {v.name} Pricing Guide
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Experiences */}
+      <section style={{ background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)', padding: '72px 24px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', color: '#fff', textAlign: 'center', marginBottom: '40px' }}>
+            More Than a Villa. A Complete Costa Rica Experience.
+          </h2>
+          <div className="exp-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '44px' }}>
+            {EXPERIENCES.map((x) => (
+              <div key={x.title} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(201,169,110,0.2)', borderRadius: '20px', padding: '24px' }}>
+                <div style={{ fontSize: '1.8rem', marginBottom: '10px' }}>{x.icon}</div>
+                <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, color: '#fff', fontSize: '1rem', marginBottom: '6px' }}>{x.title}</h3>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', lineHeight: 1.6 }}>{x.text}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <button type="button" onClick={() => goToForm()} style={{
+              padding: '16px 36px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+              background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`, color: '#fff',
+              fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: '1rem',
+            }}>
+              Download the Pricing Guide
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section style={{ background: '#fafaf8', padding: '72px 24px', textAlign: 'center' }}>
+        <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', color: '#111', marginBottom: '12px' }}>
+          Ready to See the Rates?
+        </h2>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", color: '#6b7280', maxWidth: '480px', margin: '0 auto 28px', lineHeight: 1.7 }}>
+          Get instant access to nightly and festive season pricing for all villas.
+        </p>
+        <button type="button" onClick={() => goToForm()} style={{
+          padding: '16px 40px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+          background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`, color: '#fff',
+          fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: '1rem',
+        }}>
+          Get My Free Pricing Guide
+        </button>
+      </section>
+
+      {/* Sticky mobile CTA */}
+      {!formInView && !submitted && (
+        <div className="sticky-cta" style={{
+          position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 40,
+          padding: '12px 16px', background: 'rgba(255,255,255,0.96)',
+          boxShadow: '0 -4px 20px rgba(0,0,0,0.12)',
+        }}>
+          <button type="button" onClick={() => goToForm()} style={{
+            width: '100%', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+            background: `linear-gradient(135deg, ${GOLD_LIGHT}, #a07040)`, color: '#fff',
+            fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: '0.95rem',
+          }}>
+            Get the Free Pricing Guide
+          </button>
+        </div>
+      )}
+
       {/* Responsive fix */}
       <style>{`
+        .sticky-cta { display: none; }
         @media (max-width: 700px) {
           .pricing-grid {
             grid-template-columns: 1fr !important;
@@ -573,6 +754,14 @@ export default function Pricing() {
             grid-template-columns: 1fr !important;
             gap: 20px !important;
           }
+          .showcase-row {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+          }
+          .showcase-row > div { order: 0 !important; }
+          .showcase-gallery { height: 260px !important; }
+          .exp-grid { grid-template-columns: 1fr 1fr !important; }
+          .sticky-cta { display: block; }
         }
       `}</style>
 
