@@ -22,8 +22,8 @@ const Hero = () => {
             {/* Hero Text */}
             <div className="mb-8 px-4">
               <h1 className="heading-1 text-white mb-6" style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.6)', color: 'white' }}>
-                Discover Luxury Villas in 
-                <span className="block mt-2" style={{ color: '#D4AF37', textShadow: '2px 2px 8px rgba(0,0,0,0.6)' }}>Costa Rica</span>
+                Discover the Palacio Collection of
+                <span className="block mt-2" style={{ color: '#D4AF37', textShadow: '2px 2px 8px rgba(0,0,0,0.6)' }}>Luxury Villas in Costa Rica</span>
               </h1>
               
               <p className="body-large mb-8" style={{ color: 'white', textShadow: '1px 1px 4px rgba(0,0,0,0.8)' }}>
