@@ -153,8 +153,8 @@ const villas = [
     isPremium: true,
     isComingSoon: true,
     availableFrom: "Winter 2026",
-    images: ["/images/villas/palacio-paradise/palacio-paradise-hero.webp"],
-    detailImages: ["/images/villas/palacio-paradise/palacio-paradise-hero.webp"],
+    images: ["/images/villas/palacio-paradise/palacio-paradise-helicopter.webp"],
+    detailImages: ["/images/villas/palacio-paradise/palacio-paradise-helicopter.webp"],
     topAmenities: ["180° Ocean View", "Helicopter Landing Pad", "Pool", "Air Conditioning"],
     allAmenities: [
       { name: "4 En-suite Bedrooms", icon: "fa-bed" },
