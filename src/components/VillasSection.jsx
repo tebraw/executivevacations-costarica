@@ -1,8 +1,8 @@
-﻿import React from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import villas from '../data/villas';
 
-// ── Set to true to re-enable price display ──
+// -- Set to true to re-enable price display --
 const SHOW_PRICES = false;
 
 // Get the base URL from Vite config for proper GitHub Pages paths
@@ -20,8 +20,8 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
               <circle cx="12" cy="12" r="10"/>
               <polyline points="12 6 12 12 16 14"/>
             </svg>
-            <span className="coming-soon-text">Available Soon</span>
-            <p className="coming-soon-subtext">Currently undergoing final preparations</p>
+            <span className="coming-soon-text">Available Winter 2026</span>
+            <p className="coming-soon-subtext">Coming soon</p>
           </div>
         </div>
       )}
@@ -74,7 +74,7 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         <div className="flex items-center justify-between mb-3">
           <span className="body-regular text-dark font-medium">{villa.location}</span>
           <div className="rating">
-            <span className="body-small">{villa.rating}</span>
+            {villa.rating && <span className="body-small">{villa.rating}</span>}
           </div>
         </div>
 
@@ -84,8 +84,8 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         <div className="flex items-center text-gray mb-4">
           <span className="body-small">{villa.bedrooms} {villa.useEnsuites ? "en-suites" : "bedrooms"}</span>
           <div className="detail-separator"></div>
-          <span className="body-small">{villa.bathrooms} bathrooms</span>
-          <div className="detail-separator"></div>
+          {villa.bathrooms && (<><span className="body-small">{villa.bathrooms} bathrooms</span>
+          <div className="detail-separator"></div></>)}
           <span className="body-small">{villa.guests} guests</span>
         </div>
 
@@ -112,21 +112,26 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
         <div className="flex gap-3">
           <button 
             onClick={() => onViewDetails(villa)}
+            disabled={villa.isComingSoon}
             className="btn btn-secondary flex-1"
+            style={villa.isComingSoon ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
           >
             View Details
           </button>
           <button 
             onClick={() => onSelect(isSelected ? null : villa)}
+            disabled={villa.isComingSoon}
             className={`btn flex-1 ${isSelected ? 'btn-success' : 'btn-luxury'}`}
+            style={villa.isComingSoon ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
           >
-            {isSelected ? '✓ Selected' : 'Select Villa'}
+            {isSelected ? '? Selected' : 'Select Villa'}
           </button>
         </div>
         <button
           onClick={() => navigate(`/pricing?villa=${encodeURIComponent(villa.name)}`)}
+          disabled={villa.isComingSoon}
           className="btn btn-secondary w-full mt-2"
-          style={{ fontSize: '0.78rem', letterSpacing: '0.06em' }}
+          style={{ fontSize: '0.78rem', letterSpacing: '0.06em', ...(villa.isComingSoon ? { opacity: 0.5, cursor: 'not-allowed' } : {}) }}
         >
           Pricing Guide
         </button>

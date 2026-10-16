@@ -141,6 +141,38 @@ const villas = [
     seoDescription: "4-bedroom luxury mountain villa with private pool, tennis court & full-time caretaker in Atenas, Costa Rica. Perfect for families, weddings & private retreats."
   },
   {
+    id: 5,
+    slug: "palacio-paradise",
+    name: "Palacio Paradise",
+    useEnsuites: true,
+    type: "Ultra-Luxury Oceanview Villa with Helipad",
+    location: "Costa Rica",
+    fullLocation: "Costa Rica",
+    bedrooms: 4,
+    guests: 8,
+    isPremium: true,
+    isComingSoon: true,
+    availableFrom: "Winter 2026",
+    images: ["/images/villas/palacio-paradise/palacio-paradise-hero.webp"],
+    detailImages: ["/images/villas/palacio-paradise/palacio-paradise-hero.webp"],
+    topAmenities: ["180° Ocean View", "Helicopter Landing Pad", "Pool", "Air Conditioning"],
+    allAmenities: [
+      { name: "4 En-suite Bedrooms", icon: "fa-bed" },
+      { name: "180° Ocean View", icon: "fa-water" },
+      { name: "Helicopter Landing Pad", icon: "fa-helicopter" },
+      { name: "Pool", icon: "fa-swimming-pool" },
+      { name: "Air Conditioning", icon: "fa-snowflake" }
+    ],
+    detailedDescription: "Palacio Paradise is a new ultra-luxury villa with 4 en-suite bedrooms, sweeping 180° ocean views, a pool, air conditioning and a private helicopter landing pad. Available from winter 2026.",
+    locationDescription: "Details coming soon.",
+    specialFeatures: [
+      { name: "Helicopter Landing Pad", icon: "fa-helicopter" },
+      { name: "180° Ocean View", icon: "fa-water" }
+    ],
+    seoTitle: "Palacio Paradise — Luxury Oceanview Villa with Helipad, Costa Rica | Executive Vacations",
+    seoDescription: "Coming winter 2026: 4 en-suite villa with 180° ocean views, pool, A/C and helicopter landing pad in Costa Rica."
+  },
+  {
     id: 3,
     slug: "the-view-house",
     name: "The View House",
