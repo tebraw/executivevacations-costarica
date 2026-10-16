@@ -108,6 +108,18 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
           </div>
         )}
 
+        {villa.startingPrice && !villa.isComingSoon && (
+          <div
+            onClick={() => onViewDetails(villa)}
+            role="button"
+            style={{ cursor: 'pointer', display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '6px', padding: '10px 12px', marginBottom: '12px', borderRadius: '10px', background: 'linear-gradient(135deg, #fbf6e9, #f3e7c4)', border: '1px solid #e2cf96' }}
+          >
+            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#8a6d1d', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Starting at</span>
+            <span style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111' }}>${villa.startingPrice.toLocaleString()}</span>
+            <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>/ night</span>
+          </div>
+        )}
+
         <div className="flex gap-3">
           <button 
             onClick={() => onViewDetails(villa)}

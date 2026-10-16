@@ -2,6 +2,7 @@ const villas = [
   {
     id: 4,
     slug: "palacio-musical",
+    startingPrice: 3200,
     name: "Palacio Musical",
     useEnsuites: true,
     type: "Ultra-Luxury Beachfront Villa",
@@ -49,6 +50,7 @@ const villas = [
   {
     id: 2,
     slug: "palacio-tropical",
+    startingPrice: 2800,
     name: "Palacio Tropical",
     useEnsuites: true,
     type: "Ultra-Luxury Beachfront Villa",
@@ -99,6 +101,7 @@ const villas = [
   {
     id: 1,
     slug: "the-palms-villa-estate",
+    startingPrice: 650,
     name: "Palacio Las Palmas",
     forSale: true,
     useEnsuites: false,
@@ -175,6 +178,7 @@ const villas = [
   {
     id: 3,
     slug: "the-view-house",
+    startingPrice: 399,
     name: "The View House",
     type: "Newly Built Pacific Ocean Villa",
     location: "Tambor, Puntarenas - Tango Mar",
