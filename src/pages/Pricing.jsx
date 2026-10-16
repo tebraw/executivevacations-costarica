@@ -12,24 +12,24 @@ const VILLAS = [
   'All Villas',
   'Palacio Musical',
   'Palacio Tropical',
+  'Palacio Las Palmas',
   'The View House',
-  'The Palms Villa Estate',
 ];
 
 const VILLA_PDF_MAP = {
   'All Villas': '/pdfs/All Villas - Pricing Guide _ Executive Vacations.pdf',
   'Palacio Musical': '/pdfs/Palacio Musical — Pricing Guide _ Executive Vacations.pdf',
   'Palacio Tropical': '/pdfs/Palacio Tropical — Pricing Guide _ Executive Vacations.pdf',
+  'Palacio Las Palmas': '/pdfs/Palacio Las Palmas — Pricing Guide _ Executive Vacations.pdf',
   'The View House': '/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf',
-  'The Palms Villa Estate': '/pdfs/The Palms Villa Estate — Pricing Guide _ Executive Vacations.pdf',
 };
 
 const VILLA_HERO_IMAGE_MAP = {
   'All Villas': '/images/villas/palacio-tropical/palaciotropical-469.exterior_1.webp',
   'Palacio Musical': '/images/villas/palacio-musical/palacio-musical-hero.jpg',
   'Palacio Tropical': '/images/villas/palacio-tropical/palaciotropical-469.exterior_1.webp',
+  'Palacio Las Palmas': '/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif',
   'The View House': '/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif',
-  'The Palms Villa Estate': '/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif',
 };
 
 const SHOWCASE = [
@@ -56,6 +56,17 @@ const SHOWCASE = [
     ],
   },
   {
+    name: 'Palacio Las Palmas',
+    tagline: 'Mountain Villa Retreat in Atenas',
+    text: 'A 4,700 sq ft mountain estate with private pool, tennis court, resort-style grounds and a full-time caretaker. A tranquil escape for families, reunions and retreats.',
+    stats: ['4 Bedrooms', 'Up to 8 Guests', 'Tennis Court'],
+    images: [
+      '/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif',
+      '/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp',
+      '/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif',
+    ],
+  },
+  {
     name: 'The View House',
     tagline: 'Modern Villa with Pacific Views',
     text: 'A newly built 4-bedroom villa with a custom pool and sweeping Pacific Ocean views. Just 5 minutes from the Palacio villas. Ideal for families and smaller groups.',
@@ -64,17 +75,6 @@ const SHOWCASE = [
       '/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif',
       '/images/villas/the-view-house/25d56bc7-19f0-4a97-b056-f39312120697.avif',
       '/images/villas/the-view-house/3a85d083-c4c6-4289-93d9-d2e92feff052.avif',
-    ],
-  },
-  {
-    name: 'The Palms Villa Estate',
-    tagline: 'Mountain Villa Retreat in Atenas',
-    text: 'A 4,700 sq ft mountain estate with private pool, tennis court, resort-style grounds and a full-time caretaker. A tranquil escape for families, reunions and retreats.',
-    stats: ['4 Bedrooms', 'Up to 8 Guests', 'Tennis Court'],
-    images: [
-      '/images/villas/the-palms-villa-estate/5c47af67-d690-42e8-ae02-7e8011fc52ed.avif',
-      '/images/villas/the-palms-villa-estate/12438d67-cf43-4bfe-bf7d-07244f3301dc.webp',
-      '/images/villas/the-palms-villa-estate/2eedf0e6-1325-4143-bfc6-a6abae26f1ef.avif',
     ],
   },
 ];

@@ -19,7 +19,7 @@ export const VILLA_COLORS = {
     border: '#3b82f6',
     text: '#1e40af'
   },
-  'The Palms Villa Estate': {
+  'Palacio Las Palmas': {
     bg: '#d1fae5',
     border: '#10b981',
     text: '#065f46'
