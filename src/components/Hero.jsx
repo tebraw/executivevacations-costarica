@@ -22,13 +22,14 @@ const Hero = () => {
             {/* Hero Text */}
             <div className="mb-8 px-4">
               <h1 className="heading-1 text-white mb-6" style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.6)', color: 'white' }}>
-                Discover the Palacio Collection of
-                <span className="block mt-2" style={{ color: '#D4AF37', textShadow: '2px 2px 8px rgba(0,0,0,0.6)' }}>Luxury Villas in Costa Rica</span>
+                <span className="block" style={{ fontSize: '0.45em', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 500 }}>Discover</span>
+                <span className="block mt-2" style={{ color: '#D4AF37', fontSize: '1.25em', fontWeight: 700, letterSpacing: '0.02em', borderBottom: '3px solid #D4AF37', display: 'inline-block', paddingBottom: '0.15em', textShadow: '2px 2px 10px rgba(0,0,0,0.7)' }}>The Palacio Collection</span>
+                <span className="block mt-3" style={{ fontSize: '0.7em', textShadow: '2px 2px 8px rgba(0,0,0,0.6)' }}>of Luxury Villas in Costa Rica</span>
               </h1>
               
               <p className="body-large mb-8" style={{ color: 'white', textShadow: '1px 1px 4px rgba(0,0,0,0.8)' }}>
-                Exclusive vacation villas in tropical paradise. From private pools to breathtaking ocean views – 
-                experience unforgettable moments in Costa Rica's most beautiful accommodations.
+                Exclusive oceanfront estate villas with whale observatory decks and a private helicopter landing pad –
+                the most high-end luxury collection of villas in Costa Rica.
               </p>
 
               <div className="flex justify-center">
