@@ -190,7 +190,7 @@ const villas = [
     size: "2,400 sq ft",
     isPremium: true,
     pricePerNight: 399,
-    pricing: { low: 399, high: 500 },
+    pricing: { low: 399, high: 500, festive: 699 },
     hasSpecialOffer: true,
     images: ["/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif"],
     detailImages: ["/images/villas/the-view-house/masterbedroom 1.webp", "/images/villas/the-view-house/25d56bc7-19f0-4a97-b056-f39312120697.avif", "/images/villas/the-view-house/3a85d083-c4c6-4289-93d9-d2e92feff052.avif", "/images/villas/the-view-house/3c3b16b7-77de-4fdb-97e7-cd4e5d2f533d.avif", "/images/villas/the-view-house/9bcd8e7b-6d80-4b65-b878-68835b7b243b.avif", "/images/villas/the-view-house/caee2b00-03a2-438e-981c-8d98e57f6d43.avif", "/images/villas/the-view-house/d9555571cd99-3bbc-41d2-900f-8372442d68a9.avif", "/images/villas/the-view-house/d971cd99-3bbc-41d2-900f-8372442d68a9.avif", "/images/villas/the-view-house/f24aa4e9-2615-4491-b70c-90c87f804686.avif"],
@@ -222,8 +222,13 @@ const villas = [
 // Low season: June (6) through September (9)
 const LOW_SEASON_MONTHS = [6, 7, 8, 9];
 
+// Festive season: Dec 20, 2026 - Jan 3, 2027 (nights)
+const FESTIVE_START = new Date(2026, 11, 20);
+const FESTIVE_END = new Date(2027, 0, 4);
+
 export function getVillaPrice(villa, date) {
   if (!villa.pricing) return villa.pricePerNight || 0;
+  if (villa.pricing.festive && date >= FESTIVE_START && date < FESTIVE_END) return villa.pricing.festive;
   const month = date.getMonth() + 1;
   return LOW_SEASON_MONTHS.includes(month) ? villa.pricing.low : villa.pricing.high;
 }
