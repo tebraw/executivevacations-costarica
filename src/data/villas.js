@@ -155,6 +155,7 @@ const villas = [
     guests: 8,
     isPremium: true,
     isComingSoon: true,
+    isHidden: true,
     availableFrom: "Winter 2026",
     images: ["/images/villas/palacio-paradise/palacio-paradise-helicopter.webp"],
     detailImages: ["/images/villas/palacio-paradise/palacio-paradise-helicopter.webp"],
@@ -247,4 +248,5 @@ export function calculateTotalPrice(villa, checkIn, checkOut) {
   return total;
 }
 
-export default villas;
+// Villas flagged isHidden stay in the data above but are not shown on the site.
+export default villas.filter((villa) => !villa.isHidden);
