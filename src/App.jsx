@@ -42,6 +42,7 @@ function App() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat with Wendy on WhatsApp"
+        className="wa-float"
         style={{
           position: 'fixed',
           bottom: '28px',

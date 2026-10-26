@@ -6,7 +6,7 @@ const GOLD_LIGHT = '#e8c84e';
 // ── Helpers ────────────────────────────────────────────────────
 const REVIEWS_KEY = (villa) => `ev_reviews_${villa}`;
 
-async function fetchReviews(villaName) {
+export async function fetchReviews(villaName) {
   try {
     const res = await fetch(`/.netlify/functions/get-reviews?villa=${encodeURIComponent(villaName)}`);
     if (res.ok) return await res.json();
@@ -135,7 +135,7 @@ function ReviewCard({ review }) {
 }
 
 // ── ReviewModal ───────────────────────────────────────────────
-function ReviewModal({ villaName, onClose, onSubmitted }) {
+export function ReviewModal({ villaName, onClose, onSubmitted }) {
   const [rating, setRating] = useState(0);
   const [name, setName] = useState('');
   const [text, setText] = useState('');

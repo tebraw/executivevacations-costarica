@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { getSiteBrand } from '../utils/siteBrand';
+import { PalacioNav } from './palacio/PalacioLayout';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,6 +26,10 @@ const Header = () => {
       }
     }
   };
+
+  if (brand.key === 'executive') {
+    return <div className="pc pc-part"><PalacioNav /></div>;
+  }
 
   return (
     <header className="fixed top-0 w-full bg-white shadow-md z-50">

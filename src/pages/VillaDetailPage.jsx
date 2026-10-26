@@ -1,775 +1,284 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import villas, { getVillaPrice, calculateTotalPrice } from '../data/villas';
-import { getBookings } from '../utils/bookingStorage';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import ContactModal from '../components/ContactModal';
-import ReviewSection from '../components/ReviewSection';
+import villas from '../data/villas';
 import { SITE_URL } from '../utils/siteBrand';
-import MiniCalendar, { toMidnight, sameDay } from '../components/MiniCalendar';
+import PalacioLayout from '../components/palacio/PalacioLayout';
+import DatePicker, { GiftNote, selectionText } from '../components/palacio/DatePicker';
+import InquiryForm from '../components/palacio/InquiryForm';
+import { PriceBlock } from '../components/palacio/VillaCard';
+import { VillaReviews } from '../components/palacio/Reviews';
+import { addDays, label, useBookedRanges, useReveal } from '../components/palacio/shared';
 
-const BASE_URL = import.meta.env.BASE_URL;
-
-// ── Set to true to re-enable price display ──
-const SHOW_PRICES = false;
-
-const getImagePath = (path) => {
-  const clean = path.startsWith('/') ? path : `/${path}`;
-  if (BASE_URL && BASE_URL !== './' && BASE_URL !== '.') {
-    return `${BASE_URL.replace(/\/$/, '')}${clean}`;
+function setMeta(name, content, prop) {
+  const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+  let el = document.querySelector(sel);
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute(prop ? 'property' : 'name', name);
+    document.head.appendChild(el);
   }
-  return clean;
-};
+  el.setAttribute('content', content);
+}
 
-// ─── Calendar helpers ──────────────────────────────────────────
-const MONTH_NAMES = [
-  'January','February','March','April','May','June',
-  'July','August','September','October','November','December',
-];
+const goInquire = () => document.getElementById('inquire')?.scrollIntoView({ behavior: 'smooth' });
 
-function fmtShort(d) { return d ? `${MONTH_NAMES[d.getMonth()].slice(0,3)} ${d.getDate()}` : '—'; }
-
-// ─── VillaDetailPage ──────────────────────────────────────────
-const VillaDetailPage = () => {
+export default function VillaDetailPage() {
   const { slug } = useParams();
-  const navigate = useNavigate();
   const villa = villas.find((v) => v.slug === slug);
+  const [sel, setSel] = useState({ s: null, e: null });
+  const [formVilla, setFormVilla] = useState(villa?.name || '');
+  const [lb, setLb] = useState(-1);
+  const soon = !!villa?.isComingSoon;
+  const ranges = useBookedRanges(villa && !soon ? villa.name : null);
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
-  const [touchStartX, setTouchStartX] = useState(null);
-  const [lbTouchStartX, setLbTouchStartX] = useState(null);
-  const [showSwipeHint, setShowSwipeHint] = useState(false);
-  const [dates, setDates] = useState({ checkIn: null, checkOut: null });
-  const [bookedRanges, setBookedRanges] = useState([]);
+  const images = villa
+    ? [...new Set(villa.detailImages?.length ? villa.detailImages : villa.images)].filter((p) => !/\.(mp4|pdf)$/i.test(p))
+    : [];
 
-  const images = villa?.detailImages || villa?.images || [];
-  const { checkIn, checkOut } = dates;
-  const nights = checkIn && checkOut ? Math.round((checkOut - checkIn) / 86400000) : 0;
-  const nightlyRate = villa && checkIn ? getVillaPrice(villa, checkIn) : (villa?.pricing?.low ?? villa?.pricePerNight ?? 0);
-  const totalPrice = calculateTotalPrice(villa, checkIn, checkOut);
-  const mixedSeason = nights > 1 && totalPrice !== nightlyRate * nights;
-
-  // Holiday periods: Christmas 2026 and New Year's 2026/2027
-  const HOLIDAY_PERIODS = [
-    { name: 'Christmas', start: new Date(2026, 11, 20), end: new Date(2026, 11, 27), minNights: 7 },
-    { name: "New Year's", start: new Date(2026, 11, 28), end: new Date(2027, 0, 4), minNights: 7 },
-  ];
-  const holidayInfo = (() => {
-    if (!checkIn) return null;
-    const ref = checkOut || checkIn;
-    return HOLIDAY_PERIODS.find(p => checkIn < p.end && ref >= p.start) || null;
-  })();
-
-  const handleTouchStart = (e) => setTouchStartX(e.touches[0].clientX);
-  const handleTouchEnd = (e) => {
-    if (touchStartX === null) return;
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) setCurrentImageIndex((p) => (p + 1) % images.length);
-      else setCurrentImageIndex((p) => (p - 1 + images.length) % images.length);
-    }
-    setTouchStartX(null);
-  };
-
-  const openLightbox = (idx) => {
-    setLightboxImageIndex(idx);
-    setIsLightboxOpen(true);
-    // Show swipe hint on touch devices
-    if (window.matchMedia('(hover: none)').matches && images.length > 1) {
-      setShowSwipeHint(true);
-      setTimeout(() => setShowSwipeHint(false), 2500);
-    }
-  };
-
-  useEffect(() => { window.scrollTo(0, 0); }, [slug]);
-
-  // SEO meta tags per villa
   useEffect(() => {
-    if (!villa) return;
-    const title = `${villa.name} — Luxury Villa in Costa Rica | Executive Vacations`;
+    setSel({ s: null, e: null });
+    setFormVilla(villa?.name || '');
+    setLb(-1);
+  }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useReveal([slug]);
+
+  // SEO meta tags and structured data per villa (copy comes from the villa data).
+  useEffect(() => {
+    if (!villa) return undefined;
+    const title = villa.seoTitle || `${villa.name} — Luxury Villa in Costa Rica | The Palacio Collection`;
     const rawDesc = villa.detailedDescription || villa.description || '';
-    const desc = rawDesc.length > 155 ? rawDesc.slice(0, 152) + '…' : rawDesc;
-    const image = villa.images && villa.images[0] ? `${SITE_URL}${villa.images[0]}` : `${SITE_URL}/images/hero-bg.webp`;
+    const desc = rawDesc.length > 155 ? `${rawDesc.slice(0, 152)}…` : rawDesc;
+    const image = villa.images?.[0] ? `${SITE_URL}${villa.images[0]}` : `${SITE_URL}/images/hero-bg.webp`;
     document.title = title;
-    const setMeta = (name, content, prop) => {
-      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
-      let el = document.querySelector(sel);
-      if (!el) { el = document.createElement('meta'); prop ? el.setAttribute('property', name) : el.setAttribute('name', name); document.head.appendChild(el); }
-      el.setAttribute('content', content);
-    };
-    setMeta('description', desc);
+    setMeta('description', villa.seoDescription || desc);
     setMeta('og:title', title, true);
-    setMeta('og:description', desc, true);
+    setMeta('og:description', villa.seoDescription || desc, true);
     setMeta('og:type', 'website', true);
     setMeta('og:url', `${SITE_URL}/villa/${villa.slug}`, true);
     setMeta('og:image', image, true);
 
-    // Schema.org LodgingBusiness / VacationRental
-    const amenities = (villa.allAmenities || []).map(a => ({
-      '@type': 'LocationFeatureSpecification',
-      name: a.name,
-      value: true,
-    }));
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'LodgingBusiness',
       name: villa.name,
       description: villa.detailedDescription || villa.description || '',
       url: `${SITE_URL}/villa/${villa.slug}`,
-      image: image,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: villa.location,
-        addressCountry: 'CR',
-      },
+      image,
+      address: { '@type': 'PostalAddress', addressLocality: villa.location, addressCountry: 'CR' },
       numberOfRooms: villa.bedrooms,
-      amenityFeature: amenities,
-      starRating: { '@type': 'Rating', ratingValue: villa.rating, bestRating: 5 },
-      aggregateRating: { '@type': 'AggregateRating', ratingValue: villa.rating, bestRating: 5, reviewCount: 10 },
+      amenityFeature: (villa.allAmenities || []).map((a) => ({ '@type': 'LocationFeatureSpecification', name: a.name, value: true })),
+      ...(villa.rating
+        ? {
+            starRating: { '@type': 'Rating', ratingValue: villa.rating, bestRating: 5 },
+            aggregateRating: { '@type': 'AggregateRating', ratingValue: villa.rating, bestRating: 5, reviewCount: 10 },
+          }
+        : {}),
       priceRange: villa.pricing ? `$${villa.pricing.low}–$${villa.pricing.high} per night` : '',
       telephone: '+1-800-EXEC-VACA',
     };
     let schemaEl = document.getElementById('schema-villa');
-    if (!schemaEl) { schemaEl = document.createElement('script'); schemaEl.id = 'schema-villa'; schemaEl.type = 'application/ld+json'; document.head.appendChild(schemaEl); }
+    if (!schemaEl) {
+      schemaEl = document.createElement('script');
+      schemaEl.id = 'schema-villa';
+      schemaEl.type = 'application/ld+json';
+      document.head.appendChild(schemaEl);
+    }
     schemaEl.textContent = JSON.stringify(schema);
+    return () => schemaEl.remove();
   }, [villa]);
 
   useEffect(() => {
-    if (!villa) return;
-    getBookings().then(all => {
-      const ranges = (all || []).filter(b =>
-        Array.isArray(b.villas) && b.villas.includes(villa.name)
-      ).map(b => {
-        const parse = s => { const [y,m,d] = s.split('-').map(Number); return toMidnight(new Date(y, m-1, d)); };
-        return { start: parse(b.startDate), end: parse(b.endDate) };
-      });
-      setBookedRanges(ranges);
-    }).catch(() => {});
-  }, [villa?.name]);
-  useEffect(() => {
-    document.body.style.overflow = isLightboxOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [isLightboxOpen]);
-  useEffect(() => {
-    if (!isLightboxOpen) return;
+    if (lb < 0) return undefined;
+    const step = (d) => setLb((i) => (i + d + images.length) % images.length);
     const onKey = (e) => {
-      if (e.key === 'ArrowRight') setLightboxImageIndex((p) => (p + 1) % images.length);
-      if (e.key === 'ArrowLeft') setLightboxImageIndex((p) => (p - 1 + images.length) % images.length);
-      if (e.key === 'Escape') setIsLightboxOpen(false);
+      if (e.key === 'Escape') setLb(-1);
+      if (e.key === 'ArrowRight') step(1);
+      if (e.key === 'ArrowLeft') step(-1);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [isLightboxOpen, images.length]);
+  }, [lb, images.length]);
 
   if (!villa) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <p style={{ color:'#6b7280', marginBottom:'1rem' }}>Villa not found.</p>
-        <Link to="/" className="btn btn-luxury">Back to Home</Link>
-      </div>
+      <PalacioLayout>
+        <section className="estates">
+          <div className="wrap center">
+            <h2 className="title">Villa not found</h2>
+            <Link className="btn btn-gold" to="/">Back to Home</Link>
+          </div>
+        </section>
+      </PalacioLayout>
     );
   }
 
-  const [inquireOpen, setInquireOpen] = useState(false);
-  const handleInquire = () => setInquireOpen(true);
-  const amenities = villa.allAmenities || villa.topAmenities || [];
-
-  const GOLD = '#b8972e';
-  const WRAP = { maxWidth:'1380px', margin:'0 auto', padding:'0 2rem' };
-  const SEC = { fontFamily:"'DM Sans', sans-serif", fontSize:'1.4rem', fontWeight:600, color:'#111', whiteSpace:'nowrap' };
+  const amenities = (villa.allAmenities || []).map(label).filter(Boolean);
+  const features = (villa.specialFeatures || []).map(label).filter(Boolean);
+  const others = villas.filter((v) => v.slug !== villa.slug);
+  const bestIsBestFor = /^Best for/.test(villa.bestFor || '');
+  const step = (d) => setLb((i) => (i + d + images.length) % images.length);
+  const extend7 = () => sel.s && setSel({ s: sel.s, e: addDays(sel.s, 7) });
 
   return (
-    <>
+    <PalacioLayout>
       <Helmet>
-        <title>{villa?.seoTitle || `${villa?.name} — Luxury Villa in Costa Rica | Executive Vacations`}</title>
-        <meta name="description" content={villa?.seoDescription || `Luxury villa rental in Costa Rica. ${villa?.detailedDescription?.slice(0, 150) || ''}`} />
-        <link rel="canonical" href={`${SITE_URL}/villa/${villa?.slug}`} />
-        <meta property="og:title" content={villa?.seoTitle || villa?.name} />
-        <meta property="og:description" content={villa?.seoDescription || ''} />
-        <meta property="og:type" content="website" />
-        {villa?.images?.[0] && <meta property="og:image" content={villa.images[0]} />}
+        <link rel="canonical" href={`${SITE_URL}/villa/${villa.slug}`} />
       </Helmet>
-      <Header />
-      <main className="min-h-screen" style={{ paddingTop:'80px', background:'#f8f7f4' }}>
 
-        {/* ── Back ─────────────────────────────────── */}
-        <div style={WRAP} className="py-4">
-          <button onClick={() => navigate(-1)} className="flex items-center gap-2"
-            style={{ color:'#6b7280', fontSize:'0.85rem' }}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-            Back to Villas
-          </button>
+      <div className="wrap dgw">
+        <div className="dg">
+          {images.slice(0, 5).map((p, i) => (
+            <figure key={p} onClick={() => setLb(i)}>
+              <img src={encodeURI(p)} alt={villa.name} loading={i ? 'lazy' : undefined} />
+              {i === Math.min(4, images.length - 1) && images.length > 1 && (
+                <button type="button" className="all" onClick={(e) => { e.stopPropagation(); setLb(0); }}>
+                  Show all {images.length} photos
+                </button>
+              )}
+            </figure>
+          ))}
+        </div>
+      </div>
+
+      <div className="wrap">
+        <div className="dcard">
+          <div className="crumb"><Link to="/">The Collection</Link> &nbsp;/&nbsp; {villa.name}</div>
+          <div className="dtop">
+            <div>
+              <div className="eyebrow">{villa.type} · {villa.location}</div>
+              <h1>{villa.name}</h1>
+              <div className="tag">{villa.tagline}</div>
+            </div>
+            {!soon && <PriceBlock v={villa} />}
+          </div>
+          <div className="fbar">
+            <div><b>{villa.bedrooms}</b><span>{villa.useEnsuites ? 'En-suites' : 'Bedrooms'}</span></div>
+            {villa.bathrooms ? <div><b>{villa.bathrooms}</b><span>Bathrooms</span></div> : null}
+            {villa.guests ? <div><b>{villa.guests}</b><span>Guests</span></div> : null}
+            {villa.size ? <div><b>{villa.size}</b><span>Size</span></div> : null}
+            {villa.rating ? <div><b>★ {villa.rating}</b><span>Guest rating</span></div> : null}
+          </div>
         </div>
 
-        {/* ── Gallery ──────────────────────────────── */}
-        <div style={WRAP} className="mb-10">
-
-          {/* Desktop: Airbnb-style mosaic */}
-          <div className="hidden md:block" style={{ position:'relative', height:'520px', borderRadius:'20px', overflow:'hidden' }}>
-            <div style={{ display:'grid', gridTemplateColumns:'60% calc(40% - 4px)', gridTemplateRows:'1fr 1fr', height:'100%', gap:'4px' }}>
-              {/* Large main image — spans 2 rows */}
-              <div onClick={() => openLightbox(0)}
-                style={{ gridRow:'span 2 / span 2', position:'relative', cursor:'pointer', overflow:'hidden' }}
-                onMouseEnter={e => e.currentTarget.querySelector('img').style.transform='scale(1.03)'}
-                onMouseLeave={e => e.currentTarget.querySelector('img').style.transform='scale(1)'}>
-                <img src={getImagePath(images[0])} alt={`${villa.name} luxury villa exterior in ${villa.location}, Costa Rica`}
-                  style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.7s ease', display:'block' }} />
+        <div className="dgrid">
+          <div>
+            <div className="dsec">
+              <div className="hl">
+                <div>
+                  <small>{bestIsBestFor ? 'Best for' : 'Status'}</small>
+                  {(villa.bestFor || '').replace(/^Best for /, '')}
+                </div>
+                {(villa.topAmenities || []).slice(0, 3).map((a) => (
+                  <div key={label(a)}><small>Highlight</small>{label(a)}</div>
+                ))}
               </div>
-              {/* Top-right */}
-              {images[1] && (
-                <div onClick={() => openLightbox(1)}
-                  style={{ position:'relative', cursor:'pointer', overflow:'hidden' }}
-                  onMouseEnter={e => e.currentTarget.querySelector('img').style.transform='scale(1.03)'}
-                  onMouseLeave={e => e.currentTarget.querySelector('img').style.transform='scale(1)'}>
-                  <img src={getImagePath(images[1])} alt={`${villa.name} villa interior view - luxury accommodation Costa Rica`}
-                    style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.7s ease', display:'block' }} />
-                </div>
-              )}
-              {/* Bottom-right */}
-              {images[2] && (
-                <div onClick={() => openLightbox(2)}
-                  style={{ position:'relative', cursor:'pointer', overflow:'hidden' }}
-                  onMouseEnter={e => e.currentTarget.querySelector('img').style.transform='scale(1.03)'}
-                  onMouseLeave={e => e.currentTarget.querySelector('img').style.transform='scale(1)'}>
-                  <img src={getImagePath(images[2])} alt={`${villa.name} pool and outdoor area - private villa ${villa.location}`}
-                    style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.7s ease', display:'block' }} />
-                </div>
+              <h2>The estate</h2>
+              <p>{villa.detailedDescription}</p>
+              {features.length > 0 && (
+                <ul className="am" style={{ marginTop: 20 }}>{features.map((a) => <li key={a}>{a}</li>)}</ul>
               )}
             </div>
-            {/* Show all photos */}
-            <button onClick={() => openLightbox(0)} style={{
-              position:'absolute', bottom:'16px', right:'16px',
-              background:'rgba(255,255,255,0.96)', backdropFilter:'blur(6px)',
-              border:'1.5px solid rgba(0,0,0,0.12)', borderRadius:'10px', padding:'9px 18px',
-              cursor:'pointer', display:'flex', alignItems:'center', gap:'7px',
-              fontSize:'0.78rem', fontWeight:700, fontFamily:"'DM Sans', sans-serif",
-              boxShadow:'0 2px 12px rgba(0,0,0,0.12)',
-            }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-              </svg>
-              Show all {images.length} photos
-            </button>
-          </div>
-
-          {/* Mobile: carousel */}
-          <div className="md:hidden">
-            <div className="relative overflow-hidden rounded-2xl select-none cursor-pointer"
-              style={{ aspectRatio:'4/3' }}
-              onClick={() => openLightbox(currentImageIndex)}
-              onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-              <img src={getImagePath(images[currentImageIndex])} alt={`${villa.name} - photo ${currentImageIndex + 1} - luxury villa in ${villa.location}, Costa Rica`}
-                style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover' }}
-                loading="eager" draggable={false} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-              <div className="absolute bottom-3 right-3 bg-black/55 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-xs font-medium">
-                {currentImageIndex + 1} / {images.length}
-              </div>
-              {images.length > 1 && (
+            <div className="dsec">
+              <h2>Amenities</h2>
+              <ul className="am">{amenities.map((a) => <li key={a}>{a}</li>)}</ul>
+            </div>
+            <div className="dsec">
+              <h2>Location</h2>
+              <p><strong style={{ fontWeight: 500 }}>{villa.fullLocation || villa.location}</strong>{'\n'}{villa.locationDescription}</p>
+            </div>
+            <div className="dsec" id="availability">
+              <h2>Availability</h2>
+              {soon ? (
+                <p>
+                  {villa.isPlanned
+                    ? `This estate is currently under construction and opens in ${villa.availableFrom}.`
+                    : `This estate opens in ${villa.availableFrom || 'the near future'}.`}{' '}
+                  Join the early list and we will contact you personally when dates are released.
+                </p>
+              ) : (
                 <>
-                  <button className="absolute left-0 top-0 h-full w-1/3 z-10"
-                    onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(p => (p - 1 + images.length) % images.length); }} />
-                  <button className="absolute right-0 top-0 h-full w-1/3 z-10"
-                    onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(p => (p + 1) % images.length); }} />
+                  <div className="cal">
+                    <DatePicker ranges={ranges} sel={sel} onChange={setSel} slug={villa.slug} />
+                  </div>
+                  <p className="calnote">Choose your check-in and check-out. Crossed-out dates are already reserved. Free dates are not yet a confirmed booking – send your request and we confirm personally.</p>
                 </>
               )}
             </div>
-            <div className="flex justify-center gap-1.5 mt-2">
-              {images.slice(0, 10).map((_, i) => (
-                <button key={i} onClick={() => setCurrentImageIndex(i)} className="rounded-full transition-all"
-                  style={{ background: i === currentImageIndex ? '#1F2937' : '#d1d5db', width: i === currentImageIndex ? '16px' : '6px', height:'6px' }} />
-              ))}
-              {images.length > 10 && <span style={{ fontSize:'10px', color:'#9ca3af', alignSelf:'center' }}>+{images.length - 10}</span>}
+            <div className="dsec">
+              <h2>Guest reviews</h2>
+              <VillaReviews villa={villa} />
             </div>
-            {/* Swipe hint for carousel */}
-            {images.length > 1 && (
-              <p style={{ textAlign:'center', marginTop:'8px', fontSize:'11px', color:'#9ca3af', display:'flex', alignItems:'center', justifyContent:'center', gap:'5px' }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <path d="M14 8.5C14 7.1 12.9 6 11.5 6S9 7.1 9 8.5v5"/>
-                  <path d="M9 11.5C9 10.1 7.9 9 6.5 9S4 10.1 4 11.5V16a8 8 0 0 0 16 0v-4"/>
-                  <path d="M18 12V8.5C18 7.1 16.9 6 15.5 6S13 7.1 13 8.5"/>
-                  <path d="M13 9.5C13 8.1 11.9 7 10.5 7"/>
-                </svg>
-                Swipe to see more photos
-              </p>
+          </div>
+
+          <aside className="side">
+            <div className="eyebrow">{soon ? `Opening ${villa.availableFrom || 'soon'}` : 'Reserve'}</div>
+            {!soon && (
+              <>
+                <div className="urg">Peak-season dates fill early. Ask for availability today.</div>
+                <div className="urg" style={{ color: 'var(--char)' }}>✓ Personal concierge included</div>
+              </>
             )}
+            <h3>{villa.name}</h3>
+            {!soon && <PriceBlock v={villa} />}
+            {!soon && (
+              <>
+                <div className="sidesum">{sel.s ? selectionText(sel) : 'Pick your dates in the calendar'}</div>
+                <div className="sidegift"><GiftNote sel={sel} slug={villa.slug} ranges={ranges} onExtend={extend7} /></div>
+              </>
+            )}
+            {soon ? (
+              <button type="button" className="btn btn-gold" onClick={goInquire}>Join the Early List</button>
+            ) : (
+              <>
+                <button type="button" className="btn btn-gold" onClick={goInquire}>Request Availability</button>
+                <Link className="btn btn-line" to={`/pricing?villa=${encodeURIComponent(villa.name)}`}>View Pricing Guide</Link>
+                {villa.virtualTour && (
+                  <a className="btn btn-line" href={villa.virtualTour} target="_blank" rel="noopener noreferrer">Take the Virtual Tour</a>
+                )}
+              </>
+            )}
+            <small>Personal reply from our local team · no obligation</small>
+          </aside>
+        </div>
+      </div>
+
+      <section className="estates">
+        <div className="wrap">
+          <div className="center">
+            <div className="eyebrow">Continue Exploring</div>
+            <h2 className="title">More from the Collection</h2>
+          </div>
+          <div className="other">
+            {others.map((o) => (
+              <Link key={o.slug} to={`/villa/${o.slug}`}>
+                <img src={encodeURI(o.images[0])} alt="" loading="lazy" />
+                <div className="loc">{o.location}</div>
+                <b>{o.name}</b>
+              </Link>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* ── Content ──────────────────────────────── */}
-        <div style={WRAP} className="pb-20">
-          {/* Flex: left grows, right 400px fixed */}
-          <div className="flex flex-col lg:flex-row gap-10" style={{ alignItems:'start' }}>
-
-            {/* ── LEFT ─────────────────────────────── */}
-            <div style={{ flex:1, minWidth:0 }}>
-
-              {/* Title block */}
-              <div className="mb-6">
-                <div className="flex flex-wrap items-center gap-2 mb-3">
-                  {villa.isPremium && (
-                    <span style={{ background:'linear-gradient(135deg,#c9a227,#e8c84e)', color:'#fff', fontSize:'10px', fontWeight:700, letterSpacing:'0.12em', padding:'3px 10px', borderRadius:'4px' }}>PREMIUM</span>
-                  )}
-                  {villa.isComingSoon && (
-                    <span style={{ background:'#9ca3af', color:'#fff', fontSize:'10px', fontWeight:700, letterSpacing:'0.12em', padding:'3px 10px', borderRadius:'4px' }}>AVAILABLE SOON</span>
-                  )}
-                </div>
-                <h1 style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'clamp(2rem,4vw,3rem)', fontWeight:700, color:'#111', lineHeight:1.1, marginBottom:'6px' }}>
-                  {villa.name}
-                </h1>
-                <p style={{ color:'#6b7280', fontSize:'0.95rem', marginBottom:'10px' }}>{villa.type}</p>
-                <div className="flex items-center gap-3 flex-wrap" style={{ fontSize:'0.88rem' }}>
-                  <span style={{ color:GOLD, fontWeight:700 }}>★ {villa.rating}</span>
-                  <span style={{ color:'#d1d5db' }}>·</span>
-                  <span style={{ color:'#4b5563' }}>{villa.fullLocation || villa.location}</span>
-                </div>
-              </div>
-
-              {/* Stats strip */}
-              <div className="mb-8" style={{ borderTop:'1px solid #e5e7eb', borderBottom:'1px solid #e5e7eb', padding:'18px 0' }}>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-0">
-                  {[
-                    { v: villa.bedrooms, l: villa.useEnsuites ? 'En-suites' : 'Bedrooms' },
-                    { v: villa.bathrooms, l: 'Bathrooms' },
-                    { v: villa.guests, l: 'Max Guests' },
-                    { v: villa.size || '—', l: 'Property Size', sm: true },
-                  ].map((s, i, arr) => (
-                    <div key={i} className="text-center" style={{ borderRight: i < arr.length - 1 ? '1px solid #e5e7eb' : 'none', padding:'0 12px' }}>
-                      <div style={{ fontFamily:"'DM Sans', sans-serif", fontSize: s.sm ? '1rem' : '1.7rem', fontWeight:700, color:'#111', lineHeight:1 }}>{s.v}</div>
-                      <div style={{ fontSize:'9px', color:'#9ca3af', marginTop:'5px', textTransform:'uppercase', letterSpacing:'0.08em' }}>{s.l}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Mobile booking card */}
-              <div className="lg:hidden mb-8">
-                <div style={{ background:'#fff', borderRadius:'16px', border:'1px solid #e9e4da', boxShadow:'0 4px 20px rgba(0,0,0,0.07)', overflow:'hidden' }}>
-                  <div style={{ height:'3px', background:'linear-gradient(to right,#c9a227,#e8c84e,#c9a227)' }} />
-                  <div style={{ padding:'18px 20px' }}>
-                    {/* Price */}
-                    {SHOW_PRICES && <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>{checkIn ? 'Per night' : 'Starting from'}</div>}
-                    {SHOW_PRICES && nightlyRate > 0 && (
-                      <div style={{ display:'flex', alignItems:'baseline', gap:'6px', marginBottom:'4px' }}>
-                        <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'2rem', fontWeight:700, color:'#111', lineHeight:1 }}>
-                          ${nightlyRate.toLocaleString()}
-                        </span>
-                        <span style={{ color:'#9ca3af', fontSize:'0.82rem' }}>/night</span>
-                      </div>
-                    )}
-                    <div style={{ display:'flex', alignItems:'center', gap:'6px', color:'#9ca3af', fontSize:'0.8rem', marginBottom:'16px' }}>
-                      <span style={{ color:GOLD, fontWeight:600 }}>★ {villa.rating}</span>
-                      <span>·</span>
-                      <span>{villa.location}</span>
-                    </div>
-
-                    {/* Check-in / Check-out */}
-                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', border:'1.5px solid #e5e7eb', borderRadius:'12px', overflow:'hidden', marginBottom:'12px' }}>
-                      <div style={{ padding:'10px 14px', borderRight:'1px solid #e5e7eb' }}>
-                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'DM Sans', sans-serif" }}>Check-in</div>
-                        <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkIn ? '#111' : '#9ca3af' }}>
-                          {checkIn ? fmtShort(checkIn) : 'Add date'}
-                        </div>
-                      </div>
-                      <div style={{ padding:'10px 14px' }}>
-                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'DM Sans', sans-serif" }}>Check-out</div>
-                        <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkOut ? '#111' : '#9ca3af' }}>
-                          {checkOut ? fmtShort(checkOut) : 'Add date'}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Calendar */}
-                    <div style={{ border:'1.5px solid #f0ece4', borderRadius:'12px', padding:'12px', background:'#faf9f6', marginBottom:'12px' }}>
-                      <MiniCalendar checkIn={checkIn} checkOut={checkOut} bookedRanges={bookedRanges}
-                        onChange={({ checkIn: ci, checkOut: co }) => setDates({ checkIn: ci, checkOut: co })} />
-                    </div>
-
-                    {checkIn && !checkOut && (
-                      <div style={{ fontSize:'0.72rem', color:'#9ca3af', textAlign:'center', marginBottom:'10px' }}>Select your check-out date</div>
-                    )}
-                    {(checkIn || checkOut) && (
-                      <button onClick={() => setDates({ checkIn: null, checkOut: null })}
-                        style={{ display:'block', margin:'0 auto 12px', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'#9ca3af', textDecoration:'underline' }}>
-                        Clear dates
-                      </button>
-                    )}
-
-                    {/* Night summary */}
-                    {SHOW_PRICES && checkIn && checkOut && (
-                      <div style={{ background:'#faf9f6', borderRadius:'10px', padding:'12px 14px', marginBottom:'12px', fontSize:'0.82rem' }}>
-                        <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'6px' }}>
-                          <span style={{ color:'#6b7280' }}>
-                            {mixedSeason ? `${nights} nights (rates vary by season)` : `$${nightlyRate.toLocaleString()} × ${nights} nights`}
-                          </span>
-                          <span style={{ fontWeight:600 }}>
-                            ${totalPrice.toLocaleString()}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Holiday pricing notice */}
-                    {holidayInfo && (
-                      <div style={{ background:'#fffbeb', border:'1.5px solid #f59e0b', borderRadius:'10px', padding:'11px 14px', marginBottom:'12px', display:'flex', gap:'10px', alignItems:'flex-start' }}>
-                        <span style={{ fontSize:'1.1rem', flexShrink:0 }}>🎄</span>
-                        <div style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'0.75rem', lineHeight:1.5, color:'#92400e' }}>
-                          <div style={{ fontWeight:700, marginBottom:'2px' }}>{holidayInfo.name} Holiday Pricing</div>
-                          <div>This period has special rates — <strong>the price shown is not final.</strong> A {holidayInfo.minNights}-night minimum stay applies. We'll confirm the exact rate when we contact you.</div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Buttons */}
-                    <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
-                      {villa.virtualTour && (
-                        <a href={villa.virtualTour} target="_blank" rel="noopener noreferrer"
-                          style={{ display:'flex', alignItems:'center', justifyContent:'center', border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'12px', color:GOLD, fontSize:'0.75rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', fontFamily:"'DM Sans', sans-serif" }}>
-                          Virtual 3D Tour
-                        </a>
-                      )}
-                      <button onClick={handleInquire}
-                        style={{ display:'flex', alignItems:'center', justifyContent:'center', background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.75rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'DM Sans', sans-serif", width:'100%' }}>
-                        Inquire &amp; Reserve
-                      </button>
-                      <button onClick={() => navigate(`/pricing?villa=${encodeURIComponent(villa.name)}`)}
-                        style={{ display:'flex', alignItems:'center', justifyContent:'center', border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'12px', color:GOLD, fontSize:'0.75rem', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', background:'transparent', cursor:'pointer', fontFamily:"'DM Sans', sans-serif", width:'100%' }}>
-                        Pricing Guide
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Special offers */}
-              {villa.hasChristmasSpecial && (
-                <div className="mb-5 flex items-center gap-4" style={{ background:'linear-gradient(135deg,#fefce8,#fef9c3)', border:'1px solid #fbbf24', borderRadius:'12px', padding:'14px 18px' }}>
-                  <span style={{ fontSize:'1.4rem' }}>🚢</span>
-                  <div>
-                    <div style={{ fontWeight:700, color:'#111', fontSize:'0.9rem' }}>Complimentary Catamaran Tour</div>
-                    <div style={{ color:'#6b7280', fontSize:'0.78rem', marginTop:'2px' }}>Included with reservations of 7 nights or more</div>
-                  </div>
-                </div>
-              )}
-              {villa.hasSpecialOffer && (
-                <div className="mb-5 flex items-center gap-4" style={{ background:'linear-gradient(135deg,#fefce8,#fef9c3)', border:'1px solid #fbbf24', borderRadius:'12px', padding:'14px 18px' }}>
-                  <span style={{ fontSize:'1.4rem' }}>🏍️</span>
-                  <div>
-                    <div style={{ fontWeight:700, color:'#111', fontSize:'0.9rem' }}>Complimentary ATV Tour</div>
-                    <div style={{ color:'#6b7280', fontSize:'0.78rem', marginTop:'2px' }}>Exclusive special offer included</div>
-                  </div>
-                </div>
-              )}
-
-              {/* About */}
-              <div className="mb-10">
-                <div className="flex items-center gap-3 mb-4">
-                  <h2 style={SEC}>About this Villa</h2>
-                  <div style={{ flex:1, height:'1px', background:'linear-gradient(to right, #e5e7eb, transparent)' }} />
-                </div>
-                <p style={{ color:'#4b5563', lineHeight:1.85, fontSize:'0.93rem' }}>
-                  {villa.detailedDescription || villa.description || 'Experience luxury and comfort in this stunning villa.'}
-                </p>
-              </div>
-
-              {/* Amenities */}
-              <div className="mb-10">
-                <div className="flex items-center gap-3 mb-4">
-                  <h2 style={SEC}>What this place offers</h2>
-                  <div style={{ flex:1, height:'1px', background:'linear-gradient(to right, #e5e7eb, transparent)' }} />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
-                  {amenities.map((a, i) => (
-                    <div key={i} className="flex items-center gap-3" style={{ padding:'10px 0', borderBottom:'1px solid #f3f4f6' }}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="2.5" style={{ flexShrink:0 }}>
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                      <span style={{ color:'#374151', fontSize:'0.875rem' }}>{typeof a === 'string' ? a : a.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Location */}
-              <div className="mb-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <h2 style={SEC}>Location</h2>
-                  <div style={{ flex:1, height:'1px', background:'linear-gradient(to right, #e5e7eb, transparent)' }} />
-                </div>
-                <div style={{ background:'#fff', border:'1px solid #e5e7eb', borderRadius:'14px', padding:'20px', boxShadow:'0 1px 4px rgba(0,0,0,0.04)' }}>
-                  <div className="flex items-start gap-3">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="2" style={{ flexShrink:0, marginTop:'2px' }}>
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-                    </svg>
-                    <div>
-                      <div style={{ fontWeight:600, color:'#111', marginBottom:'6px', fontSize:'0.9rem' }}>{villa.fullLocation || villa.location}</div>
-                      <p style={{ color:'#6b7280', lineHeight:1.7, fontSize:'0.85rem' }}>
-                        {villa.locationDescription || "Located in one of Costa Rica's most prestigious areas."}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* ── RIGHT — Booking Card ─────────────── */}
-            <div className="hidden lg:block" style={{ width:'400px', flexShrink:0 }}>
-              <div style={{ position:'sticky', top:'100px' }}>
-                <div style={{ background:'#fff', borderRadius:'20px', border:'1px solid #e9e4da', boxShadow:'0 8px 40px rgba(0,0,0,0.09), 0 2px 8px rgba(0,0,0,0.04)', overflow:'hidden' }}>
-
-                  {/* Gold accent top */}
-                  <div style={{ height:'3px', background:'linear-gradient(to right, #c9a227, #e8c84e, #c9a227)' }} />
-
-                  {/* Price header */}
-                  <div style={{ padding:'22px 24px 0' }}>
-                    {SHOW_PRICES && (
-                      <>
-                        <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:GOLD, marginBottom:'2px', fontFamily:"'DM Sans', sans-serif" }}>
-                          {checkIn ? 'Per night' : 'Starting from'}
-                        </div>
-                        <div className="flex items-baseline gap-2 mb-1">
-                          {nightlyRate > 0 ? (
-                            <>
-                              <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'2.4rem', fontWeight:700, color:'#111', lineHeight:1 }}>
-                                ${nightlyRate.toLocaleString()}
-                              </span>
-                              <span style={{ color:'#9ca3af', fontSize:'0.85rem' }}>/night</span>
-                            </>
-                          ) : (
-                            <span style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'1.4rem', fontWeight:700, color:'#111' }}>Contact for Pricing</span>
-                          )}
-                        </div>
-                      </>
-                    )}
-                    <div className="flex items-center gap-2 mb-5">
-                      <span style={{ color:GOLD, fontSize:'0.82rem', fontWeight:600 }}>★ {villa.rating}</span>
-                      <span style={{ color:'#e5e7eb' }}>·</span>
-                      <span style={{ color:'#9ca3af', fontSize:'0.82rem' }}>{villa.location}</span>
-                    </div>
-
-                    {/* Check-in / Check-out */}
-                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', border:'1.5px solid #e5e7eb', borderRadius:'12px', overflow:'hidden', marginBottom:'12px' }}>
-                      <div style={{ padding:'11px 14px', borderRight:'1px solid #e5e7eb' }}>
-                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'DM Sans', sans-serif" }}>Check-in</div>
-                        <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkIn ? '#111' : '#9ca3af' }}>
-                          {checkIn ? fmtShort(checkIn) : 'Add date'}
-                        </div>
-                      </div>
-                      <div style={{ padding:'11px 14px' }}>
-                        <div style={{ fontSize:'9px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9ca3af', marginBottom:'3px', fontFamily:"'DM Sans', sans-serif" }}>Check-out</div>
-                        <div style={{ fontSize:'0.85rem', fontWeight:600, color: checkOut ? '#111' : '#9ca3af' }}>
-                          {checkOut ? fmtShort(checkOut) : 'Add date'}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Calendar */}
-                    <div style={{ border:'1.5px solid #f0ece4', borderRadius:'12px', padding:'14px', background:'#faf9f6', marginBottom: checkIn && !checkOut ? '8px' : '16px' }}>
-                      <MiniCalendar checkIn={checkIn} checkOut={checkOut} bookedRanges={bookedRanges}
-                        onChange={({ checkIn: ci, checkOut: co }) => setDates({ checkIn: ci, checkOut: co })} />
-                    </div>
-
-                    {/* Hint text */}
-                    {checkIn && !checkOut && (
-                      <div style={{ fontSize:'0.72rem', color:'#9ca3af', textAlign:'center', marginBottom:'12px' }}>
-                        Select your check-out date
-                      </div>
-                    )}
-
-                    {/* Clear dates */}
-                    {(checkIn || checkOut) && (
-                      <button onClick={() => setDates({ checkIn: null, checkOut: null })}
-                        style={{ display:'block', margin:'0 auto 12px', background:'none', border:'none', cursor:'pointer', fontSize:'0.75rem', color:'#9ca3af', textDecoration:'underline' }}>
-                        Clear dates
-                      </button>
-                    )}
-
-                    {/* Nights summary */}
-                    {SHOW_PRICES && nights > 0 && (
-                      <div style={{ background:'linear-gradient(135deg,#fefce8,#fef9c3)', border:'1px solid #fbbf24', borderRadius:'10px', padding:'12px 14px', marginBottom:'12px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                        <span style={{ fontSize:'0.8rem', color:'#6b7280' }}>
-                          {mixedSeason ? `${nights} nights (rates vary by season)` : `$${nightlyRate.toLocaleString()} × ${nights} nights`}
-                        </span>
-                        <span style={{ fontFamily:"'DM Sans', sans-serif", fontWeight:700, color:'#111', fontSize:'1rem' }}>
-                          ${totalPrice.toLocaleString()}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Holiday pricing notice */}
-                    {holidayInfo && (
-                      <div style={{ background:'#fffbeb', border:'1.5px solid #f59e0b', borderRadius:'10px', padding:'11px 14px', marginBottom:'12px', display:'flex', gap:'10px', alignItems:'flex-start' }}>
-                        <span style={{ fontSize:'1.1rem', flexShrink:0 }}>🎄</span>
-                        <div style={{ fontFamily:"'DM Sans', sans-serif", fontSize:'0.75rem', lineHeight:1.5, color:'#92400e' }}>
-                          <div style={{ fontWeight:700, marginBottom:'2px' }}>{holidayInfo.name} Holiday Pricing</div>
-                          <div>This period has special rates — <strong>the price shown is not final.</strong> A {holidayInfo.minNights}-night minimum stay applies. We'll confirm the exact rate when we contact you.</div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Card footer */}
-                  <div style={{ padding:'0 24px 22px' }}>
-                    <div style={{ height:'1px', background:'#f3f4f6', marginBottom:'14px' }} />
-
-                    {/* Quick stats */}
-                    {[
-                      { label: villa.useEnsuites ? 'En-suites' : 'Bedrooms', value: villa.bedrooms },
-                      { label: 'Bathrooms', value: villa.bathrooms },
-                      { label: 'Max Guests', value: villa.guests },
-                      { label: 'Property Size', value: villa.size || '—' },
-                    ].map((r, i, arr) => (
-                      <div key={i} className="flex justify-between" style={{ padding:'7px 0', borderBottom: i < arr.length - 1 ? '1px solid #f9f9f7' : 'none' }}>
-                        <span style={{ color:'#9ca3af', fontSize:'0.8rem' }}>{r.label}</span>
-                        <span style={{ fontFamily:"'DM Sans', sans-serif", color:'#111', fontWeight:700, fontSize:'0.85rem' }}>{r.value}</span>
-                      </div>
-                    ))}
-
-                    <div style={{ height:'1px', background:'#f3f4f6', margin:'14px 0' }} />
-
-                    {villa.virtualTour && (
-                      <a href={villa.virtualTour} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 w-full"
-                        style={{ border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'11px', color:GOLD, fontSize:'0.74rem', fontWeight:700, letterSpacing:'0.08em', textDecoration:'none', textTransform:'uppercase', marginBottom:'8px', display:'flex', fontFamily:"'DM Sans', sans-serif" }}>
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
-                        </svg>
-                        Virtual 3D Tour
-                      </a>
-                    )}
-
-                    <button onClick={handleInquire} className="w-full flex items-center justify-center gap-2"
-                      style={{ background:'linear-gradient(135deg,#c9a227,#e8c84e)', borderRadius:'10px', padding:'14px', color:'#111', fontWeight:700, fontSize:'0.76rem', letterSpacing:'0.1em', textTransform:'uppercase', border:'none', cursor:'pointer', fontFamily:"'DM Sans', sans-serif" }}>
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.5 16z"/>
-                      </svg>
-                      Inquire &amp; Reserve
-                    </button>
-
-                    <button onClick={() => navigate(`/pricing?villa=${encodeURIComponent(villa.name)}`)} className="w-full flex items-center justify-center gap-2 mt-2"
-                      style={{ border:'1.5px solid '+GOLD, borderRadius:'10px', padding:'12px', color:GOLD, fontSize:'0.76rem', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', background:'transparent', cursor:'pointer', fontFamily:"'DM Sans', sans-serif" }}>
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-                      </svg>
-                      Pricing Guide
-                    </button>
-
-                    <div className="flex items-center justify-center gap-4 mt-4">
-                      {['Instant Response', 'No Hidden Fees', 'Full Privacy'].map(b => (
-                        <div key={b} className="flex items-center gap-1" style={{ color:'#9ca3af', fontSize:'9px' }}>
-                          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-                          {b}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+      <section id="inquire">
+        <div className="wrap inq">
+          <div>
+            <div className="eyebrow">Plan Your Stay</div>
+            <h2 className="title">Request availability for {villa.name}</h2>
+            <p className="lead">A short request is all we need. We reply personally.</p>
           </div>
+          <InquiryForm key={villa.slug} formName="villa-inquiry" villa={formVilla} onVillaChange={setFormVilla} sel={sel} onSelChange={setSel} />
         </div>
-      </main>
+      </section>
 
-      <ReviewSection villa={villa} />
-
-      <Footer />
-
-      {/* ── Lightbox ─────────────────────────────── */}
-      {isLightboxOpen && (
-        <div className="fixed inset-0 flex items-center justify-center"
-          style={{ zIndex:9999, background:'rgba(0,0,0,0.95)' }}
-          onClick={() => setIsLightboxOpen(false)}
-          onTouchStart={(e) => setLbTouchStartX(e.touches[0].clientX)}
-          onTouchEnd={(e) => {
-            if (lbTouchStartX === null) return;
-            const diff = lbTouchStartX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 40) {
-              if (diff > 0) setLightboxImageIndex(p => (p + 1) % images.length);
-              else setLightboxImageIndex(p => (p - 1 + images.length) % images.length);
-            }
-            setLbTouchStartX(null);
-          }}>
-
-          <button onClick={() => setIsLightboxOpen(false)}
-            style={{ position:'absolute', top:'16px', right:'16px', width:'40px', height:'40px', background:'rgba(255,255,255,0.1)', borderRadius:'50%', border:'1px solid rgba(255,255,255,0.2)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:10, cursor:'pointer' }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-
-          <div style={{ position:'absolute', top:'16px', left:'50%', transform:'translateX(-50%)', background:'rgba(255,255,255,0.1)', color:'#fff', padding:'5px 14px', borderRadius:'999px', fontSize:'13px', zIndex:10 }}>
-            {lightboxImageIndex + 1} / {images.length}
-          </div>
-
-          <img src={getImagePath(images[lightboxImageIndex])} alt={`${villa.name} luxury villa photo ${lightboxImageIndex + 1} of ${images.length} - ${villa.location}, Costa Rica`}
-            onClick={(e) => e.stopPropagation()}
-            style={{ display:'block', maxWidth:'95vw', maxHeight:'90vh', width:'auto', height:'auto', borderRadius:'8px', cursor:'default' }}
-            draggable={false} />
-
-          {images.length > 1 && (
-            <>
-              <button onClick={(e) => { e.stopPropagation(); setLightboxImageIndex(p => (p - 1 + images.length) % images.length); }}
-                className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 items-center justify-center"
-                style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.1)', borderRadius:'50%', border:'1px solid rgba(255,255,255,0.2)', cursor:'pointer', zIndex:10 }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <button onClick={(e) => { e.stopPropagation(); setLightboxImageIndex(p => (p + 1) % images.length); }}
-                className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 items-center justify-center"
-                style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.1)', borderRadius:'50%', border:'1px solid rgba(255,255,255,0.2)', cursor:'pointer', zIndex:10 }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
-            </>
-          )}
-
-          {/* Mobile swipe hint overlay */}
-          {showSwipeHint && (
-            <div className="md:hidden" style={{
-              position:'absolute', bottom:'72px', left:'50%', transform:'translateX(-50%)',
-              background:'rgba(0,0,0,0.6)', backdropFilter:'blur(6px)',
-              color:'#fff', borderRadius:'999px', padding:'9px 20px',
-              display:'flex', alignItems:'center', gap:'10px',
-              fontSize:'13px', fontWeight:500, whiteSpace:'nowrap',
-              zIndex:20, animation:'lbHintFade 2.5s ease forwards',
-              pointerEvents:'none',
-            }}>
-              <svg width="26" height="26" viewBox="0 0 40 40" fill="none" style={{ animation:'lbSwipe 1.1s ease-in-out infinite' }}>
-                <rect x="15" y="4" width="10" height="18" rx="5" fill="white" opacity="0.9"/>
-                <rect x="7" y="16" width="10" height="16" rx="5" fill="white" opacity="0.7"/>
-                <rect x="23" y="16" width="10" height="16" rx="5" fill="white" opacity="0.7"/>
-              </svg>
-              Swipe left or right
-            </div>
-          )}
-          <style>{`
-            @keyframes lbHintFade {
-              0%   { opacity: 0; transform: translateX(-50%) translateY(6px); }
-              15%  { opacity: 1; transform: translateX(-50%) translateY(0); }
-              75%  { opacity: 1; }
-              100% { opacity: 0; }
-            }
-            @keyframes lbSwipe {
-              0%,100% { transform: translateX(0); }
-              40%     { transform: translateX(-5px); }
-              60%     { transform: translateX(5px); }
-            }
-          `}</style>
-        </div>
-      )}
-
-      {/* ── Contact / Inquiry Modal ───────────── */}
-      <ContactModal
-        villa={villa}
-        isOpen={inquireOpen}
-        onClose={() => setInquireOpen(false)}
-        initialCheckIn={checkIn}
-        initialCheckOut={checkOut}
-      />
-    </>
+      <div className={`lb${lb >= 0 ? ' on' : ''}`} onClick={() => setLb(-1)}>
+        <button type="button" className="lbn l" aria-label="Previous" onClick={(e) => { e.stopPropagation(); step(-1); }}>‹</button>
+        {lb >= 0 && <img src={encodeURI(images[lb])} alt="" onClick={(e) => { e.stopPropagation(); step(1); }} />}
+        <button type="button" className="lbn r" aria-label="Next" onClick={(e) => { e.stopPropagation(); step(1); }}>›</button>
+        <div className="lbc">{images.length > 1 && lb >= 0 ? `${lb + 1} / ${images.length}` : ''}</div>
+      </div>
+    </PalacioLayout>
   );
-};
-
-export default VillaDetailPage;
+}

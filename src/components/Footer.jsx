@@ -1,8 +1,13 @@
 import React from 'react';
 import { getSiteBrand } from '../utils/siteBrand';
+import { PalacioFooter } from './palacio/PalacioLayout';
 
 const Footer = () => {
   const brand = getSiteBrand();
+
+  if (brand.key === 'executive') {
+    return <div className="pc pc-part"><PalacioFooter /></div>;
+  }
 
   return (
     <footer style={{ backgroundColor: '#0F172A' }} className="text-white py-16">
