@@ -1,6 +1,6 @@
 import { getStore } from '@netlify/blobs';
 
-const BASE_URL = 'https://executivevacations.net';
+const BASE_URL = 'https://thepalaciocollection.com';
 
 const STATIC_PAGES = [
   { url: '/', priority: '1.0', changefreq: 'weekly' },

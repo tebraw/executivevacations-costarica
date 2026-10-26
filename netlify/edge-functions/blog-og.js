@@ -1,6 +1,6 @@
 import { getStore } from '@netlify/blobs';
 
-const BASE_URL = 'https://executivevacations.net';
+const BASE_URL = 'https://thepalaciocollection.com';
 const DEFAULT_IMAGE = `${BASE_URL}/images/hero-bg.webp`;
 
 export default async (request, context) => {

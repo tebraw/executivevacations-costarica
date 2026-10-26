@@ -1,4 +1,9 @@
 # SPA fallback - Functions are automatically excluded by Netlify
+#
+# DOMAIN CUTOVER: once thepalaciocollection.com is the primary domain on Netlify,
+# uncomment these two lines so the old address forwards visitors and Google to the new one.
+# https://executivevacations.net/*      https://thepalaciocollection.com/:splat  301!
+# https://www.executivevacations.net/*  https://thepalaciocollection.com/:splat  301!
 /pricing-guide-view-house.html  /pricing-guide-view-house.html  200
 
 # 301 redirects: /wedding-packages -> /pricing/

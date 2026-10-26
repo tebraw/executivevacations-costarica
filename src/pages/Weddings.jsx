@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import WeddingContactFormSection from '../components/WeddingContactFormSection';
-import { getSiteBrand } from '../utils/siteBrand';
+import { getSiteBrand, SITE_URL } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 const GOLD_LIGHT = '#c9a96e';
@@ -150,7 +150,7 @@ export default function Weddings() {
     };
     setMeta('description', 'Host your dream destination wedding in Costa Rica. Secluded beachfront estates with private access to the beach, ceremony on the sand, private chefs, full staff, and a free catamaran tour included.');
     setMeta('og:title', `${brand.tagline} | ${brand.fullName}`, true);
-    setMeta('og:url', 'https://executivevacations.net/weddings', true);
+    setMeta('og:url', `${SITE_URL}/weddings`, true);
   }, []);
 
   // Lightbox keyboard navigation

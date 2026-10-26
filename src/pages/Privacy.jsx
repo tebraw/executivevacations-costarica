@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { SITE_URL } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 
@@ -18,7 +19,7 @@ export default function Privacy() {
       <Helmet>
         <title>Privacy Policy | Executive Vacations Costa Rica</title>
         <meta name="description" content="Privacy Policy for Executive Vacations Costa Rica." />
-        <link rel="canonical" href="https://executivevacations.net/privacy" />
+        <link rel="canonical" href={`${SITE_URL}/privacy`} />
       </Helmet>
       <Header />
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '120px 24px 80px' }}>
@@ -27,7 +28,7 @@ export default function Privacy() {
         <p style={{ color: '#6b7280', fontSize: '0.88rem', marginBottom: '3rem', fontFamily: "'DM Sans', sans-serif" }}>Last updated: August 21, 2026</p>
 
         <Section title="Who We Are">
-          Executive Vacations Costa Rica ("we", "us", "our") operates the website executivevacations.net. We are a luxury villa rental company based in Costa Rica. Contact: <a href="mailto:propertieswithmeritt@yahoo.com" style={{ color: GOLD }}>propertieswithmeritt@yahoo.com</a>
+          Executive Vacations Costa Rica ("we", "us", "our") operates the website {SITE_URL.replace('https://', '')}. We are a luxury villa rental company based in Costa Rica. Contact: <a href="mailto:propertieswithmeritt@yahoo.com" style={{ color: GOLD }}>propertieswithmeritt@yahoo.com</a>
         </Section>
 
         <Section title="Information We Collect">

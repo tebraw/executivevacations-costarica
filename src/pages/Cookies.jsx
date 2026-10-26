@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { SITE_URL } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 
@@ -18,7 +19,7 @@ export default function Cookies() {
       <Helmet>
         <title>Cookie Policy | Executive Vacations Costa Rica</title>
         <meta name="description" content="Cookie Policy for Executive Vacations Costa Rica." />
-        <link rel="canonical" href="https://executivevacations.net/cookies" />
+        <link rel="canonical" href={`${SITE_URL}/cookies`} />
       </Helmet>
       <Header />
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '120px 24px 80px' }}>

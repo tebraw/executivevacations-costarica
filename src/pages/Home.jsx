@@ -9,7 +9,7 @@ import ContactFormSection from '../components/ContactFormSection'
 import InstructionModal from '../components/InstructionModal'
 import Footer from '../components/Footer'
 import villas from '../data/villas'
-import { getSiteBrand } from '../utils/siteBrand'
+import { getSiteBrand, SITE_URL } from '../utils/siteBrand'
 
 function Home() {
   const location = useLocation();
@@ -34,8 +34,8 @@ function Home() {
     setMeta('og:title', title, true);
     setMeta('og:description', desc, true);
     setMeta('og:type', 'website', true);
-    setMeta('og:url', 'https://executivevacations.net/', true);
-    setMeta('og:image', 'https://executivevacations.net/images/hero-bg.webp', true);
+    setMeta('og:url', `${SITE_URL}/`, true);
+    setMeta('og:image', `${SITE_URL}/images/hero-bg.webp`, true);
   }, []);
 
   // Scroll to contact section when navigated with #contact hash
@@ -102,7 +102,7 @@ function Home() {
   return (
     <div className="min-h-screen" style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
       <Helmet>
-        <link rel="canonical" href="https://executivevacations.net/" />
+        <link rel="canonical" href={`${SITE_URL}/`} />
       </Helmet>
       <Header />
       <Hero />

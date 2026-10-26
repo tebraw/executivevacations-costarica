@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ContactModal from '../components/ContactModal';
 import ReviewSection from '../components/ReviewSection';
+import { SITE_URL } from '../utils/siteBrand';
 import MiniCalendar, { toMidnight, sameDay } from '../components/MiniCalendar';
 
 const BASE_URL = import.meta.env.BASE_URL;
@@ -92,7 +93,7 @@ const VillaDetailPage = () => {
     const title = `${villa.name} — Luxury Villa in Costa Rica | Executive Vacations`;
     const rawDesc = villa.detailedDescription || villa.description || '';
     const desc = rawDesc.length > 155 ? rawDesc.slice(0, 152) + '…' : rawDesc;
-    const image = villa.images && villa.images[0] ? `https://executivevacations.net${villa.images[0]}` : 'https://executivevacations.net/images/hero-bg.webp';
+    const image = villa.images && villa.images[0] ? `${SITE_URL}${villa.images[0]}` : `${SITE_URL}/images/hero-bg.webp`;
     document.title = title;
     const setMeta = (name, content, prop) => {
       const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
@@ -104,7 +105,7 @@ const VillaDetailPage = () => {
     setMeta('og:title', title, true);
     setMeta('og:description', desc, true);
     setMeta('og:type', 'website', true);
-    setMeta('og:url', `https://executivevacations.net/villa/${villa.slug}`, true);
+    setMeta('og:url', `${SITE_URL}/villa/${villa.slug}`, true);
     setMeta('og:image', image, true);
 
     // Schema.org LodgingBusiness / VacationRental
@@ -118,7 +119,7 @@ const VillaDetailPage = () => {
       '@type': 'LodgingBusiness',
       name: villa.name,
       description: villa.detailedDescription || villa.description || '',
-      url: `https://executivevacations.net/villa/${villa.slug}`,
+      url: `${SITE_URL}/villa/${villa.slug}`,
       image: image,
       address: {
         '@type': 'PostalAddress',
@@ -186,7 +187,7 @@ const VillaDetailPage = () => {
       <Helmet>
         <title>{villa?.seoTitle || `${villa?.name} — Luxury Villa in Costa Rica | Executive Vacations`}</title>
         <meta name="description" content={villa?.seoDescription || `Luxury villa rental in Costa Rica. ${villa?.detailedDescription?.slice(0, 150) || ''}`} />
-        <link rel="canonical" href={`https://executivevacations.net/villa/${villa?.slug}`} />
+        <link rel="canonical" href={`${SITE_URL}/villa/${villa?.slug}`} />
         <meta property="og:title" content={villa?.seoTitle || villa?.name} />
         <meta property="og:description" content={villa?.seoDescription || ''} />
         <meta property="og:type" content="website" />

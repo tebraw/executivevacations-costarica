@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { getSiteBrand } from '../utils/siteBrand';
+import { getSiteBrand, SITE_URL } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 
@@ -35,7 +35,7 @@ export default function BlogPost() {
     if (!post) return;
     const metaTitle = post.metaTitle || post.title + ' | Executive Vacations Costa Rica';
     const metaDesc = post.metaDesc || 'Executive Vacations Costa Rica — luxury private villa rentals. ' + post.title;
-    const canonicalUrl = `https://executivevacations.net/blog/${post.slug}-${post.id}`;
+    const canonicalUrl = `${SITE_URL}/blog/${post.slug}-${post.id}`;
     document.title = metaTitle;
     const setMeta = (name, content, prop = false) => {
       const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
@@ -89,7 +89,7 @@ export default function BlogPost() {
   const metaDesc = post.metaDesc || 'Executive Vacations Costa Rica — luxury private villa rentals. ' + post.title;
   const wordCount = post.text.split(/\s+/).length;
   const readingTime = Math.max(1, Math.round(wordCount / 200));
-  const canonicalUrl = `https://executivevacations.net/blog/${post.slug}-${post.id}`;
+  const canonicalUrl = `${SITE_URL}/blog/${post.slug}-${post.id}`;
   const schemaJson = JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -97,8 +97,8 @@ export default function BlogPost() {
     description: metaDesc,
     datePublished: post.date,
     dateModified: post.updatedAt || post.date,
-    author: { '@type': 'Organization', name: 'Executive Vacations Costa Rica', url: 'https://executivevacations.net' },
-    publisher: { '@type': 'Organization', name: 'Executive Vacations Costa Rica', url: 'https://executivevacations.net' },
+    author: { '@type': 'Organization', name: 'Executive Vacations Costa Rica', url: SITE_URL },
+    publisher: { '@type': 'Organization', name: 'Executive Vacations Costa Rica', url: SITE_URL },
     url: canonicalUrl,
     ...(post.imageUrl ? { image: post.imageUrl } : {}),
     keywords: post.focusKeyword || 'luxury villa Costa Rica, private villa rental Costa Rica',

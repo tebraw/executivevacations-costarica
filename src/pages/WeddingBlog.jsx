@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { SITE_URL } from '../utils/siteBrand';
 
 const ROSE = '#c084a0';
 
@@ -105,7 +106,7 @@ export default function WeddingBlog() {
     setMeta('description', desc);
     setMeta('og:title', title, true);
     setMeta('og:description', desc, true);
-    setMeta('og:url', 'https://executivevacations.net/wedding-blog', true);
+    setMeta('og:url', `${SITE_URL}/wedding-blog`, true);
 
     fetch('/.netlify/functions/get-blog-posts')
       .then(r => r.ok ? r.json() : [])

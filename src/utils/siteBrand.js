@@ -3,7 +3,9 @@ const WEDDING_HOSTS = new Set([
   'www.paradiseweddingscostarica.com',
 ]);
 
-const EXECUTIVE_DOMAIN = 'https://executivevacations.net';
+// Main site address. Change it here when the domain changes.
+export const SITE_URL = 'https://thepalaciocollection.com';
+const EXECUTIVE_DOMAIN = SITE_URL;
 const WEDDING_DOMAIN = 'https://www.paradiseweddingscostarica.com';
 
 function isLocalHost() {

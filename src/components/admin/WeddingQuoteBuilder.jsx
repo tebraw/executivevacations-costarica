@@ -448,7 +448,7 @@ export default function WeddingQuoteBuilder() {
     doc.setFontSize(8);
     doc.setTextColor(150, 140, 120);
     doc.text('Price includes: venue, private chefs, catering, housekeeping, concierge & security.', pageW / 2, footerY + 7, { align: 'center' });
-    doc.text('executivevacations.net | paradiseweddingscostarica.com', pageW / 2, footerY + 13, { align: 'center' });
+    doc.text('thepalaciocollection.com | paradiseweddingscostarica.com', pageW / 2, footerY + 13, { align: 'center' });
 
     const filename = `Wedding-Quote${customer.name ? '-' + customer.name.replace(/\s+/g, '-') : ''}.pdf`;
     doc.save(filename);

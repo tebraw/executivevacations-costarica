@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { getSiteBrand } from '../utils/siteBrand';
+import { getSiteBrand, SITE_URL } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 const GOLD_LIGHT = '#c9a96e';
@@ -191,7 +191,7 @@ export default function Pricing() {
     setMeta('description', desc);
     setMeta('og:title', title, true);
     setMeta('og:description', desc, true);
-    setMeta('og:url', 'https://executivevacations.net/pricing', true);
+    setMeta('og:url', `${SITE_URL}/pricing`, true);
   }, []);
 
   const validate = () => {
@@ -245,7 +245,7 @@ export default function Pricing() {
   return (
     <div className="min-h-screen" style={{ background: '#fafaf8' }}>
       <Helmet>
-        <link rel="canonical" href="https://executivevacations.net/pricing" />
+        <link rel="canonical" href={`${SITE_URL}/pricing`} />
       </Helmet>
       <Header />
 

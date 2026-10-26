@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { SITE_URL } from '../utils/siteBrand';
 
 const GOLD = '#b8972e';
 
@@ -18,7 +19,7 @@ export default function Terms() {
       <Helmet>
         <title>Terms of Service | Executive Vacations Costa Rica</title>
         <meta name="description" content="Terms of Service for Executive Vacations Costa Rica." />
-        <link rel="canonical" href="https://executivevacations.net/terms" />
+        <link rel="canonical" href={`${SITE_URL}/terms`} />
       </Helmet>
       <Header />
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '120px 24px 80px' }}>
@@ -27,7 +28,7 @@ export default function Terms() {
         <p style={{ color: '#6b7280', fontSize: '0.88rem', marginBottom: '3rem', fontFamily: "'DM Sans', sans-serif" }}>Last updated: August 21, 2026</p>
 
         <Section title="Agreement to Terms">
-          By accessing executivevacations.net you agree to be bound by these Terms of Service. If you do not agree, please do not use our website.
+          By accessing {SITE_URL.replace('https://', '')} you agree to be bound by these Terms of Service. If you do not agree, please do not use our website.
         </Section>
 
         <Section title="Use of Website">
