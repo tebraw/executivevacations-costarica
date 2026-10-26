@@ -35,7 +35,8 @@
 .pc .hero h1.lockup{display:inline-block;text-align:center;font-family:'Cormorant Garamond',serif;font-weight:600;letter-spacing:0;line-height:1;max-width:none;margin:0 0 40px}
 .pc .lockup .l1{display:flex;align-items:flex-end;justify-content:center;gap:.1em}
 .pc .lockup .the{font-size:clamp(2.4rem,6.2vw,5rem);text-transform:uppercase;line-height:.9;letter-spacing:.02em}
-.pc .lockup .pal{font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(3.6rem,9.6vw,7.8rem);line-height:.8;padding:0 .12em .08em;background:linear-gradient(180deg,#f8e19a,#d2a43a 55%,#a97b1d);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 2px 14px rgba(0,0,0,.5))}
+/* The extra padding gives the gold gradient (background-clip:text) room to paint the whole script, including the P's swash above the line box. The negative margins keep the layout unchanged. */
+.pc .lockup .pal{font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(3.6rem,9.6vw,7.8rem);line-height:.8;padding:.25em .24em .2em;margin:-.25em -.12em -.12em;background:linear-gradient(180deg,#f8e19a .25em,#d2a43a .73em,#a97b1d 1.13em);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 2px 14px rgba(0,0,0,.5))}
 .pc .lockup .col{display:block;font-size:clamp(2.3rem,7vw,5.8rem);text-transform:uppercase;line-height:.95;letter-spacing:.02em;margin-top:.04em}
 .pc .lockup .sub{display:block;font-size:clamp(.62rem,1.5vw,1.05rem);letter-spacing:.34em;text-transform:uppercase;font-weight:600;margin-top:1.3em}
 .pc .hero p{max-width:520px;font-weight:400;font-size:1.05rem;opacity:.96;margin-bottom:34px;line-height:1.7}
