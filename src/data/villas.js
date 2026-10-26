@@ -2,6 +2,9 @@ const villas = [
   {
     id: 4,
     slug: "palacio-musical",
+    tagline: "An extraordinary estate for extraordinary moments.",
+    bestFor: "Best for weddings & large celebrations",
+    fit: ["celebrations"],
     startingPrice: 3200,
     name: "Palacio Musical",
     useEnsuites: true,
@@ -50,6 +53,9 @@ const villas = [
   {
     id: 2,
     slug: "palacio-tropical",
+    tagline: "Your private paradise, right by the ocean.",
+    bestFor: "Best for oceanfront group escapes",
+    fit: ["oceanfront"],
     startingPrice: 2800,
     name: "Palacio Tropical",
     useEnsuites: true,
@@ -101,6 +107,9 @@ const villas = [
   {
     id: 1,
     slug: "the-palms-villa-estate",
+    tagline: "A tranquil escape for family, reunions and retreats.",
+    bestFor: "Best for retreats & family reunions",
+    fit: ["families", "retreats"],
     startingPrice: 650,
     name: "Palacio Las Palmas",
     forSale: true,
@@ -146,6 +155,9 @@ const villas = [
   {
     id: 5,
     slug: "palacio-paradise",
+    tagline: "Our newest estate, arriving winter 2026.",
+    bestFor: "Be among the first to stay",
+    fit: [],
     name: "Palacio Paradise",
     useEnsuites: true,
     type: "Ultra-Luxury Oceanview Villa with Helipad",
@@ -179,6 +191,9 @@ const villas = [
   {
     id: 3,
     slug: "the-view-house",
+    tagline: "Find your perfect kind of escape.",
+    bestFor: "Best for families & close friends",
+    fit: ["families"],
     startingPrice: 399,
     name: "The View House",
     type: "Newly Built Pacific Ocean Villa",
@@ -216,6 +231,37 @@ const villas = [
     pricingPdf: "/pdfs/The View House — Pricing Guide _ Executive Vacations.pdf",
     seoTitle: "The View House — Boutique Luxury Villa with Pacific Ocean Views, Costa Rica | Executive Vacations",
     seoDescription: "Modern 4-bedroom villa with custom pool & Pacific Ocean views in Tambor, Costa Rica. 5 min from Palacio Tropical & Musical, 35 min from Santa Teresa. Perfect for families."
+  },
+  {
+    id: 6,
+    slug: "palacio-ruins",
+    tagline: "Our largest estate yet, opening in 2028.",
+    bestFor: "Coming soon: 10 en-suite bedrooms",
+    fit: [],
+    name: "Palacio Ruins",
+    useEnsuites: true,
+    type: "Ultra-Luxury Estate",
+    location: "Costa Rica",
+    fullLocation: "Costa Rica",
+    bedrooms: 10,
+    isPremium: true,
+    isComingSoon: true,
+    isPlanned: true,
+    availableFrom: "2028",
+    imageNote: "Concept impression",
+    images: ["/images/palacio-ruins.jpg"],
+    detailImages: ["/images/palacio-ruins.jpg"],
+    topAmenities: ["Currently under construction"],
+    allAmenities: [
+      { name: "10 En-suite Bedrooms", icon: "fa-bed" }
+    ],
+    detailedDescription: "Palacio Ruins is our largest estate yet, with ten en-suite bedrooms and a setting made to take your breath away. It is currently under construction and opens in 2028. Images shown are concept impressions.",
+    locationDescription: "Details coming soon.",
+    specialFeatures: [
+      { name: "Our largest estate yet", icon: "fa-star" }
+    ],
+    seoTitle: "Palacio Ruins — 10 En-suite Luxury Estate, Opening 2028 in Costa Rica | The Palacio Collection",
+    seoDescription: "Opening 2028: Palacio Ruins, our largest estate yet with ten en-suite bedrooms in Costa Rica."
   }
 ];
 
