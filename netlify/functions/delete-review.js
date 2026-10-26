@@ -1,4 +1,5 @@
 import { getStore } from '@netlify/blobs';
+import { reviewKeysFor } from './villa-names.js';
 
 export default async (req, context) => {
   try {
@@ -11,12 +12,13 @@ export default async (req, context) => {
     }
 
     const store = getStore('reviews');
-    const key = `reviews-${villa.toLowerCase().replace(/\s+/g, '-')}`;
-
-    const existing = await store.get(key);
-    const reviews = existing ? JSON.parse(existing) : [];
-    const filtered = reviews.filter(r => r.id !== id);
-    await store.set(key, JSON.stringify(filtered));
+    for (const key of reviewKeysFor(villa)) {
+      const existing = await store.get(key);
+      if (!existing) continue;
+      const reviews = JSON.parse(existing);
+      if (!reviews.some(r => r.id === id)) continue;
+      await store.set(key, JSON.stringify(reviews.filter(r => r.id !== id)));
+    }
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,

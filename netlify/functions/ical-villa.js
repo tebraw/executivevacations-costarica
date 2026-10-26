@@ -1,4 +1,5 @@
 import { getStore } from '@netlify/blobs';
+import { canonicalVillaName, normalizeBookings } from './villa-names.js';
 
 export default async (req) => {
   try {
@@ -11,7 +12,8 @@ export default async (req) => {
     }
 
     const store = getStore('bookings');
-    const allBookings = await store.get('all-bookings', { type: 'json' }) || [];
+    const allBookings = normalizeBookings(await store.get('all-bookings', { type: 'json' }) || []);
+    const matchName = canonicalVillaName(villaName);
 
     console.log(`=== iCal Feed for ${villaName} ===`);
     console.log('Total bookings in storage:', allBookings.length);
@@ -24,7 +26,7 @@ export default async (req) => {
       const end = new Date(endParts[0], endParts[1] - 1, endParts[2]);
       
       const isValid = end >= start;
-      const hasVilla = booking.villas && booking.villas.includes(villaName);
+      const hasVilla = booking.villas && booking.villas.includes(matchName);
       
       if (isValid && hasVilla) {
         console.log(`✅ INCLUDING: ${booking.customerName} - ${booking.startDate} to ${booking.endDate}`);

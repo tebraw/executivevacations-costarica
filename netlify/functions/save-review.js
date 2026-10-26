@@ -1,4 +1,5 @@
 import { getStore } from '@netlify/blobs';
+import { canonicalVillaName, reviewKey } from './villa-names.js';
 
 export default async (req, context) => {
   try {
@@ -20,14 +21,15 @@ export default async (req, context) => {
     }
 
     const store = getStore('reviews');
-    const key = `reviews-${villa.toLowerCase().replace(/\s+/g, '-')}`;
+    const villaName = canonicalVillaName(villa);
+    const key = reviewKey(villaName);
 
     const existing = await store.get(key);
     const reviews = existing ? JSON.parse(existing) : [];
 
     const newReview = {
       id: Date.now().toString(),
-      villa,
+      villa: villaName,
       name: name.trim().slice(0, 100),
       rating: Number(rating),
       text: text.trim().slice(0, 1000),

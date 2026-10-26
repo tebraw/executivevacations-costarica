@@ -1,8 +1,9 @@
 import { getStore } from '@netlify/blobs';
+import { normalizeBooking } from './villa-names.js';
 
 export default async (req, context) => {
   try {
-    const booking = await req.json();
+    const booking = normalizeBooking(await req.json());
     const store = getStore('bookings');
     
     // Get existing bookings

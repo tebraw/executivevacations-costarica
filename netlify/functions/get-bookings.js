@@ -1,4 +1,5 @@
 import { getStore } from '@netlify/blobs';
+import { normalizeBookings } from './villa-names.js';
 
 export default async (req, context) => {
   const adminSecret = process.env.ADMIN_SECRET;
@@ -16,7 +17,7 @@ export default async (req, context) => {
       });
     }
 
-    const bookings = JSON.parse(bookingsData);
+    const bookings = normalizeBookings(JSON.parse(bookingsData));
 
     // Public requests get only the fields needed for availability checking (no PII)
     const payload = isAdmin
