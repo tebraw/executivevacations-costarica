@@ -2,14 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { label } from './shared';
 
-export const CHIPS = [
-  ['all', 'All estates'],
-  ['celebrations', 'Weddings & celebrations'],
-  ['oceanfront', 'Oceanfront'],
-  ['families', 'Families & friends'],
-  ['retreats', 'Retreats & reunions'],
-];
-
 const cardFacts = (v) =>
   [
     `${v.bedrooms} ${v.useEnsuites ? 'en-suites' : 'bedrooms'}`,
@@ -36,14 +28,14 @@ export function PriceBlock({ v }) {
   );
 }
 
-export default function VillaCard({ v, hidden, onAsk }) {
+export default function VillaCard({ v, onAsk }) {
   const soon = v.isComingSoon;
   const ask = (e) => {
     e.preventDefault();
     onAsk(v.name);
   };
   return (
-    <article className={`card${hidden ? ' hide' : ''}`}>
+    <article className="card">
       <Link className="img" to={`/villa/${v.slug}`}>
         <img src={encodeURI(v.images[0])} alt={v.name} loading="lazy" />
         {soon && <span className="badge soon">{v.isPlanned ? 'Opening' : 'Available'} {v.availableFrom || 'soon'}</span>}

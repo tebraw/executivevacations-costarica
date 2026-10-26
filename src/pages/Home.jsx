@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import villas from '../data/villas';
 import { SITE_URL } from '../utils/siteBrand';
 import PalacioLayout from '../components/palacio/PalacioLayout';
-import VillaCard, { CHIPS } from '../components/palacio/VillaCard';
+import VillaCard from '../components/palacio/VillaCard';
 import InquiryForm from '../components/palacio/InquiryForm';
 import { ReviewCard, useApprovedReviews } from '../components/palacio/Reviews';
 import { WEDDINGS_URL, useReveal } from '../components/palacio/shared';
@@ -51,7 +51,6 @@ function setMeta(name, content, prop) {
 
 export default function Home() {
   const location = useLocation();
-  const [filter, setFilter] = useState('all');
   const [villa, setVilla] = useState('');
   const [sel, setSel] = useState({ s: null, e: null });
   const track = useRef(null);
@@ -146,14 +145,9 @@ export default function Home() {
             <h2 className="title">Find the estate that fits your story</h2>
             <p className="lead">Each estate is individually curated. Explore the details, then request availability and we will respond personally.</p>
           </div>
-          <div className="chips" role="group" aria-label="Filter estates">
-            {CHIPS.map(([key, text]) => (
-              <button key={key} type="button" className={`chip${filter === key ? ' on' : ''}`} onClick={() => setFilter(key)}>{text}</button>
-            ))}
-          </div>
           <div className="grid" id="grid">
             {villas.map((v) => (
-              <VillaCard key={v.slug} v={v} onAsk={ask} hidden={filter !== 'all' && !(v.fit || []).includes(filter)} />
+              <VillaCard key={v.slug} v={v} onAsk={ask} />
             ))}
           </div>
           <div className="guide">

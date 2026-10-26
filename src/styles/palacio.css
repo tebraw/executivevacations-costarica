@@ -142,10 +142,6 @@
 .pc .quick select{width:100%;border:0;padding:4px 20px 14px;font:inherit;font-weight:600;background:transparent;outline:0;appearance:none}
 .pc .quick>div{border-right:1px solid var(--line)}.pc .quick .btn{border-radius:0;padding:0 34px}
 @media(max-width:700px){.pc .quick{grid-template-columns:1fr}.pc .quick>div{border-right:0;border-bottom:1px solid var(--line)}.pc .quick .btn{padding:18px}}
-.pc .chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:34px}
-.pc .chip{border:1px solid #d8d2c4;background:#fff;border-radius:4px;padding:10px 20px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:.25s}
-.pc .chip:hover{border-color:var(--gold)}.pc .chip.on{background:var(--char);color:#fff;border-color:var(--char)}
-.pc .card.hide{display:none}
 .pc .rt{color:var(--char);font-weight:700;letter-spacing:0;text-transform:none;font-size:.8rem;margin-left:8px}.pc .rt i{color:var(--gold);font-style:normal}
 .pc .pg{display:block;font-size:.78rem;color:var(--muted);margin-top:2px;font-weight:500}
 .pc .guide{margin-top:56px;background:var(--char);color:#fff;border-radius:6px;padding:clamp(28px,4vw,48px);display:flex;gap:28px;align-items:center;justify-content:space-between;flex-wrap:wrap}
@@ -266,7 +262,9 @@
 /* Neutralize global site styles (index.css) that would otherwise leak into the new design */
 .pc .btn{gap:0;box-shadow:none}
 .pc .btn::before{content:none}
-.pc .btn:focus,.pc button:focus{outline:2px solid var(--gold);outline-offset:2px}
+/* Hide the global blue focus ring after mouse clicks; keyboard focus keeps the gold ring (same as the approved design) */
+.pc .btn:focus:not(:focus-visible),.pc button:focus:not(:focus-visible){outline:0}
+.pc .btn:focus-visible,.pc button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .pc .card{border:0;box-shadow:none;animation:none}
 .pc .card:hover{border-color:transparent}
 .pc input[type="text"],.pc input[type="email"],.pc input[type="tel"],.pc input[type="date"],.pc input[type="number"],.pc select,.pc textarea{background-color:transparent;box-shadow:none;transform:none;font-family:inherit;font-size:inherit;line-height:inherit;transition:border-color .2s}
