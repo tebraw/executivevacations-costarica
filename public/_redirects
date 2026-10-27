@@ -2,7 +2,11 @@
 #
 # Old domains forward to the primary domain thepalaciocollection.com (301, path and query string are kept).
 # Function URLs stay reachable on the old address so existing calendar (iCal) subscriptions and webhooks keep working.
+https://executivevacations.net/.netlify/functions/*      /.netlify/functions/:splat  200!
+https://www.executivevacations.net/.netlify/functions/*  /.netlify/functions/:splat  200!
 https://www.paradisevillascostarica.com/.netlify/functions/*  /.netlify/functions/:splat  200!
+https://executivevacations.net/*          https://thepalaciocollection.com/:splat  301!
+https://www.executivevacations.net/*      https://thepalaciocollection.com/:splat  301!
 https://www.paradisevillascostarica.com/*  https://thepalaciocollection.com/:splat  301!
 
 /pricing-guide-view-house.html  /pricing-guide-view-house.html  200
