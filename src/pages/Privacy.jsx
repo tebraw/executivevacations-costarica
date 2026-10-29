@@ -58,12 +58,14 @@ export default function Privacy() {
             <li><strong>Twilio</strong> — SMS messaging</li>
             <li><strong>Google Tag Manager / GA4</strong> — website analytics</li>
             <li><strong>Meta (WhatsApp)</strong> — admin notifications</li>
-            <li><strong>Meta (Facebook and Instagram)</strong> — advertising and ad measurement through the Meta Pixel on our advertising pages</li>
+            <li><strong>Meta (Facebook and Instagram)</strong> — advertising and ad measurement through the Meta Pixel, and an embedded guest post from Instagram, on our advertising pages</li>
           </ul>
         </Section>
 
-        <Section title="Advertising and the Meta Pixel">
+        <Section title="Advertising, the Meta Pixel and Instagram content">
           On our advertising pages we use the Meta Pixel, a tool of Meta Platforms, Inc. It records which pages you view and which steps of our request form you complete, together with technical information about your device and browser, and it may set a cookie (_fbp, and _fbc when you arrive from an ad). Meta receives this information and may use it to measure and improve our ads, to show our ads to people who may be interested, and for its own purposes as described in Meta&apos;s Data Policy. Depending on our Pixel settings, Meta may also receive hashed contact details that you enter in our forms, such as your email address, to match visits to Meta accounts.
+          <br /><br />
+          Our advertising pages also show a public Instagram post from one of our guests. A moment after the page has loaded, your browser connects to Instagram (Meta) to load it, even if you do not tap it. Instagram then receives technical information such as your IP address and device details and may set cookies, as described in Instagram&apos;s own privacy policy.
           <br /><br />
           You can control the ads you see on Meta&apos;s platforms in your <a href="https://www.facebook.com/adpreferences/" target="_blank" rel="noopener noreferrer" style={{ color: GOLD }}>ad preferences</a> and opt out of interest-based advertising through the <a href="https://optout.aboutads.info/" target="_blank" rel="noopener noreferrer" style={{ color: GOLD }}>Digital Advertising Alliance</a>. You can also block or delete cookies in your browser (see our <a href="/cookies" style={{ color: GOLD }}>Cookie Policy</a>).
         </Section>

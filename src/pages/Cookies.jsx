@@ -25,7 +25,7 @@ export default function Cookies() {
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '120px 24px 80px' }}>
         <p style={{ fontSize: '0.8rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: GOLD, fontWeight: 700, marginBottom: '12px', fontFamily: "'DM Sans', sans-serif" }}>Legal</p>
         <h1 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: '2rem', color: '#111', marginBottom: '8px' }}>Cookie Policy</h1>
-        <p style={{ color: '#6b7280', fontSize: '0.88rem', marginBottom: '3rem', fontFamily: "'DM Sans', sans-serif" }}>Last updated: August 21, 2026</p>
+        <p style={{ color: '#6b7280', fontSize: '0.88rem', marginBottom: '3rem', fontFamily: "'DM Sans', sans-serif" }}>Last updated: October 29, 2026</p>
 
         <Section title="What Are Cookies">
           Cookies are small text files stored on your device when you visit a website. They help websites remember your preferences and understand how visitors use the site.
@@ -55,6 +55,11 @@ export default function Cookies() {
                 <td style={{ padding: '10px 0' }}>_fbc</td>
                 <td style={{ padding: '10px 0' }}>Meta (Facebook)</td>
                 <td style={{ padding: '10px 0' }}>Stores the ad click identifier to attribute requests to ads</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                <td style={{ padding: '10px 0' }}>mid (and similar)</td>
+                <td style={{ padding: '10px 0' }}>Instagram (Meta)</td>
+                <td style={{ padding: '10px 0' }}>Set by Instagram when the embedded guest post on our advertising pages loads</td>
               </tr>
               <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
                 <td style={{ padding: '10px 0' }}>GTM-*</td>

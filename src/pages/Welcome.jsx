@@ -315,7 +315,7 @@ function Page({ cfgBase, variant }) {
           </section>
         )}
 
-        <GuestSpotlight />
+        <GuestSpotlight onCta={scrollToQuiz} />
 
         <section className="why">
           <div className="wrap">
