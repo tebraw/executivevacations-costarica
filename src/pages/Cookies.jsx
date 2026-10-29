@@ -52,6 +52,11 @@ export default function Cookies() {
                 <td style={{ padding: '10px 0' }}>Ad conversion tracking and retargeting</td>
               </tr>
               <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
+                <td style={{ padding: '10px 0' }}>_fbc</td>
+                <td style={{ padding: '10px 0' }}>Meta (Facebook)</td>
+                <td style={{ padding: '10px 0' }}>Stores the ad click identifier to attribute requests to ads</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
                 <td style={{ padding: '10px 0' }}>GTM-*</td>
                 <td style={{ padding: '10px 0' }}>Google Tag Manager</td>
                 <td style={{ padding: '10px 0' }}>Tag management container</td>

@@ -109,7 +109,11 @@ body:has(.pc.lp) .wa-float{display:none!important}
 .lp .spot .lead{color:rgba(255,255,255,.78);margin-bottom:22px}
 .lp .spotg{display:grid;gap:30px;align-items:center}
 @media(min-width:860px){.lp .spotg{grid-template-columns:1fr 1fr;gap:70px}}
-.lp .spotbox{position:relative;width:100%;max-width:460px;justify-self:center;border-radius:12px;overflow:hidden;background:#111}
+.lp .spotcol{width:100%;max-width:460px;justify-self:center}
+.lp .spotbox{position:relative;width:100%;border-radius:12px;overflow:hidden;background:#111}
+.lp .spotbox.live{background:#fff;min-height:300px}
+.lp .spotbox .instagram-media a{display:block;padding:28px 20px;color:var(--char);text-align:center;font-weight:600;text-decoration:underline}
+.lp .spotnote{margin-top:12px;font-size:.76rem;line-height:1.5;color:rgba(255,255,255,.62)}
 .lp .spotplay{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;width:100%;min-height:320px;border:0;cursor:pointer;color:#fff;font:inherit;font-weight:600;background:radial-gradient(circle at 30% 20%,#4a3a1b,#1b1b1d 70%)}
 .lp .spotico{display:flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;background:var(--gold);color:#fff;font-size:1.6rem;padding-left:5px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 .lp .spotbox iframe{display:block;width:100%;height:640px;border:0;background:#fff}
