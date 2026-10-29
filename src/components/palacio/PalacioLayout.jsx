@@ -80,7 +80,7 @@ export function PalacioFooter() {
           </div>
           <div>
             <h5>Contact</h5>
-            <a href="mailto:propertieswithmeritt@yahoo.com">propertieswithmeritt@yahoo.com</a>
+            <a href="mailto:bookings@thepalaciocollection.com">bookings@thepalaciocollection.com</a>
             <a href="tel:+13038818588">303-881-8588</a>
             <a href="https://www.instagram.com/paradisevillascostarica/" target="_blank" rel="noopener noreferrer">Instagram</a>
           </div>
