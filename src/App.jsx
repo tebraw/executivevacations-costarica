@@ -14,6 +14,8 @@ const WeddingPackages = lazy(() => import('./pages/WeddingPackages'))
 const Privacy = lazy(() => import('./pages/Privacy'))
 const Terms = lazy(() => import('./pages/Terms'))
 const Cookies = lazy(() => import('./pages/Cookies'))
+const Welcome = lazy(() => import('./pages/Welcome'))
+const WelcomeThanks = lazy(() => import('./pages/WelcomeThanks'))
 
 import { isWeddingDomain } from './utils/siteBrand'
 
@@ -88,6 +90,9 @@ function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/cookies" element={<Cookies />} />
+        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/welcome/thanks" element={<WelcomeThanks />} />
+        <Route path="/welcome/:variant" element={<Welcome />} />
       </Routes>
       </Suspense>
     </Router>

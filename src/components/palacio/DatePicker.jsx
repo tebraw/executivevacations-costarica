@@ -55,9 +55,9 @@ export function GiftNote({ sel, slug, ranges, onExtend }) {
   );
 }
 
-export default function DatePicker({ ranges, sel, onChange, slug }) {
+export default function DatePicker({ ranges, sel, onChange, slug, initialMonth }) {
   const [cur, setCur] = useState(() => {
-    const d = new Date();
+    const d = initialMonth ? new Date(initialMonth) : new Date();
     d.setDate(1);
     d.setHours(0, 0, 0, 0);
     return d;

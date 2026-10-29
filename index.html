@@ -93,6 +93,34 @@
       <input type="text" name="guestCount" />
       <textarea name="message"></textarea>
     </form>
+
+    <!-- Hidden form for the paid-ads landing page (/welcome) -->
+    <form name="welcome-lead" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="subject" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="occasion" />
+      <input type="text" name="group-size" />
+      <input type="text" name="villa-selected" />
+      <input type="date" name="checkIn" />
+      <input type="date" name="checkOut" />
+      <input type="text" name="nights" />
+      <input type="text" name="flexible-dates" />
+      <input type="text" name="travel-window" />
+      <input type="text" name="landing-variant" />
+      <input type="text" name="landing-path" />
+      <input type="text" name="utm_source" />
+      <input type="text" name="utm_medium" />
+      <input type="text" name="utm_campaign" />
+      <input type="text" name="utm_content" />
+      <input type="text" name="utm_term" />
+      <input type="text" name="fbclid" />
+      <input type="text" name="fbp" />
+      <input type="text" name="fbc" />
+      <input type="text" name="referrer" />
+      <input type="text" name="event-id" />
+    </form>
     
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
