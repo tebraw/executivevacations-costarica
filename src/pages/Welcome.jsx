@@ -43,7 +43,7 @@ const VARIANTS = {
     occasion: '',
     eyebrow: 'Tambor & Atenas · Costa Rica',
     h1: 'Your whole group. One private estate in Costa Rica.',
-    sub: 'Oceanfront estates for up to 18 guests, concierge team included. Tell us your dates and we reply personally within 24 hours.',
+    sub: 'Oceanfront estates for up to 20 guests, concierge team included. Tell us your dates and we reply personally within 24 hours.',
   },
   holiday: {
     key: 'holiday',
@@ -58,7 +58,7 @@ const VARIANTS = {
     occasion: 'Family reunion',
     eyebrow: 'Family reunions & multi-generation trips',
     h1: 'One house for the whole family. One team to handle everything.',
-    sub: 'Seven bedrooms, room for up to 18 guests and the Pacific at your doorstep. No one is left planning alone.',
+    sub: 'Seven bedrooms, room for up to 20 guests and the Pacific at your doorstep. No one is left planning alone.',
   },
   celebrate: {
     key: 'celebrate',
@@ -340,7 +340,7 @@ function Page({ cfgBase, variant }) {
               <p className="lead">Tap an estate to check its dates. We confirm every detail personally.</p>
             </div>
             <div className="egroup">
-              <h3>For 9 to 18 guests</h3>
+              <h3>For 9 to 20 guests</h3>
               <p className="egnote">Palacio Musical and Palacio Tropical sit side by side and can be booked together for very large groups.</p>
               <div className="egrid">
                 {BIG.map((n) => {

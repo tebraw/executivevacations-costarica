@@ -525,7 +525,7 @@ export default function Weddings() {
                 12,500 sq ft of secluded beachfront estate with private access to the beach directly on Costa Rica's Tango Mar coast. Three ocean-view decks, a professional music studio, a whale watching observatory, and a natural beach ceremony area steps below the property.
               </p>
               <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '1rem', lineHeight: 1.85 }}>
-                The main estate sleeps 18 guests in 7 en-suite bedrooms -- but your wedding doesn't stop there. Right next door sits Palacio Tropical, and together they form one of the most exclusive private venues on the Pacific coast.
+                The main estate sleeps 20 guests in 7 en-suite bedrooms -- but your wedding doesn't stop there. Right next door sits Palacio Tropical, and together they form one of the most exclusive private venues on the Pacific coast.
               </p>
             </div>
 
@@ -535,7 +535,7 @@ export default function Weddings() {
                 Your Guest List, Fully Accommodated
               </p>
               {[
-                { name: 'Palacio Musical',  detail: '7 en-suites &bull; 18 overnight guests', primary: true },
+                { name: 'Palacio Musical',  detail: '7 en-suites &bull; 20 overnight guests', primary: true },
                 { name: 'Palacio Tropical', detail: '7 en-suites &bull; 18 overnight guests', primary: false },
                 { name: 'Casa Oceano',      detail: 'Oceanfront villa &bull; 14 guests', primary: false },
                 { name: 'The View House',   detail: '4 bedrooms &bull; 8 guests',  primary: false },

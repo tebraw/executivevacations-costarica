@@ -13,7 +13,7 @@ const villas = [
     rating: 4.97,
     bedrooms: 7,
     bathrooms: 8,
-    guests: 18,
+    guests: 20,
     size: "12,500 sq ft",
     isPremium: true,
     pricePerNight: 2700,

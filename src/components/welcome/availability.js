@@ -5,13 +5,14 @@ const DAY = 864e5;
 export const COMBO = 'Palacio Musical + Palacio Tropical';
 export const comboParts = (name) => (name === COMBO ? ['Palacio Musical', 'Palacio Tropical'] : [name]);
 
-// Which estates suit which group size (capacity: Musical and Tropical 18 guests, the other two 8).
+// Which estates suit which group size (capacity: Musical 20 guests, Tropical 18, the other two 8).
+// A group of 19 or more can take Palacio Musical alone (up to 20) or both estates side by side.
 export const GROUPS = [
   { id: '2-4', label: '2–4', estates: ['The View House', 'Palacio Las Palmas'] },
   { id: '5-8', label: '5–8', estates: ['The View House', 'Palacio Las Palmas'] },
   { id: '9-12', label: '9–12', estates: ['Palacio Tropical', 'Palacio Musical'] },
   { id: '13-18', label: '13–18', estates: ['Palacio Musical', 'Palacio Tropical'] },
-  { id: '19+', label: '19+', estates: [COMBO] },
+  { id: '19+', label: '19+', estates: [COMBO, 'Palacio Musical'] },
 ];
 
 export const OCCASIONS = ['Family reunion', 'Milestone birthday', "Friends' getaway", 'Wedding or celebration', 'Retreat or team trip'];
