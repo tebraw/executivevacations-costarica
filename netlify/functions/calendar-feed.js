@@ -1,4 +1,5 @@
 import { getStore } from '@netlify/blobs';
+import { withoutPrivate } from './booking-utils.js';
 
 export default async (req) => {
   if (req.method !== 'GET') {
@@ -7,7 +8,8 @@ export default async (req) => {
 
   try {
     const store = getStore('bookings');
-    const allBookings = await store.get('all-bookings', { type: 'json' }) || [];
+    // Private (friends and family) bookings are never part of a public feed.
+    const allBookings = withoutPrivate(await store.get('all-bookings', { type: 'json' }) || []);
 
     console.log('=== iCal Feed Generation ===');
     console.log('Total bookings in storage:', allBookings.length);

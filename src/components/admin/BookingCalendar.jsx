@@ -1,5 +1,6 @@
 ﻿import React, { useState, useMemo } from 'react';
 import { getVillaColor } from '../../utils/bookingStorage';
+import { isPrivateBooking, conflictMap } from '../../utils/bookingConflicts';
 
 const BookingCalendar = ({ bookings, onBookingClick }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -92,8 +93,40 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
       }
     });
     
+    // Bars that overlap within a week go on separate lines, so a real booking never hides a private one.
+    const rows = new Map();
+    spans.forEach((span) => {
+      const row = Math.floor(span.startIndex / 7);
+      rows.set(row, [...(rows.get(row) || []), span]);
+    });
+    rows.forEach((rowSpans) => {
+      rowSpans.sort((a, b) => a.startIndex - b.startIndex || b.daysSpan - a.daysSpan);
+      const laneEnds = [];
+      rowSpans.forEach((span) => {
+        let lane = laneEnds.findIndex((end) => end <= span.startIndex);
+        if (lane === -1) {
+          lane = laneEnds.length;
+          laneEnds.push(0);
+        }
+        laneEnds[lane] = span.startIndex + span.daysSpan;
+        span.lane = lane;
+      });
+    });
+
     return spans;
   }, [bookings, daysInMonth, year, month]);
+
+  const rowLanes = useMemo(() => {
+    const lanes = {};
+    bookingSpans.forEach((span) => {
+      const row = Math.floor(span.startIndex / 7);
+      lanes[row] = Math.max(lanes[row] || 0, span.lane + 1);
+    });
+    return lanes;
+  }, [bookingSpans]);
+
+  const conflicts = useMemo(() => conflictMap(bookings), [bookings]);
+  const privateCount = useMemo(() => bookings.filter(isPrivateBooking).length, [bookings]);
 
   const getSpansForDay = (index) => {
     return bookingSpans.filter(span => span.startIndex === index);
@@ -216,6 +249,26 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
         </div>
       </div>
 
+      {privateCount > 0 && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          padding: '10px 18px',
+          background: 'repeating-linear-gradient(45deg, #ecfdf5 0 10px, #ffffff 10px 20px)',
+          borderBottom: '2px dashed #0f766e',
+          color: '#115e59',
+          fontSize: '13px',
+          fontWeight: '700'
+        }}>
+          <span style={{ fontSize: '18px' }}>🔒</span>
+          <span>
+            Striped dashed bars are PRIVATE (Friends &amp; Family) bookings. They are visible only here in the admin, never on the website,
+            in the availability search or in the iCal feeds. ⚠ marks a real booking on the same dates: the private guests must leave.
+          </span>
+        </div>
+      )}
+
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(7, 1fr)',
@@ -255,7 +308,7 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
             <div
               key={index}
               style={{
-                minHeight: '140px',
+                minHeight: `${Math.max(140, 52 + (rowLanes[Math.floor(index / 7)] || 0) * 22)}px`,
                 padding: '12px 4px 4px 4px',
                 position: 'relative',
                 backgroundColor: date 
@@ -291,20 +344,30 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
                       const bookingStyle = getBookingStyle(span.booking);
                       const cellWidth = 100;
                       const width = `calc(${span.daysSpan * cellWidth}% + ${(span.daysSpan - 1) * 1}px)`;
+                      const isPriv = isPrivateBooking(span.booking);
+                      const hasConflict = conflicts.has(span.booking.id);
+                      const stripeColor = bookingStyle.borderColor;
                       
                       return (
                         <div
                           key={`${span.booking.id}-${spanIndex}`}
                           onClick={() => onBookingClick(span.booking)}
+                          title={`${isPriv ? 'PRIVATE (Friends & Family), not visible on the website. ' : ''}${hasConflict ? 'CONFLICT: overlaps a ' + (isPriv ? 'real booking. ' : 'private booking. ') : ''}${span.booking.customerName || ''}`.trim()}
                           style={{
                             position: 'absolute',
-                            top: `${spanIndex * 22}px`,
+                            top: `${span.lane * 22}px`,
                             left: '4px',
                             width: width,
                             height: '20px',
-                            background: bookingStyle.background,
+                            background: isPriv
+                              ? `repeating-linear-gradient(45deg, ${bookingStyle.background.includes('gradient') ? getVillaColor(span.booking.villas[0]).bg : bookingStyle.background} 0 6px, rgba(255,255,255,0.92) 6px 12px)`
+                              : bookingStyle.background,
                             color: bookingStyle.color,
-                            borderLeft: `3px solid ${bookingStyle.borderColor}`,
+                            ...(isPriv
+                              ? { border: `2px dashed ${stripeColor}`, borderLeft: `4px solid ${stripeColor}` }
+                              : { borderLeft: `3px solid ${bookingStyle.borderColor}` }),
+                            outline: hasConflict ? '2px solid #dc2626' : 'none',
+                            outlineOffset: '1px',
                             borderRadius: span.isStart && span.isEnd ? '4px' : 
                                          span.isStart ? '4px 0 0 4px' : 
                                          span.isEnd ? '0 4px 4px 0' : '0',
@@ -330,7 +393,7 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
                                 whiteSpace: 'nowrap',
                                 flex: '1'
                               }}>
-                                {span.booking.customerName}
+                                {isPriv ? '🔒 ' : ''}{hasConflict ? '⚠ ' : ''}{span.booking.customerName}
                               </span>
                               <span style={{ 
                                 fontSize: '9px',
@@ -386,6 +449,20 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
             <span style={{ fontSize: '14px', fontWeight: '600', color: '#374151' }}>{name}</span>
           </div>
         ))}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{
+            width: '28px',
+            height: '16px',
+            borderRadius: '4px',
+            background: 'repeating-linear-gradient(45deg, #ddd6fe 0 6px, rgba(255,255,255,0.92) 6px 12px)',
+            border: '2px dashed #8b5cf6'
+          }} />
+          <span style={{ fontSize: '14px', fontWeight: '700', color: '#115e59' }}>🔒 Friends &amp; Family (private, not on website)</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: '28px', height: '16px', borderRadius: '4px', background: '#fff', outline: '2px solid #dc2626', outlineOffset: '1px' }} />
+          <span style={{ fontSize: '14px', fontWeight: '700', color: '#b91c1c' }}>⚠ Conflict (private and real booking overlap)</span>
+        </div>
       </div>
     </div>
   );

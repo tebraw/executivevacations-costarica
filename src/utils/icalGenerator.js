@@ -19,8 +19,9 @@ export const generateICalFromBookings = (bookings) => {
     `SEQUENCE:${sequence}`
   ];
 
-  // Filter valid bookings only
+  // Filter valid bookings only. Private (friends and family) bookings are never exported.
   const validBookings = bookings.filter(booking => {
+    if (booking.isPrivate === true) return false;
     const start = new Date(booking.startDate);
     const end = new Date(booking.endDate);
     return end >= start;

@@ -1,5 +1,6 @@
 import { getStore } from '@netlify/blobs';
 import { normalizeBookings } from './villa-names.js';
+import { withoutPrivate } from './booking-utils.js';
 
 export default async (req, context) => {
   const adminSecret = process.env.ADMIN_SECRET;
@@ -19,10 +20,11 @@ export default async (req, context) => {
 
     const bookings = normalizeBookings(JSON.parse(bookingsData));
 
-    // Public requests get only the fields needed for availability checking (no PII)
+    // Public requests get only the fields needed for availability checking (no PII), and never the private
+    // (friends and family) bookings, which exist only in the admin.
     const payload = isAdmin
       ? bookings
-      : bookings.map(({ id, startDate, endDate, villas, status }) => ({ id, startDate, endDate, villas, status }));
+      : withoutPrivate(bookings).map(({ id, startDate, endDate, villas, status }) => ({ id, startDate, endDate, villas, status }));
 
     return new Response(JSON.stringify(payload), {
       status: 200,

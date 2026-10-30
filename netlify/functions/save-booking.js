@@ -1,35 +1,38 @@
 import { getStore } from '@netlify/blobs';
 import { normalizeBooking } from './villa-names.js';
+import { BOOKINGS_KEY, assertNothingLost, snapshotBeforeWrite, validateBooking } from './booking-utils.js';
+
+const json = (body, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 
 export default async (req, context) => {
   try {
     const booking = normalizeBooking(await req.json());
+    const invalid = validateBooking(booking);
+    if (invalid) return json({ error: invalid }, 400);
     const store = getStore('bookings');
     
     // Get existing bookings
-    const bookingsData = await store.get('all-bookings');
-    const bookings = bookingsData ? JSON.parse(bookingsData) : [];
+    const previousRaw = await store.get(BOOKINGS_KEY);
+    const bookings = previousRaw ? JSON.parse(previousRaw) : [];
     
-    // Add or update booking
-    const existingIndex = bookings.findIndex(b => b.id === booking.id);
+    // An update keeps every field the form does not send (created date, fields added later); a new booking is appended.
+    const existingIndex = bookings.findIndex((b) => String(b.id) === String(booking.id));
+    const next = bookings.slice();
     if (existingIndex >= 0) {
-      bookings[existingIndex] = booking;
+      next[existingIndex] = { ...bookings[existingIndex], ...booking };
     } else {
-      bookings.push(booking);
+      next.push(booking);
     }
     
-    // Save back to blob storage
-    await store.set('all-bookings', JSON.stringify(bookings));
+    // Nothing that is stored may disappear, and the previous list is copied before anything is overwritten.
+    assertNothingLost(bookings, next);
+    await snapshotBeforeWrite(store, previousRaw);
+    await store.set(BOOKINGS_KEY, JSON.stringify(next));
     
-    return new Response(JSON.stringify({ success: true, booking }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return json({ success: true, booking: next[existingIndex >= 0 ? existingIndex : next.length - 1], count: next.length });
   } catch (error) {
     console.error('Error saving booking:', error);
-    return new Response(JSON.stringify({ error: 'Failed to save booking' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return json({ error: 'Failed to save booking' }, 500);
   }
 };

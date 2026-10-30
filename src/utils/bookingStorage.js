@@ -51,7 +51,54 @@ export const getBookings = async (adminToken = null) => {
   }
 };
 
-// Save a new booking or update existing one
+// The Netlify functions answer with { error } when they refuse or fail.
+async function responseError(response) {
+  try {
+    const data = await response.json();
+    if (data && data.error) {
+      const message = `The booking was NOT saved: ${data.error}`;
+      return /[.!?]$/.test(message) ? message : `${message}.`;
+    }
+  } catch {
+    /* not JSON */
+  }
+  return `The booking was NOT saved (the server answered ${response.status}).`;
+}
+
+// After saving, the list is read back from the server. This shows whether the booking really is stored, and
+// whether the website can see it (a private booking must not be visible there, a real one must). No cache, so
+// the answers are fresh.
+async function verifySaved(booking) {
+  const adminToken = import.meta.env.VITE_ADMIN_SECRET;
+  const isPrivate = booking.isPrivate === true;
+  const result = { storedInAdmin: false, onWebsite: null, total: null };
+  const read = async (headers) => {
+    const response = await fetch('/.netlify/functions/get-bookings', { headers, cache: 'no-store' });
+    if (!response.ok) throw new Error(`read ${response.status}`);
+    const data = await response.json();
+    if (!Array.isArray(data)) throw new Error('unexpected answer');
+    return data;
+  };
+  try {
+    const all = await read(adminToken ? { 'x-admin-token': adminToken } : {});
+    const found = all.find((b) => String(b.id) === String(booking.id));
+    result.storedInAdmin =
+      !!found && found.startDate === booking.startDate && found.endDate === booking.endDate && (found.isPrivate === true) === isPrivate;
+    result.total = all.length;
+  } catch (error) {
+    console.error('Could not read the bookings back (admin):', error);
+  }
+  try {
+    const website = await read({});
+    result.onWebsite = website.some((b) => String(b.id) === String(booking.id));
+  } catch (error) {
+    console.error('Could not read the bookings back (website):', error);
+  }
+  return result;
+}
+
+// Save a new booking or update an existing one. Returns { ok, booking, verification } or { ok: false, error }.
+// Unlike before, a failed save is reported instead of being kept in the browser and called a success.
 export const saveBooking = async (bookingData) => {
   try {
     const now = new Date().toISOString();
@@ -76,9 +123,11 @@ export const saveBooking = async (bookingData) => {
     console.log('Save response status:', response.status);
     if (response.ok) {
       console.log('Booking saved successfully to Netlify Blobs!');
-      return true;
+      return { ok: true, booking, verification: await verifySaved(booking) };
     }
     
+    // Without the Netlify functions (plain `vite` development) the booking is kept in the browser only.
+    if (!import.meta.env.DEV) return { ok: false, error: await responseError(response) };
     console.warn('API save failed, using localStorage fallback');
     // Fallback to localStorage if API fails
     const bookings = await getBookings();
@@ -90,10 +139,10 @@ export const saveBooking = async (bookingData) => {
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
     console.log('Booking saved to localStorage as fallback');
-    return true;
+    return { ok: true, booking, verification: null };
   } catch (error) {
     console.error('Error saving booking:', error);
-    return false;
+    return { ok: false, error: 'Network error. The booking was NOT saved.' };
   }
 };
 

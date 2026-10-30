@@ -1,5 +1,6 @@
 import { getStore } from '@netlify/blobs';
 import { canonicalVillaName, normalizeBookings } from './villa-names.js';
+import { withoutPrivate } from './booking-utils.js';
 
 export default async (req) => {
   try {
@@ -12,7 +13,8 @@ export default async (req) => {
     }
 
     const store = getStore('bookings');
-    const allBookings = normalizeBookings(await store.get('all-bookings', { type: 'json' }) || []);
+    // Private (friends and family) bookings are never part of a public feed.
+    const allBookings = withoutPrivate(normalizeBookings(await store.get('all-bookings', { type: 'json' }) || []));
     const matchName = canonicalVillaName(villaName);
 
     console.log(`=== iCal Feed for ${villaName} ===`);

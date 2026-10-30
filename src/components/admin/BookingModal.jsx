@@ -1,5 +1,7 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { getVillaPriceForDate, DEFAULT_ACTIVITY_PRICES } from '../../utils/invoiceGenerator';
+import { conflictsFor } from '../../utils/bookingConflicts';
+import { PrivateBanner, ConflictBox } from './PrivateBookingUI';
 
 const VILLAS = [
   { name: 'Palacio Tropical', icon: '🏰', color: 'from-amber-400 to-yellow-500', accentColor: '#f59e0b' },
@@ -19,7 +21,7 @@ const ACTIVITIES = [
   { name: 'Yoga Session', icon: '🧘' }
 ];
 
-const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
+const BookingModal = ({ isOpen, onClose, onSave, editingBooking, bookings = [], presetPrivate = false, saving = false, error = '' }) => {
   const [formData, setFormData] = useState({
     villas: [],
     villaPrice: {},
@@ -76,6 +78,23 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
       }
     }
   }, [formData.startDate, formData.villas]);
+
+  // Friends & Family (private) bookings are visible only in the admin, never on the website.
+  const [isPrivate, setIsPrivate] = useState(false);
+  useEffect(() => {
+    setIsPrivate(editingBooking ? editingBooking.isPrivate === true : presetPrivate);
+  }, [editingBooking, isOpen, presetPrivate]);
+
+  // What this booking collides with. A private booking on a real one is not allowed; a real booking on a
+  // private one is allowed but flagged, because the private guests then have to leave.
+  const conflicts = useMemo(() => {
+    if (!formData.startDate || !formData.endDate || formData.villas.length === 0) return [];
+    return conflictsFor(
+      { id: editingBooking?.id, villas: formData.villas, startDate: formData.startDate, endDate: formData.endDate, isPrivate },
+      bookings
+    );
+  }, [formData.startDate, formData.endDate, formData.villas, isPrivate, bookings, editingBooking]);
+  const blocked = isPrivate && conflicts.some((c) => c.kind === 'private-on-real');
 
   const handleVillaToggle = (villaName) => {
     setFormData(prev => {
@@ -140,6 +159,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
     }));
   };  const handleSubmit = (e) => {
     e.preventDefault();
+    if (saving || blocked) return;
     
     if (formData.villas.length === 0) {
       alert('Please select at least one villa');
@@ -156,9 +176,12 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
       return;
     }
 
+    // An edit keeps every field the form does not show, and the booking type is always sent explicitly.
     const bookingData = {
+      ...(editingBooking || {}),
       ...formData,
-      id: editingBooking?.id
+      id: editingBooking?.id,
+      isPrivate
     };
     
     onSave(bookingData);
@@ -188,10 +211,12 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
       {/* Page header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#0b0f18', margin: 0 }}>
-            📅 {editingBooking ? 'Edit Booking' : 'New Booking'}
+          <h2 style={{ fontSize: '1.6rem', fontWeight: 900, color: isPrivate ? '#115e59' : '#0b0f18', margin: 0 }}>
+            {isPrivate ? '🔒' : '📅'} {editingBooking ? 'Edit' : 'New'} {isPrivate ? 'Friends & Family Booking' : 'Booking'}
           </h2>
-          <p style={{ color: '#6b7280', fontSize: '0.9rem', margin: '4px 0 0' }}>Manage your luxury villa reservations</p>
+          <p style={{ color: isPrivate ? '#0f766e' : '#6b7280', fontSize: '0.9rem', margin: '4px 0 0', fontWeight: isPrivate ? 700 : 400 }}>
+            {isPrivate ? 'Private · only visible here in the admin · not shown on the website' : 'Manage your luxury villa reservations'}
+          </p>
         </div>
         <button type="button" onClick={onClose} style={{ padding: '8px 18px', borderRadius: '10px', border: '2px solid #e5e7eb', background: '#fff', color: '#6b7280', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
           ✕ Cancel
@@ -202,6 +227,45 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
 
         {/* ── Left: form ── */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {error && (
+            <div role="alert" style={{ borderRadius: '14px', border: '2px solid #dc2626', background: '#fef2f2', color: '#7f1d1d', padding: '14px 16px', fontSize: '14px', fontWeight: 700 }}>
+              ⛔ {error} Everything you entered is still here, nothing was lost. Please try again.
+            </div>
+          )}
+
+          <BookingSection title="Booking type" icon={isPrivate ? '🔒' : '🏷️'}>
+            <div role="radiogroup" aria-label="Booking type" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+              {[
+                { value: false, title: 'Real booking', text: 'A paying guest. It shows as booked on the website calendar.' },
+                { value: true, title: '🔒 Friends & Family (private)', text: 'Not visible on the website. Real guests can still book these dates.' }
+              ].map((opt) => {
+                const active = isPrivate === opt.value;
+                return (
+                  <button
+                    key={String(opt.value)}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => setIsPrivate(opt.value)}
+                    style={{
+                      textAlign: 'left',
+                      padding: '14px 16px',
+                      borderRadius: '14px',
+                      border: active ? `3px solid ${opt.value ? '#0f766e' : '#667eea'}` : '2px solid #e5e7eb',
+                      background: active ? (opt.value ? 'repeating-linear-gradient(45deg, #ecfdf5 0 12px, #ffffff 12px 24px)' : '#eef2ff') : '#fff',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <div style={{ fontWeight: 900, color: '#111827', fontSize: '15px' }}>{opt.title}</div>
+                    <div style={{ marginTop: '4px', color: '#4b5563', fontSize: '13px', lineHeight: 1.45 }}>{opt.text}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </BookingSection>
+
+          {isPrivate && <PrivateBanner />}
+          <ConflictBox conflicts={conflicts} />
           <BookingSection title="1. Select Villas" icon="🏰">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {VILLAS.map((villa) => {
@@ -261,7 +325,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                     </button>
                     
                     {isSelected && (
-                      <div className="mt-4 px-6 py-4 rounded-2xl border-2 border-dashed" style={{ borderColor: villa.accentColor + '40', background: villa.accentColor + '08' }}>
+                      <div className="mt-4 px-6 py-4 rounded-2xl border-2 border-dashed" style={{ display: isPrivate ? 'none' : 'block', borderColor: villa.accentColor + '40', background: villa.accentColor + '08' }}>
                         <label className="block text-sm font-bold mb-2" style={{ color: villa.accentColor }}>
                           💰 Price per Night
                         </label>
@@ -704,8 +768,8 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
         <div className="bm-sticky" style={{ position: 'sticky', top: '104px' }}>
           <div style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)' }}>
             {/* Summary header */}
-            <div style={{ background: 'linear-gradient(135deg, #0b0f18 0%, #1a2744 100%)', padding: '20px 22px' }}>
-              <p style={{ fontSize: '0.7rem', letterSpacing: '0.2em', color: '#c9a96e', fontWeight: 700, textTransform: 'uppercase', margin: '0 0 4px' }}>Live Summary</p>
+            <div style={{ background: isPrivate ? 'linear-gradient(135deg, #134e4a 0%, #0f766e 100%)' : 'linear-gradient(135deg, #0b0f18 0%, #1a2744 100%)', padding: '20px 22px' }}>
+              <p style={{ fontSize: '0.7rem', letterSpacing: '0.2em', color: '#c9a96e', fontWeight: 700, textTransform: 'uppercase', margin: '0 0 4px' }}>Live Summary{isPrivate ? ' · 🔒 PRIVATE · NOT ON WEBSITE' : ''}</p>
               <h3 style={{ color: '#fff', fontWeight: 900, fontSize: '1.1rem', margin: 0 }}>
                 {formData.customerName || 'Guest Name'}
               </h3>
@@ -725,13 +789,13 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
                   {formData.villas.map((v) => (
                     <div key={v} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', paddingBottom: '8px', borderBottom: '1px solid #f3f4f6' }}>
                       <span style={{ fontSize: '13px', color: '#374151', flex: 1, lineHeight: 1.4 }}>{v} × {nights}n</span>
-                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#1f2937', whiteSpace: 'nowrap' }}>{fmtUSD((parseFloat(formData.villaPrice[v]) || 0) * nights)}</span>
+                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#1f2937', whiteSpace: 'nowrap' }}>{isPrivate ? '—' : fmtUSD((parseFloat(formData.villaPrice[v]) || 0) * nights)}</span>
                     </div>
                   ))}
                   {formData.selectedActivities.map((a) => (
                     <div key={a.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', paddingBottom: '8px', borderBottom: '1px solid #f3f4f6' }}>
                       <span style={{ fontSize: '13px', color: '#374151', flex: 1, lineHeight: 1.4 }}>{a.name} × {a.numberOfPeople || 1}</span>
-                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#1f2937', whiteSpace: 'nowrap' }}>{fmtUSD((a.pricePerPerson || 0) * (a.numberOfPeople || 1))}</span>
+                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#1f2937', whiteSpace: 'nowrap' }}>{isPrivate ? '—' : fmtUSD((a.pricePerPerson || 0) * (a.numberOfPeople || 1))}</span>
                     </div>
                   ))}
                 </div>
@@ -742,7 +806,7 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
             <div style={{ background: '#f9fafb', padding: '14px 22px', borderTop: '1px solid #f3f4f6' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '14px', fontWeight: 900, color: '#0b0f18' }}>TOTAL</span>
-                <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#b8972e' }}>{fmtUSD(grandTotal)}</span>
+                <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#b8972e' }}>{isPrivate ? 'No charge' : fmtUSD(grandTotal)}</span>
               </div>
             </div>
 
@@ -751,9 +815,10 @@ const BookingModal = ({ isOpen, onClose, onSave, editingBooking }) => {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                style={{ padding: '12px', borderRadius: '12px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', fontWeight: 800, fontSize: '14px', boxShadow: '0 4px 16px rgba(102,126,234,0.35)' }}
+                disabled={saving || blocked}
+                style={{ padding: '12px', borderRadius: '12px', border: 'none', cursor: saving || blocked ? 'not-allowed' : 'pointer', opacity: saving || blocked ? 0.6 : 1, background: isPrivate ? 'linear-gradient(135deg, #0f766e, #134e4a)' : 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', fontWeight: 800, fontSize: '14px', boxShadow: '0 4px 16px rgba(102,126,234,0.35)' }}
               >
-                ✓ {editingBooking ? 'Update Booking' : 'Create Booking'}
+                {saving ? 'Saving…' : blocked ? '⛔ Dates already booked' : `${isPrivate ? '🔒' : '✓'} ${editingBooking ? 'Update' : 'Create'} ${isPrivate ? 'private booking' : 'Booking'}`}
               </button>
               <button
                 type="button"

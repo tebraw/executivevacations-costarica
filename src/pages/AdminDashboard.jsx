@@ -1,6 +1,8 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import BookingCalendar from '../components/admin/BookingCalendar';
 import BookingModal from '../components/admin/BookingModal';
+import { SaveNotice, PrivateBanner, ConflictBox } from '../components/admin/PrivateBookingUI';
+import { isPrivateBooking, conflictsFor, conflictsForDetails, formatRange, toDay } from '../utils/bookingConflicts';
 import WeddingQuoteBuilder from '../components/admin/WeddingQuoteBuilder';
 import { getBookings, saveBooking, deleteBooking } from '../utils/bookingStorage';
 import { generateInvoice } from '../utils/invoiceGenerator';
@@ -31,6 +33,14 @@ const AdminDashboard = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showICalModal, setShowICalModal] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveNotice, setSaveNotice] = useState(null);
+  const [modalError, setModalError] = useState('');
+  const [presetPrivate, setPresetPrivate] = useState(false);
+  // A new booking gets its id before the first attempt, so pressing save again after a failure updates the same
+  // booking instead of creating a second one.
+  const newBookingIdRef = useRef(null);
+  const privateUpcoming = bookings.filter((b) => isPrivateBooking(b) && new Date(b.endDate) >= new Date()).length;
   const [activeTab, setActiveTab] = useState('bookings');
   const [reviews, setReviews] = useState([]);
   const [reviewsLoading, setReviewsLoading] = useState(false);
@@ -416,16 +426,85 @@ const AdminDashboard = () => {
     const data = await getBookings(import.meta.env.VITE_ADMIN_SECRET);
     setBookings(data);
     setLoading(false);
+    return data;
   };
 
+  const openNewBooking = (isPrivate = false) => {
+    newBookingIdRef.current = null;
+    setEditingBooking(null);
+    setPresetPrivate(isPrivate);
+    setModalError('');
+    setIsModalOpen(true);
+  };
+
+  // Saves, then checks the result: the booking must be stored, and a private one must be hidden from the website.
+  // On any problem the form stays open with everything that was entered, so nothing is lost.
   const handleCreateBooking = async (bookingData) => {
-    await saveBooking(bookingData);
-    await loadBookings();
+    if (saving) return;
+    setSaving(true);
+    setModalError('');
+    const isNew = !bookingData.id;
+    let data = bookingData;
+    if (isNew) {
+      if (!newBookingIdRef.current) newBookingIdRef.current = { id: Date.now().toString(), createdAt: new Date().toISOString() };
+      data = { ...bookingData, ...newBookingIdRef.current };
+    }
+
+    const result = await saveBooking(data);
+    if (!result.ok) {
+      setModalError(result.error || 'The booking could not be saved.');
+      setSaving(false);
+      return;
+    }
+
+    const fresh = await loadBookings();
+    const saved = result.booking;
+    const check = result.verification;
+    if (check && !check.storedInAdmin) {
+      // The server accepted it, but reading it back did not show it. The form stays open as an edit of the same
+      // booking, so saving again cannot create a duplicate.
+      setEditingBooking(saved);
+      setModalError('The booking was sent but could not be confirmed afterwards. Reload the calendar to check. Saving again will not create a duplicate.');
+      setSaving(false);
+      return;
+    }
+
+    newBookingIdRef.current = null;
+    const isPrivate = saved.isPrivate === true;
+    const checks = [{ ok: true, text: 'Saved and verified: the booking is stored in the admin calendar.' }];
+    if (check && isPrivate) {
+      checks.push(
+        check.onWebsite === false
+          ? { ok: true, text: 'Hidden from the website: the public booking list does not contain it, so it blocks no dates there.' }
+          : check.onWebsite === true
+            ? { ok: false, text: 'WARNING: the public booking list contains this booking, so it is NOT hidden. Do not rely on it.' }
+            : { ok: null, text: 'Website visibility could not be verified. Please check the website calendar.' }
+      );
+    } else if (check && check.onWebsite === true) {
+      checks.push({ ok: true, text: 'Visible on the website: these dates show as booked there.' });
+    } else if (check && check.onWebsite === false) {
+      checks.push({ ok: false, text: 'The website list does not show this booking yet.' });
+    }
+    const conflicts = conflictsFor(saved, fresh);
+    const bad = checks.some((c) => c.ok === false);
+    const unsure = checks.some((c) => c.ok === null);
+    setSaveNotice({
+      tone: bad ? 'error' : conflicts.length || unsure ? 'warning' : 'success',
+      private: isPrivate,
+      title: `${isPrivate ? '🔒 Private booking' : '✅ Booking'} ${isNew ? 'saved' : 'updated'}: ${saved.customerName || 'Guest'}`,
+      summary: `${(saved.villas || []).join(', ')} · ${formatRange(toDay(saved.startDate), toDay(saved.endDate))}${isPrivate ? ' · Friends & Family · not on the website' : ''}`,
+      checks,
+      conflicts
+    });
+    setSaving(false);
     setIsModalOpen(false);
     setEditingBooking(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleEditBooking = (booking) => {
+    newBookingIdRef.current = null;
+    setModalError('');
     setEditingBooking(booking);
     setIsModalOpen(true);
   };
@@ -664,10 +743,14 @@ const AdminDashboard = () => {
                 iCal Link
               </button>
               <button
-                onClick={() => {
-                  setEditingBooking(null);
-                  setIsModalOpen(true);
-                }}
+                onClick={() => openNewBooking(true)}
+                className="px-5 py-3 rounded-xl border-2 border-dashed flex items-center gap-2 font-semibold text-sm transition-all duration-200 hover:shadow-lg"
+                style={{ borderColor: '#0f766e', color: '#115e59', background: 'repeating-linear-gradient(45deg, #ecfdf5 0 10px, #ffffff 10px 20px)' }}
+                title="Add friends or family. Not visible on the website.">
+                🔒 Friends &amp; Family
+              </button>
+              <button
+                onClick={() => openNewBooking(false)}
                 className="btn btn-luxury flex items-center gap-2 shadow-lg hover:shadow-xl transition-shadow">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="12" y1="5" x2="12" y2="19"/>
@@ -768,11 +851,17 @@ const AdminDashboard = () => {
               <BookingModal
                 isOpen={isModalOpen}
                 onClose={() => {
+                  newBookingIdRef.current = null;
+                  setModalError('');
                   setIsModalOpen(false);
                   setEditingBooking(null);
                 }}
                 onSave={handleCreateBooking}
                 editingBooking={editingBooking}
+                bookings={bookings}
+                presetPrivate={presetPrivate}
+                saving={saving}
+                error={modalError}
               />
             ) : (
               <>
@@ -793,6 +882,24 @@ const AdminDashboard = () => {
                 iCal Link
               </button>
             </div>
+            <SaveNotice notice={saveNotice} onClose={() => setSaveNotice(null)} />
+            <div className="max-w-4xl mx-auto mb-6 flex flex-wrap items-center gap-3 rounded-2xl p-4" style={{ border: '2px dashed #0f766e', background: 'repeating-linear-gradient(45deg, #ecfdf5 0 12px, #ffffff 12px 24px)' }}>
+              <div style={{ flex: '1 1 260px' }}>
+                <div style={{ fontWeight: 900, color: '#115e59' }}>🔒 Friends &amp; Family bookings</div>
+                <div style={{ fontSize: '13px', color: '#134e4a', lineHeight: 1.5 }}>
+                  Private holds that are visible only here. They never show on the website, in the availability search or in the iCal feeds.
+                  {privateUpcoming > 0 ? ` ${privateUpcoming} upcoming private booking${privateUpcoming === 1 ? ' is' : 's are'} not counted in the numbers below.` : ' None yet.'}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => openNewBooking(true)}
+                className="px-5 py-2.5 rounded-xl text-white font-bold text-sm shadow"
+                style={{ background: 'linear-gradient(135deg, #0f766e, #134e4a)' }}
+              >
+                🔒 Add Friends &amp; Family booking
+              </button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
               <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center gap-3">
@@ -803,7 +910,7 @@ const AdminDashboard = () => {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-dark">{bookings.length}</div>
+                    <div className="text-2xl font-bold text-dark">{bookings.filter((b) => !isPrivateBooking(b)).length}</div>
                     <div className="text-sm text-gray">Total Bookings</div>
                   </div>
                 </div>
@@ -818,7 +925,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-dark">
-                      {bookings.filter(b => new Date(b.endDate) >= new Date()).length}
+                      {bookings.filter(b => !isPrivateBooking(b) && new Date(b.endDate) >= new Date()).length}
                     </div>
                     <div className="text-sm text-gray">Active Bookings</div>
                   </div>
@@ -1857,6 +1964,7 @@ const AdminDashboard = () => {
               style={{
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 padding: '16px 20px',
+                ...(isPrivateBooking(showDeleteConfirm) ? { background: 'linear-gradient(135deg, #134e4a 0%, #0f766e 100%)' } : {}),
                 position: 'relative',
                 overflow: 'hidden',
                 flexShrink: 0
@@ -1892,8 +2000,8 @@ const AdminDashboard = () => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-black text-white">Booking Details</h3>
-                    <p className="text-white/70 text-xs font-medium">Manage reservation</p>
+                    <h3 className="text-xl font-black text-white">{isPrivateBooking(showDeleteConfirm) ? '🔒 Private Booking · Friends & Family' : 'Booking Details'}</h3>
+                    <p className="text-white/70 text-xs font-medium">{isPrivateBooking(showDeleteConfirm) ? 'Not visible on the website · only here in the admin' : 'Manage reservation'}</p>
                   </div>
                 </div>
                 <button
@@ -1932,6 +2040,17 @@ const AdminDashboard = () => {
               className="custom-scrollbar"
             >
               
+              {isPrivateBooking(showDeleteConfirm) && (
+                <div style={{ marginBottom: '12px' }}>
+                  <PrivateBanner compact />
+                </div>
+              )}
+              {conflictsForDetails(showDeleteConfirm, bookings).length > 0 && (
+                <div style={{ marginBottom: '12px' }}>
+                  <ConflictBox conflicts={conflictsForDetails(showDeleteConfirm, bookings)} />
+                </div>
+              )}
+
               {/* Customer & Dates Combined Row */}
               <div 
                 style={{ 
@@ -2253,6 +2372,10 @@ const AdminDashboard = () => {
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={() => {
+                    if (isPrivateBooking(showDeleteConfirm)) {
+                      alert('Friends & Family bookings have no invoice.');
+                      return;
+                    }
                     generateInvoice(showDeleteConfirm);
                   }}
                   className="transition-all duration-300 hover:scale-105"
@@ -2274,7 +2397,7 @@ const AdminDashboard = () => {
                       <polyline points="7 10 12 15 17 10"/>
                       <line x1="12" y1="15" x2="12" y2="3"/>
                     </svg>
-                    Download Invoice
+                    {isPrivateBooking(showDeleteConfirm) ? 'No invoice (private)' : 'Download Invoice'}
                   </span>
                 </button>
                 <button
@@ -2305,7 +2428,7 @@ const AdminDashboard = () => {
                 </button>
                 <button
                   onClick={() => {
-                    if (window.confirm('Are you sure you want to delete this booking?')) {
+                    if (window.confirm(isPrivateBooking(showDeleteConfirm) ? 'Delete this PRIVATE (Friends & Family) booking?' : 'Are you sure you want to delete this booking?')) {
                       handleDeleteBooking(showDeleteConfirm.id);
                     }
                   }}
@@ -2422,6 +2545,7 @@ const AdminDashboard = () => {
                 <h3 className="font-semibold text-green-900 mb-2">🔄 Auto-Sync:</h3>
                 <ul className="text-sm text-green-800 space-y-1">
                   <li>• Bookings sync automatically when you add/edit/delete them</li>
+                  <li>• 🔒 Private (Friends &amp; Family) bookings are never included in the feeds or in the file</li>
                   <li>• The feed updates in real-time (no manual refresh needed)</li>
                   <li>• Calendar apps check for updates every 1-24 hours automatically</li>
                 </ul>
@@ -2474,7 +2598,7 @@ const AdminDashboard = () => {
         <button
           className="fixed z-50 md:hidden flex items-center justify-center rounded-full shadow-xl"
           style={{ bottom: '76px', right: '16px', width: '56px', height: '56px', background: 'linear-gradient(135deg, #c9a96e, #a07040)' }}
-          onClick={() => { setEditingBooking(null); setIsModalOpen(true); }}
+          onClick={() => openNewBooking(false)}
           aria-label="New Booking"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
