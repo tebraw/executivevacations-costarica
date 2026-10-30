@@ -1,6 +1,9 @@
 // Client-side iCal generator
 // Generates iCal feed directly from the same data source as the calendar
 
+// Same marker as the All Villas (Combined) feed on the server (netlify/functions/ical.js).
+const PRIVATE_NOTE = '🔒 PRIVATE BOOKING (Friends & Family) - not shown on the website';
+
 export const generateICalFromBookings = (bookings) => {
   const now = new Date();
   const timestamp = now.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
@@ -19,9 +22,9 @@ export const generateICalFromBookings = (bookings) => {
     `SEQUENCE:${sequence}`
   ];
 
-  // Filter valid bookings only. Private (friends and family) bookings are never exported.
+  // Filter valid bookings only. Private (friends and family) bookings are included and marked, like in the
+  // All Villas (Combined) feed: this file is the owner's own copy of the same calendar.
   const validBookings = bookings.filter(booking => {
-    if (booking.isPrivate === true) return false;
     const start = new Date(booking.startDate);
     const end = new Date(booking.endDate);
     return end >= start;
@@ -46,6 +49,7 @@ export const generateICalFromBookings = (bookings) => {
     booking.villas.forEach(villa => {
       const activities = getActivitiesSummary(booking.selectedActivities);
       const description = `Villa: ${villa}\\nGuest: ${booking.customerName}\\nPhone: ${booking.customerPhone || 'N/A'}\\nActivities: ${activities}\\nNotes: ${booking.additionalNotes || 'None'}`;
+      const isPrivate = booking.isPrivate === true;
       
       ical.push(
         'BEGIN:VEVENT',
@@ -54,8 +58,10 @@ export const generateICalFromBookings = (bookings) => {
         `SEQUENCE:${sequence}`,
         `DTSTART;VALUE=DATE:${startDateIcal}`,
         `DTEND;VALUE=DATE:${endDateIcal}`,
-        `SUMMARY:${villa} - ${booking.customerName || 'Guest'}`,
-        `DESCRIPTION:${description}`,
+        isPrivate
+          ? `SUMMARY:🔒 ${villa} - ${booking.customerName || 'Guest'} (Friends & Family)`
+          : `SUMMARY:${villa} - ${booking.customerName || 'Guest'}`,
+        `DESCRIPTION:${isPrivate ? `${PRIVATE_NOTE}\\n` : ''}${description}`,
         `LOCATION:${getVillaLocation(villa)}`,
         'STATUS:CONFIRMED',
         'TRANSP:OPAQUE',

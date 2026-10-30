@@ -263,8 +263,8 @@ const BookingCalendar = ({ bookings, onBookingClick }) => {
         }}>
           <span style={{ fontSize: '18px' }}>🔒</span>
           <span>
-            Striped dashed bars are PRIVATE (Friends &amp; Family) bookings. They are visible only here in the admin, never on the website,
-            in the availability search or in the iCal feeds. ⚠ marks a real booking on the same dates: the private guests must leave.
+            Striped dashed bars are PRIVATE (Friends &amp; Family) bookings. They are visible only here in the admin and in your own All Villas (Combined) iCal link, never on the website,
+            in the availability search or in the individual villa iCal links. ⚠ marks a real booking on the same dates: the private guests must leave.
           </span>
         </div>
       )}

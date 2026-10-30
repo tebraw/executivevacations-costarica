@@ -887,7 +887,7 @@ const AdminDashboard = () => {
               <div style={{ flex: '1 1 260px' }}>
                 <div style={{ fontWeight: 900, color: '#115e59' }}>🔒 Friends &amp; Family bookings</div>
                 <div style={{ fontSize: '13px', color: '#134e4a', lineHeight: 1.5 }}>
-                  Private holds that are visible only here. They never show on the website, in the availability search or in the iCal feeds.
+                  Private holds that are visible only here. They never show on the website, in the availability search or in the individual villa iCal links. Only your own All Villas (Combined) link shows them.
                   {privateUpcoming > 0 ? ` ${privateUpcoming} upcoming private booking${privateUpcoming === 1 ? ' is' : 's are'} not counted in the numbers below.` : ' None yet.'}
                 </div>
               </div>
@@ -2504,10 +2504,14 @@ const AdminDashboard = () => {
                     </button>
                   </div>
                 </div>
+                <div className="rounded-xl p-3 text-sm" style={{ border: '2px dashed #0f766e', background: '#ecfdf5', color: '#134e4a', lineHeight: 1.5 }}>
+                  🔒 This link also shows your Friends &amp; Family bookings (marked with 🔒). Keep it for yourself and only send the individual villa links below to others: they never include Friends &amp; Family bookings.
+                </div>
               </div>
 
               <div className="space-y-3">
                 <h3 className="font-semibold text-gray-900">🏘️ Individual Villas</h3>
+                <p className="text-sm text-gray-600">These are the links to send out. They never include Friends &amp; Family bookings.</p>
                 
                 {['Palacio Tropical', 'Palacio Musical', 'Palacio Las Palmas', 'The View House'].map(villa => (
                   <div key={villa} className="bg-gray-50 border border-gray-200 rounded-xl p-3">
@@ -2545,7 +2549,7 @@ const AdminDashboard = () => {
                 <h3 className="font-semibold text-green-900 mb-2">🔄 Auto-Sync:</h3>
                 <ul className="text-sm text-green-800 space-y-1">
                   <li>• Bookings sync automatically when you add/edit/delete them</li>
-                  <li>• 🔒 Private (Friends &amp; Family) bookings are never included in the feeds or in the file</li>
+                  <li>• 🔒 Friends &amp; Family bookings appear in the All Villas (Combined) link and in the downloaded file, never in the individual villa links</li>
                   <li>• The feed updates in real-time (no manual refresh needed)</li>
                   <li>• Calendar apps check for updates every 1-24 hours automatically</li>
                 </ul>

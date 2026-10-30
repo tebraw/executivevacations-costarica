@@ -24,8 +24,8 @@ export function PrivateBanner({ compact = false }) {
           PRIVATE BOOKING · FRIENDS &amp; FAMILY
         </div>
         <p style={{ margin: '6px 0 0', color: '#134e4a', fontSize: compact ? '13px' : '14px', lineHeight: 1.55 }}>
-          This booking is visible <b>only here in the admin</b>. It does <b>not</b> appear on the website, in the availability search or in the
-          iCal feeds, and it does <b>not</b> block these dates for real guests. If a real guest books the same dates you will see a ⚠ conflict,
+          This booking is visible <b>only here in the admin</b> (and in your own All Villas (Combined) iCal link). It does <b>not</b> appear on the website,
+          in the availability search or in the individual villa iCal links, and it does <b>not</b> block these dates for real guests. If a real guest books the same dates you will see a ⚠ conflict,
           and your friends or family will have to leave.
         </p>
       </div>

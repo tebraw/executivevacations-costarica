@@ -1,5 +1,9 @@
 import { getStore } from '@netlify/blobs';
-import { withoutPrivate } from './booking-utils.js';
+import { isPrivateBooking } from './booking-utils.js';
+
+// This combined feed is the owner's own calendar, so it also shows the private (friends and family) bookings,
+// clearly marked. The feeds that are sent to others (ical-villa) never include them.
+const PRIVATE_NOTE = '🔒 PRIVATE BOOKING (Friends & Family) - not shown on the website';
 
 export default async (req) => {
   if (req.method !== 'GET') {
@@ -8,8 +12,7 @@ export default async (req) => {
 
   try {
     const store = getStore('bookings');
-    // Private (friends and family) bookings are never part of a public feed.
-    const allBookings = withoutPrivate(await store.get('all-bookings', { type: 'json' }) || []);
+    const allBookings = await store.get('all-bookings', { type: 'json' }) || [];
 
     console.log('=== iCal Feed Generation ===');
     console.log('Total bookings in storage:', allBookings.length);
@@ -97,6 +100,7 @@ function generateICalendar(bookings) {
     booking.villas.forEach(villa => {
       const activities = getActivitiesSummary(booking.selectedActivities);
       const description = `Villa: ${villa}\\nGuest: ${booking.customerName}\\nPhone: ${booking.customerPhone || 'N/A'}\\nActivities: ${activities}\\nNotes: ${booking.additionalNotes || 'None'}`;
+      const isPrivate = isPrivateBooking(booking);
       
       ical.push(
         'BEGIN:VEVENT',
@@ -105,8 +109,10 @@ function generateICalendar(bookings) {
         `SEQUENCE:${sequence}`,
         `DTSTART;VALUE=DATE:${startDateIcal}`,
         `DTEND;VALUE=DATE:${endDateIcal}`,
-        `SUMMARY:${villa} - ${booking.customerName || 'Guest'}`,
-        `DESCRIPTION:${description}`,
+        isPrivate
+          ? `SUMMARY:🔒 ${villa} - ${booking.customerName || 'Guest'} (Friends & Family)`
+          : `SUMMARY:${villa} - ${booking.customerName || 'Guest'}`,
+        `DESCRIPTION:${isPrivate ? `${PRIVATE_NOTE}\\n` : ''}${description}`,
         `LOCATION:${getVillaLocation(villa)}`,
         'STATUS:CONFIRMED',
         'TRANSP:OPAQUE',
