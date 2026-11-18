@@ -1,6 +1,16 @@
 import React from 'react';
 import { cropStyle, placeLayout } from './geometry';
 
+// What the card says it opens: "Photos & videos", "Video", "Photo" ...
+const ctaOf = (media) => {
+  if (!media.length) return 'Coming soon';
+  const hasVideo = media.some((m) => m.type !== 'image');
+  const hasPhoto = media.some((m) => m.type === 'image');
+  if (hasVideo && hasPhoto) return 'Photos & videos';
+  if (hasVideo) return media.length === 1 ? 'Video' : 'Videos';
+  return media.length === 1 ? 'Photo' : 'Photos';
+};
+
 function Thumb({ place, image, layout }) {
   if (place.thumb) {
     return (
@@ -35,7 +45,7 @@ export function PlaceRail({ places, image, layout, hoverKey, onHover, onOpen }) 
                 <span className="area-card__short">{place.short}</span>
               </span>
               {place.facts && <span className="area-card__facts">{place.facts}</span>}
-              <span className="area-card__cta">{place.media.length ? 'Photos & videos' : 'Coming soon'} →</span>
+              <span className="area-card__cta">{ctaOf(place.media)}&nbsp;→</span>
             </span>
             {place.badge && <span className="area-card__badge">{place.badge}</span>}
           </button>

@@ -1,10 +1,11 @@
 {
   "places": {
-    "musical": { "x": 12, "y": 62, "side": "bottom", "label": { "dx": -0.5, "dy": 9 } },
-    "ruins-platform": { "x": 13.8, "y": 55, "side": "top", "label": { "dx": 11, "dy": -6 } },
-    "tropical": { "x": 16, "y": 63.5, "side": "bottom", "label": { "dx": 10, "dy": 6 } },
-    "paradise": { "x": 70, "y": 40, "side": "top" },
-    "view-house": { "x": 88, "y": 31, "side": "top" }
+    "musical": { "x": 8.6, "y": 56.5, "side": "right", "label": { "dx": 2.1, "dy": 3.5, "anchor": "l" } },
+    "tropical": { "x": 11, "y": 54.8, "side": "right" },
+    "ruins-platform": { "x": 10.8, "y": 47.1, "side": "right" },
+    "tennis-court": { "x": 52.7, "y": 24.9, "side": "top", "label": { "dx": 0.8, "dy": -7.4, "anchor": "c" } },
+    "paradise": { "x": 73, "y": 34.9, "side": "right" },
+    "view-house": { "x": 91.7, "y": 20.1, "side": "left" }
   },
   "flights": {}
 }

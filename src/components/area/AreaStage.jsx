@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { controlThrough, curvePath, curvePoint, flightControl, labelOffset, leaveCapsule, placeLayout, placeUnit } from './geometry';
+import { anchorOf, chipRect, controlThrough, curvePath, curvePoint, flightControl, labelOffset, leaveCapsule, placeLayout, placeUnit } from './geometry';
 
 const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
 const round1 = (n) => Math.round(n * 10) / 10;
@@ -118,16 +118,15 @@ export default function AreaStage({
     const out = [];
     places.forEach((place) => {
       const pos = placeLayout(layout, place.id);
-      const offset = labelOffset(pos);
       const box = chipBox[place.id];
-      if (!offset || !box) return;
+      if (!labelOffset(pos) || !box) return;
       const pin = { x: (pos.x / 100) * size.w, y: (pos.y / 100) * size.h };
-      const centre = { x: ((pos.x + offset.dx) / 100) * size.w, y: ((pos.y + offset.dy) / 100) * size.h };
+      const rect = chipRect(pos, box, size);
+      const centre = { x: (rect.left + rect.right) / 2, y: (rect.top + rect.bottom) / 2 };
       const dx = pin.x - centre.x;
       const dy = pin.y - centre.y;
-      const length = Math.hypot(dx, dy);
       const t = leaveCapsule(box.w, box.h, dx, dy);
-      if (!length || t === null) return;
+      if (!Math.hypot(dx, dy) || t === null) return;
       const edge = { x: centre.x + dx * t, y: centre.y + dy * t };
       const run = Math.hypot(pin.x - edge.x, pin.y - edge.y);
       const dot = 12;
@@ -135,27 +134,34 @@ export default function AreaStage({
       out.push({ id: place.id, x1: edge.x, y1: edge.y, x2: pin.x - ((pin.x - edge.x) / run) * dot, y2: pin.y - ((pin.y - edge.y) / run) * dot });
     });
     return out;
-  }, [places, layout, chipBox, size.w, size.h]);
+  }, [places, layout, chipBox, size]);
 
-  // Dragging in the layout editor: the position is read from the pointer, relative to the picture.
-  const drag = (onMove) =>
+  // Dragging in the layout editor: the position is read from the pointer, relative to the picture. "current" is where
+  // the dragged thing sits now (percent of the picture); the spot where it was grabbed is kept, so nothing jumps.
+  const drag = (onMove, current) =>
     editable
       ? {
           onPointerDown: (e) => {
             e.preventDefault();
             e.currentTarget.setPointerCapture(e.pointerId);
-            draggingRef.current = e.pointerId;
+            const r = canvasRef.current.getBoundingClientRect();
+            draggingRef.current = {
+              id: e.pointerId,
+              gx: current ? ((e.clientX - r.left) / r.width) * 100 - current.x : 0,
+              gy: current ? ((e.clientY - r.top) / r.height) * 100 - current.y : 0,
+            };
           },
           onPointerMove: (e) => {
-            if (draggingRef.current !== e.pointerId) return;
+            const grab = draggingRef.current;
+            if (!grab || grab.id !== e.pointerId) return;
             const r = canvasRef.current.getBoundingClientRect();
             onMove({
-              x: round1(clamp(((e.clientX - r.left) / r.width) * 100, 0, 100)),
-              y: round1(clamp(((e.clientY - r.top) / r.height) * 100, 0, 100)),
+              x: round1(clamp(((e.clientX - r.left) / r.width) * 100 - grab.gx, 0, 100)),
+              y: round1(clamp(((e.clientY - r.top) / r.height) * 100 - grab.gy, 0, 100)),
             });
           },
           onPointerUp: (e) => {
-            if (draggingRef.current !== e.pointerId) return;
+            if (!draggingRef.current || draggingRef.current.id !== e.pointerId) return;
             draggingRef.current = null;
             try {
               e.currentTarget.releasePointerCapture(e.pointerId);
@@ -213,7 +219,7 @@ export default function AreaStage({
             </svg>
           )}
 
-          {flightGeo.map(({ flight, a, b, mid }) => {
+          {flightGeo.map(({ flight, a, b, c, mid }) => {
             const key = `flight:${flight.id}`;
             const title = flightTitle(flight);
             return (
@@ -225,7 +231,7 @@ export default function AreaStage({
                 aria-label={editable ? `Bend the flight path: ${title}` : `Play flight video: ${title}`}
                 onClick={() => !editable && onOpenFlight(flight.id)}
                 {...hover(key)}
-                {...drag((m) => onMoveFlight(flight.id, controlThrough(a, b, m)))}
+                {...drag((m) => onMoveFlight(flight.id, controlThrough(a, b, m)), mid)}
               >
                 <svg viewBox="0 0 16 16" aria-hidden="true">
                   <path d="M4.5 2.4v11.2L13.6 8z" />
@@ -238,6 +244,7 @@ export default function AreaStage({
           {places.map((place) => {
             const pos = placeLayout(layout, place.id);
             const offset = labelOffset(pos);
+            const anchor = anchorOf(offset);
             const key = `place:${place.id}`;
             const state = `is-${place.status}${hoverKey === key ? ' is-active' : ''}`;
             // The name tag is a separate button next to the pin: it can be moved freely in the layout editor. For
@@ -252,7 +259,7 @@ export default function AreaStage({
                   aria-label={editable ? `Move ${place.name}` : `${place.name}: view photos and videos`}
                   onClick={() => !editable && onOpenPlace(place.id)}
                   {...hover(key)}
-                  {...drag((p) => onMovePlace(place.id, p))}
+                  {...drag((p) => onMovePlace(place.id, p), pos)}
                 >
                   <span className="area-pin__dot" aria-hidden="true" />
                 </button>
@@ -262,17 +269,20 @@ export default function AreaStage({
                     if (el) chipRefs.current.set(place.id, el);
                     else chipRefs.current.delete(place.id);
                   }}
-                  className={`area-chip ${offset ? 'is-free' : `side-${pos.side || 'right'}`} ${state}`}
+                  className={`area-chip ${offset ? `is-free anchor-${anchor}` : `side-${pos.side || 'right'}`} ${state}`}
                   style={offset ? { left: `${pos.x + offset.dx}%`, top: `${pos.y + offset.dy}%` } : { left: `${pos.x}%`, top: `${pos.y}%` }}
                   data-place={place.id}
                   tabIndex={-1}
                   aria-hidden="true"
                   onClick={() => !editable && onOpenPlace(place.id)}
                   {...hover(key)}
-                  {...drag((p) => onMovePlace(place.id, { label: { dx: round1(p.x - pos.x), dy: round1(p.y - pos.y) } }))}
+                  {...drag(
+                    (p) => onMovePlace(place.id, { label: { dx: round1(p.x - pos.x), dy: round1(p.y - pos.y), anchor } }),
+                    offset ? { x: pos.x + offset.dx, y: pos.y + offset.dy } : null
+                  )}
                 >
                   <span className="area-chip__name">
-                    <span className="area-chip__full">{place.name}</span>
+                    <span className="area-chip__full">{place.tag || place.name}</span>
                     <span className="area-chip__short">{place.short}</span>
                   </span>
                   {place.badge && <span className="area-chip__badge">{place.badge}</span>}

@@ -6,12 +6,13 @@
     <link rel="apple-touch-icon" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
-      // Preload the home hero everywhere except on the ad landing pages and the hidden area page, which do not show it.
-      if (!/^\/(welcome|area)(\/|$)/i.test(location.pathname)) {
+      // Preload the big picture of the page that opens: the home hero, or the drone shot of the hidden area page.
+      // The ad landing pages use their own lighter hero image and need neither.
+      if (!/^\/welcome(\/|$)/i.test(location.pathname)) {
         var hero = document.createElement('link');
         hero.rel = 'preload';
         hero.as = 'image';
-        hero.href = '/images/hero-bg.webp';
+        hero.href = /^\/area(\/|$)/i.test(location.pathname) ? '/images/area/drone.webp' : '/images/hero-bg.webp';
         hero.setAttribute('fetchpriority', 'high');
         document.head.appendChild(hero);
       }

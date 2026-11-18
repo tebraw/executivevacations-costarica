@@ -90,29 +90,39 @@ export function leaveCapsule(w, h, dx, dy) {
 // Where a place sits on the picture (from area-layout.json, or the edited copy).
 export const placeLayout = (layout, id) => layout.places?.[id] || { x: 50, y: 50, side: 'right' };
 
-// The name tag of a place can be moved away from its pin ("label": { dx, dy } in percent of the picture). Returns
-// that offset, or null when the tag simply sits on one side of the pin.
+// The name tag of a place can be moved away from its pin: "label": { dx, dy, anchor } where dx and dy (percent of the
+// picture) lead from the pin to the anchor point. "anchor" says which part of the tag sits on that point: "c" the
+// middle (default), "l" the left edge, "r" the right edge, "t" the top edge, "b" the bottom edge. Returns that
+// label, or null when the tag simply sits on one side of the pin.
 export const labelOffset = (pos) => (pos.label && Number.isFinite(pos.label.dx) && Number.isFinite(pos.label.dy) ? pos.label : null);
 
-// The rectangle (in pixels of the picture) that holds a pin and its name tag. "box" is the size of the tag.
-export function placeUnit(pos, box, size) {
+export const ANCHORS = ['c', 'l', 'r', 't', 'b'];
+export const anchorOf = (label) => (label && ANCHORS.includes(label.anchor) ? label.anchor : 'c');
+
+// The rectangle (in pixels of the picture) of the name tag of a place. "box" is the size of the tag.
+export function chipRect(pos, box, size) {
   const px = (pos.x / 100) * size.w;
   const py = (pos.y / 100) * size.h;
   const offset = labelOffset(pos);
-  let tag;
   if (offset) {
-    const cx = ((pos.x + offset.dx) / 100) * size.w;
-    const cy = ((pos.y + offset.dy) / 100) * size.h;
-    tag = { left: cx - box.w / 2, right: cx + box.w / 2, top: cy - box.h / 2, bottom: cy + box.h / 2 };
-  } else if (pos.side === 'left') {
-    tag = { left: px - 22 - box.w, right: px - 22, top: py - box.h / 2, bottom: py + box.h / 2 };
-  } else if (pos.side === 'top') {
-    tag = { left: px - box.w / 2, right: px + box.w / 2, top: py - 20 - box.h, bottom: py - 20 };
-  } else if (pos.side === 'bottom') {
-    tag = { left: px - box.w / 2, right: px + box.w / 2, top: py + 20, bottom: py + 20 + box.h };
-  } else {
-    tag = { left: px + 22, right: px + 22 + box.w, top: py - box.h / 2, bottom: py + box.h / 2 };
+    const ax = ((pos.x + offset.dx) / 100) * size.w;
+    const ay = ((pos.y + offset.dy) / 100) * size.h;
+    const anchor = anchorOf(offset);
+    const left = anchor === 'l' ? ax : anchor === 'r' ? ax - box.w : ax - box.w / 2;
+    const top = anchor === 't' ? ay : anchor === 'b' ? ay - box.h : ay - box.h / 2;
+    return { left, right: left + box.w, top, bottom: top + box.h };
   }
+  if (pos.side === 'left') return { left: px - 22 - box.w, right: px - 22, top: py - box.h / 2, bottom: py + box.h / 2 };
+  if (pos.side === 'top') return { left: px - box.w / 2, right: px + box.w / 2, top: py - 20 - box.h, bottom: py - 20 };
+  if (pos.side === 'bottom') return { left: px - box.w / 2, right: px + box.w / 2, top: py + 20, bottom: py + 20 + box.h };
+  return { left: px + 22, right: px + 22 + box.w, top: py - box.h / 2, bottom: py + box.h / 2 };
+}
+
+// The rectangle (in pixels of the picture) that holds a pin and its name tag.
+export function placeUnit(pos, box, size) {
+  const px = (pos.x / 100) * size.w;
+  const py = (pos.y / 100) * size.h;
+  const tag = chipRect(pos, box, size);
   return {
     left: Math.min(px - 16, tag.left),
     right: Math.max(px + 16, tag.right),

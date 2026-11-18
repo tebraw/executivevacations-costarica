@@ -5,8 +5,7 @@ import { AREA_IMAGE, FLIGHTS, LAYOUT, PLACES, getFlight, getPlace } from '../dat
 import AreaStage from '../components/area/AreaStage';
 import MediaViewer from '../components/area/MediaViewer';
 import { FlightNav, PlaceRail } from '../components/area/PlaceRail';
-import { flightControl, labelOffset, placeLayout } from '../components/area/geometry';
-import { waLink } from '../components/welcome/contact';
+import { anchorOf, flightControl, labelOffset, placeLayout } from '../components/area/geometry';
 import '../styles/area.css';
 
 const LayoutEditor = lazy(() => import('../components/area/LayoutEditor'));
@@ -126,7 +125,7 @@ export default function Area() {
               const l = placeLayout(layout, p.id);
               const entry = { x: l.x, y: l.y, side: l.side || 'right' };
               const offset = labelOffset(l);
-              if (offset) entry.label = { dx: offset.dx, dy: offset.dy };
+              if (offset) entry.label = { dx: offset.dx, dy: offset.dy, anchor: anchorOf(offset) };
               return [p.id, entry];
             })
           ),
@@ -177,9 +176,6 @@ export default function Area() {
             <p className="area-intro__text">Tap a villa to see photos and videos, or follow a flight path from house to house.</p>
           </div>
         </div>
-        <a className="area-enquire" href={waLink("Hi! I'm looking at the area map and would like to know more about the villas.")} target="_blank" rel="noopener noreferrer">
-          Enquire<span className="area-enquire__more"> on WhatsApp</span>
-        </a>
       </header>
 
       <FlightNav flights={FLIGHTS} titleOf={flightTitle} hoverKey={hoverKey} onHover={setHoverKey} onOpen={openFlight} />

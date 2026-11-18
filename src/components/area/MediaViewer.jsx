@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { waLink } from '../welcome/contact';
 import { cropStyle, distanceMeters, formatDistance, placeLayout } from './geometry';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, video[controls], iframe, [tabindex]:not([tabindex="-1"])';
@@ -16,7 +15,7 @@ function Slide({ item }) {
     return <img src={item.src} alt={item.alt || ''} decoding="async" draggable="false" onError={() => setFailed(true)} />;
   }
   if (item.type === 'video') {
-    return <video src={item.src} poster={item.poster} controls playsInline preload="metadata" autoPlay={!!item.autoPlay} onError={() => setFailed(true)} />;
+    return <video src={item.src} poster={item.poster} aria-label={item.alt || undefined} controls playsInline muted={!!item.autoPlay} preload="metadata" autoPlay={!!item.autoPlay} onError={() => setFailed(true)} />;
   }
   if ((item.type === 'youtube' || item.type === 'vimeo') && EMBED_ID.test(item.id || '')) {
     const auto = item.autoPlay ? 1 : 0;
@@ -144,7 +143,6 @@ export default function MediaViewer({ target, places, flights, image, layout, on
         return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
       })()
     : place && placeLayout(layout, place.id);
-  const enquiry = waLink(`Hi! I'd like to know more about ${isFlight ? to.name : place.name}.`);
 
   return (
     <div className="area-viewer" role="dialog" aria-modal="true" aria-labelledby="area-viewer-title">
@@ -158,7 +156,10 @@ export default function MediaViewer({ target, places, flights, image, layout, on
 
         <div className="area-viewer__media" {...swipe}>
           {current ? (
-            <Slide key={index} item={current} />
+            <>
+              <Slide key={index} item={current} />
+              {current.caption && <p className="area-viewer__caption">{current.caption}</p>}
+            </>
           ) : isFlight ? (
             <Empty image={image} pos={emptyPos} zoom={2.4} title="Flight video coming soon" text={`The flight from ${from.short} to ${to.short} is being prepared.`} />
           ) : (
@@ -237,9 +238,6 @@ export default function MediaViewer({ target, places, flights, image, layout, on
                 View villa page
               </a>
             )}
-            <a className="area-btn" href={enquiry} target="_blank" rel="noopener noreferrer">
-              Enquire on WhatsApp
-            </a>
           </div>
 
           {isFlight && (
