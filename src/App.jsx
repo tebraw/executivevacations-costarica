@@ -16,6 +16,7 @@ const Terms = lazy(() => import('./pages/Terms'))
 const Cookies = lazy(() => import('./pages/Cookies'))
 const Welcome = lazy(() => import('./pages/Welcome'))
 const WelcomeThanks = lazy(() => import('./pages/WelcomeThanks'))
+const Area = lazy(() => import('./pages/Area'))
 
 import { isWeddingDomain } from './utils/siteBrand'
 
@@ -93,6 +94,8 @@ function App() {
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/welcome/thanks" element={<WelcomeThanks />} />
         <Route path="/welcome/:variant" element={<Welcome />} />
+        {/* Hidden page: only reachable by its link, not listed anywhere on the site */}
+        <Route path="/area" element={<Area />} />
       </Routes>
       </Suspense>
     </Router>

@@ -1,0 +1,10 @@
+{
+  "places": {
+    "musical": { "x": 12, "y": 62, "side": "bottom", "label": { "dx": -0.5, "dy": 9 } },
+    "ruins-platform": { "x": 13.8, "y": 55, "side": "top", "label": { "dx": 11, "dy": -6 } },
+    "tropical": { "x": 16, "y": 63.5, "side": "bottom", "label": { "dx": 10, "dy": 6 } },
+    "paradise": { "x": 70, "y": 40, "side": "top" },
+    "view-house": { "x": 88, "y": 31, "side": "top" }
+  },
+  "flights": {}
+}
