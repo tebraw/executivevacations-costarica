@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
       // Preload the big picture of the page that opens: the home hero, or the drone shot of the hidden area page.
-      // The ad landing pages use their own lighter hero image and need neither.
-      if (!/^\/welcome(\/|$)/i.test(location.pathname)) {
+      // The ad landing pages use their own lighter hero image, and the guest page (/thingstodo) has no big picture, so they need neither.
+      if (!/^\/(welcome|thingstodo)(\/|$)/i.test(location.pathname)) {
         var hero = document.createElement('link');
         hero.rel = 'preload';
         hero.as = 'image';
