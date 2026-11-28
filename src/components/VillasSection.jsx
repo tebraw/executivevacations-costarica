@@ -46,18 +46,8 @@ const VillaCard = ({ villa, isSelected, onSelect, onViewDetails }) => {
             </div>
           </div>
         )}
-        {villa.hasSpecialOffer && !isSelected && (
-          <div className="christmas-special-badge">
-            <div className="christmas-badge-header">SPECIAL OFFER</div>
-            <div className="christmas-badge-divider"></div>
-            <div className="christmas-badge-offer">
-              <span className="offer-text">FREE</span>
-              <span className="offer-details">ATV Tour</span>
-            </div>
-          </div>
-        )}
 
-        {villa.isPremium && !isSelected && !villa.hasChristmasSpecial && !villa.hasSpecialOffer && (
+        {villa.isPremium && !isSelected && !villa.hasChristmasSpecial && (
           <div className="absolute top-3 left-3 bg-luxury-gold text-white px-2 py-1 rounded text-xs font-semibold">
             PREMIUM
           </div>
